@@ -1,0 +1,1402 @@
+[
+  {
+    "nameTR": "Serçe",
+    "nameEN": "Sparrow",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga",
+    "nameEN": "Crow",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin",
+    "nameEN": "Pigeon",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal",
+    "nameEN": "Eagle",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin",
+    "nameEN": "Hawk",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş",
+    "nameEN": "Owl",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek",
+    "nameEN": "Stork",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo",
+    "nameEN": "Flamingo",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı",
+    "nameEN": "Seagull",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç",
+    "nameEN": "Swallow",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk",
+    "nameEN": "Cuckoo",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül",
+    "nameEN": "Nightingale",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka",
+    "nameEN": "Goldfinch",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık",
+    "nameEN": "Starling",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun",
+    "nameEN": "Raven",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros",
+    "nameEN": "Albatross",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna",
+    "nameEN": "Crane",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan",
+    "nameEN": "Parrot",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu",
+    "nameEN": "Peacock",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek",
+    "nameEN": "Duck",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz",
+    "nameEN": "Goose",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen",
+    "nameEN": "Penguin",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu",
+    "nameEN": "Cockatoo",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin",
+    "nameEN": "Dove",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal",
+    "nameEN": "Cardinal",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu",
+    "nameEN": "Common Starling",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe",
+    "nameEN": "House Sparrow",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu",
+    "nameEN": "Northern Cardinal",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş",
+    "nameEN": "Barn Owl",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya",
+    "nameEN": "Canary",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 2",
+    "nameEN": "Sparrow 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 2",
+    "nameEN": "Crow 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 2",
+    "nameEN": "Pigeon 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 2",
+    "nameEN": "Eagle 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 2",
+    "nameEN": "Hawk 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 2",
+    "nameEN": "Owl 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 2",
+    "nameEN": "Stork 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 2",
+    "nameEN": "Flamingo 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 2",
+    "nameEN": "Seagull 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 2",
+    "nameEN": "Swallow 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 2",
+    "nameEN": "Cuckoo 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 2",
+    "nameEN": "Nightingale 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 2",
+    "nameEN": "Goldfinch 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 2",
+    "nameEN": "Starling 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 2",
+    "nameEN": "Raven 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 2",
+    "nameEN": "Albatross 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 2",
+    "nameEN": "Crane 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 2",
+    "nameEN": "Parrot 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 2",
+    "nameEN": "Peacock 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 2",
+    "nameEN": "Duck 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz 2",
+    "nameEN": "Goose 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen 2",
+    "nameEN": "Penguin 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu 2",
+    "nameEN": "Cockatoo 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin 2",
+    "nameEN": "Dove 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal 2",
+    "nameEN": "Cardinal 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu 2",
+    "nameEN": "Common Starling 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe 2",
+    "nameEN": "House Sparrow 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu 2",
+    "nameEN": "Northern Cardinal 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş 2",
+    "nameEN": "Barn Owl 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya 2",
+    "nameEN": "Canary 2",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 3",
+    "nameEN": "Sparrow 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 3",
+    "nameEN": "Crow 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 3",
+    "nameEN": "Pigeon 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 3",
+    "nameEN": "Eagle 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 3",
+    "nameEN": "Hawk 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 3",
+    "nameEN": "Owl 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 3",
+    "nameEN": "Stork 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 3",
+    "nameEN": "Flamingo 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 3",
+    "nameEN": "Seagull 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 3",
+    "nameEN": "Swallow 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 3",
+    "nameEN": "Cuckoo 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 3",
+    "nameEN": "Nightingale 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 3",
+    "nameEN": "Goldfinch 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 3",
+    "nameEN": "Starling 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 3",
+    "nameEN": "Raven 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 3",
+    "nameEN": "Albatross 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 3",
+    "nameEN": "Crane 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 3",
+    "nameEN": "Parrot 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 3",
+    "nameEN": "Peacock 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 3",
+    "nameEN": "Duck 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz 3",
+    "nameEN": "Goose 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen 3",
+    "nameEN": "Penguin 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu 3",
+    "nameEN": "Cockatoo 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin 3",
+    "nameEN": "Dove 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal 3",
+    "nameEN": "Cardinal 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu 3",
+    "nameEN": "Common Starling 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe 3",
+    "nameEN": "House Sparrow 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu 3",
+    "nameEN": "Northern Cardinal 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş 3",
+    "nameEN": "Barn Owl 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya 3",
+    "nameEN": "Canary 3",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 4",
+    "nameEN": "Sparrow 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 4",
+    "nameEN": "Crow 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 4",
+    "nameEN": "Pigeon 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 4",
+    "nameEN": "Eagle 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 4",
+    "nameEN": "Hawk 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 4",
+    "nameEN": "Owl 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 4",
+    "nameEN": "Stork 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 4",
+    "nameEN": "Flamingo 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 4",
+    "nameEN": "Seagull 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 4",
+    "nameEN": "Swallow 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 4",
+    "nameEN": "Cuckoo 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 4",
+    "nameEN": "Nightingale 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 4",
+    "nameEN": "Goldfinch 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 4",
+    "nameEN": "Starling 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 4",
+    "nameEN": "Raven 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 4",
+    "nameEN": "Albatross 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 4",
+    "nameEN": "Crane 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 4",
+    "nameEN": "Parrot 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 4",
+    "nameEN": "Peacock 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 4",
+    "nameEN": "Duck 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz 4",
+    "nameEN": "Goose 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen 4",
+    "nameEN": "Penguin 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu 4",
+    "nameEN": "Cockatoo 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin 4",
+    "nameEN": "Dove 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal 4",
+    "nameEN": "Cardinal 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu 4",
+    "nameEN": "Common Starling 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe 4",
+    "nameEN": "House Sparrow 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu 4",
+    "nameEN": "Northern Cardinal 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş 4",
+    "nameEN": "Barn Owl 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya 4",
+    "nameEN": "Canary 4",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 5",
+    "nameEN": "Sparrow 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 5",
+    "nameEN": "Crow 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 5",
+    "nameEN": "Pigeon 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 5",
+    "nameEN": "Eagle 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 5",
+    "nameEN": "Hawk 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 5",
+    "nameEN": "Owl 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 5",
+    "nameEN": "Stork 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 5",
+    "nameEN": "Flamingo 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 5",
+    "nameEN": "Seagull 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 5",
+    "nameEN": "Swallow 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 5",
+    "nameEN": "Cuckoo 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 5",
+    "nameEN": "Nightingale 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 5",
+    "nameEN": "Goldfinch 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 5",
+    "nameEN": "Starling 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 5",
+    "nameEN": "Raven 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 5",
+    "nameEN": "Albatross 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 5",
+    "nameEN": "Crane 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 5",
+    "nameEN": "Parrot 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 5",
+    "nameEN": "Peacock 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 5",
+    "nameEN": "Duck 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz 5",
+    "nameEN": "Goose 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen 5",
+    "nameEN": "Penguin 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu 5",
+    "nameEN": "Cockatoo 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin 5",
+    "nameEN": "Dove 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal 5",
+    "nameEN": "Cardinal 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu 5",
+    "nameEN": "Common Starling 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe 5",
+    "nameEN": "House Sparrow 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu 5",
+    "nameEN": "Northern Cardinal 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş 5",
+    "nameEN": "Barn Owl 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya 5",
+    "nameEN": "Canary 5",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 6",
+    "nameEN": "Sparrow 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 6",
+    "nameEN": "Crow 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 6",
+    "nameEN": "Pigeon 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 6",
+    "nameEN": "Eagle 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 6",
+    "nameEN": "Hawk 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 6",
+    "nameEN": "Owl 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 6",
+    "nameEN": "Stork 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 6",
+    "nameEN": "Flamingo 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 6",
+    "nameEN": "Seagull 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 6",
+    "nameEN": "Swallow 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 6",
+    "nameEN": "Cuckoo 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 6",
+    "nameEN": "Nightingale 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 6",
+    "nameEN": "Goldfinch 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 6",
+    "nameEN": "Starling 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 6",
+    "nameEN": "Raven 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 6",
+    "nameEN": "Albatross 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 6",
+    "nameEN": "Crane 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 6",
+    "nameEN": "Parrot 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 6",
+    "nameEN": "Peacock 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 6",
+    "nameEN": "Duck 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  },
+  {
+    "nameTR": "Kaz 6",
+    "nameEN": "Goose 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goose"
+  },
+  {
+    "nameTR": "Penguen 6",
+    "nameEN": "Penguin 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Penguin"
+  },
+  {
+    "nameTR": "Kakadu 6",
+    "nameEN": "Cockatoo 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cockatoo"
+  },
+  {
+    "nameTR": "Güvercin 6",
+    "nameEN": "Dove 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Dove"
+  },
+  {
+    "nameTR": "Kardinal 6",
+    "nameEN": "Cardinal 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cardinal"
+  },
+  {
+    "nameTR": "Sığırcık kuşu 6",
+    "nameEN": "Common Starling 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Common+Starling"
+  },
+  {
+    "nameTR": "Bayağı serçe 6",
+    "nameEN": "House Sparrow 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=House+Sparrow"
+  },
+  {
+    "nameTR": "Kardinal kuşu 6",
+    "nameEN": "Northern Cardinal 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Northern+Cardinal"
+  },
+  {
+    "nameTR": "Alaca baykuş 6",
+    "nameEN": "Barn Owl 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Barn+Owl"
+  },
+  {
+    "nameTR": "Kanarya 6",
+    "nameEN": "Canary 6",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Canary"
+  },
+  {
+    "nameTR": "Serçe 7",
+    "nameEN": "Sparrow 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Sparrow"
+  },
+  {
+    "nameTR": "Karga 7",
+    "nameEN": "Crow 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crow"
+  },
+  {
+    "nameTR": "Güvercin 7",
+    "nameEN": "Pigeon 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Pigeon"
+  },
+  {
+    "nameTR": "Kartal 7",
+    "nameEN": "Eagle 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Eagle"
+  },
+  {
+    "nameTR": "Şahin 7",
+    "nameEN": "Hawk 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Hawk"
+  },
+  {
+    "nameTR": "Baykuş 7",
+    "nameEN": "Owl 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Owl"
+  },
+  {
+    "nameTR": "Leylek 7",
+    "nameEN": "Stork 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Stork"
+  },
+  {
+    "nameTR": "Flamingo 7",
+    "nameEN": "Flamingo 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Flamingo"
+  },
+  {
+    "nameTR": "Martı 7",
+    "nameEN": "Seagull 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Seagull"
+  },
+  {
+    "nameTR": "Kırlangıç 7",
+    "nameEN": "Swallow 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Swallow"
+  },
+  {
+    "nameTR": "Guguk 7",
+    "nameEN": "Cuckoo 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Cuckoo"
+  },
+  {
+    "nameTR": "Bülbül 7",
+    "nameEN": "Nightingale 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Nightingale"
+  },
+  {
+    "nameTR": "Saka 7",
+    "nameEN": "Goldfinch 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Goldfinch"
+  },
+  {
+    "nameTR": "Sığırcık 7",
+    "nameEN": "Starling 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Starling"
+  },
+  {
+    "nameTR": "Kuzgun 7",
+    "nameEN": "Raven 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Raven"
+  },
+  {
+    "nameTR": "Albatros 7",
+    "nameEN": "Albatross 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Albatross"
+  },
+  {
+    "nameTR": "Turna 7",
+    "nameEN": "Crane 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Crane"
+  },
+  {
+    "nameTR": "Bayağı papağan 7",
+    "nameEN": "Parrot 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Parrot"
+  },
+  {
+    "nameTR": "Tavus kuşu 7",
+    "nameEN": "Peacock 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Peacock"
+  },
+  {
+    "nameTR": "Ördek 7",
+    "nameEN": "Duck 7",
+    "category": "kuslar",
+    "difficulty": "zor",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg#name=Duck"
+  }
+]
