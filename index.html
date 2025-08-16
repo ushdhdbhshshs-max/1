@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Hayvan Tahmin Yarışması</title>
+  <style>
+    :root {
+      --bg1: #0f1226;
+      --bg2: #24103d;
+      --card: rgba(255,255,255,0.09);
+      --glass: rgba(255,255,255,0.12);
+      --text: #f7f7fb;
+      --muted: #cfd1e2;
+      --accent: #8a7dff;
+      --accent2: #00e3a2;
+      --danger: #ff5b6e;
+      --warning: #ffb020;
+      --ok: #27d07d;
+      --shadow: rgba(0,0,0,0.3);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      background-attachment: fixed;
+    }
+
+    #app { max-width: 520px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+
+    header {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(15,18,38,0.85), rgba(15,18,38,0.35));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .brand { font-weight: 800; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+    .brand .logo { font-size: 20px; }
+
+    .lives { display: flex; align-items: center; gap: 8px; }
+    .life-info { font-size: 12px; color: var(--muted); }
+
+    button {
+      appearance: none; border: none; outline: none; cursor: pointer;
+      background: var(--accent);
+      color: white; padding: 12px 14px; border-radius: 12px; font-weight: 700; letter-spacing: .2px;
+      box-shadow: 0 8px 24px rgba(138,125,255,0.25);
+      transition: transform .06s ease, filter .2s ease;
+    }
+    button:active { transform: translateY(1px) scale(0.99); }
+    button.secondary { background: var(--glass); color: var(--text); box-shadow: 0 4px 14px var(--shadow); }
+    button.ghost { background: transparent; color: var(--muted); box-shadow: none; padding: 8px 10px; }
+
+    #watchAdBtn { background: linear-gradient(90deg, var(--accent), #ff7dd7); padding: 10px 12px; border-radius: 10px; font-size: 12px; }
+
+    main { flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 16px; }
+
+    .card {
+      background: var(--card); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    h1, h2, h3 { margin: 0 0 8px 0; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 18px; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+    .category {
+      display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    }
+    .category .icon { font-size: 36px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4)); }
+    .category h3 { font-size: 16px; margin-bottom: 4px; }
+    .category .levels { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+    .category .levels button { padding: 10px 8px; font-size: 12px; border-radius: 10px; }
+
+    #homeScreen .subtitle { color: var(--muted); margin-bottom: 12px; }
+
+    #gameScreen .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    #progress { font-size: 13px; color: var(--muted); }
+    #gameContainer { display: grid; gap: 12px; }
+    #gameContainer .hero { text-align: center; font-size: 80px; line-height: 1; }
+
+    .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .option-btn { width: 100%; }
+
+    .image-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .image-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.06); }
+    .image-option .big { font-size: 64px; }
+
+    .letter-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .slot { width: 44px; height: 52px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px dashed rgba(255,255,255,0.18); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; }
+    .letters { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .letter { padding: 10px 0; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); font-weight: 800; }
+    .letter[disabled] { opacity: 0.35; filter: grayscale(0.6); }
+
+    .drag-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .dropzone { height: 82px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); display: grid; place-items: center; background: rgba(255,255,255,0.05); position: relative; }
+    .dropzone.locked { border-style: solid; border-color: var(--ok); background: rgba(39,208,125,0.12); }
+    .dropzone .label { position: absolute; bottom: -8px; left: 10px; font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.35); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+
+    .drag-item { user-select: none; -webkit-user-drag: element; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .drag-item.selected { outline: 2px solid var(--accent2); box-shadow: 0 0 0 3px rgba(0,227,162,0.25) inset; }
+    .drag-item.placed { opacity: 0.45; filter: grayscale(0.6); pointer-events: none; }
+    .dropzone.highlight { border-color: var(--accent2); background: rgba(0,227,162,0.08); }
+
+    .controls { display: flex; gap: 8px; }
+
+    #gameOverScreen { text-align: center; }
+
+    #adOverlay { position: fixed; inset: 0; background: rgba(10,10,15,0.9); display: grid; place-items: center; z-index: 20; }
+    #adOverlay .ad-card { width: min(92vw, 420px); background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; text-align: center; }
+    .progress { width: 100%; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; border: 1px solid rgba(255,255,255,0.12); }
+    .progress > div { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #ff7dd7); transition: width 0.12s linear; }
+
+    #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 30; }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+    @media (min-width: 480px) {
+      .options { grid-template-columns: 1fr 1fr; }
+      .letters { grid-template-columns: repeat(8, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="brand">
+        <div class="logo">🧠</div>
+        <div>Hayvan Tahmin</div>
+      </div>
+      <div class="lives">
+        <div id="heartContainer" aria-live="polite">❤️❤️❤️</div>
+        <span id="lifeInfo" class="life-info"></span>
+        <button id="watchAdBtn" title="1 Saat Sınırsız Can">Reklam İzle</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="grid">
+        <div class="card">
+          <h1>Hayvan Tahmin Yarışması</h1>
+          <div class="subtitle">Kategorini ve seviyeni seç, 4 mini-oyunu art arda doğru tamamla!</div>
+        </div>
+        <div id="categories" class="grid"></div>
+      </section>
+
+      <section id="gameScreen" hidden>
+        <div class="card">
+          <div class="topbar">
+            <div id="progress">Oyun 1/4</div>
+            <div id="currentCatLvl" class="life-info"></div>
+          </div>
+          <div id="gameContainer"></div>
+          <div class="controls">
+            <button id="backBtn" class="secondary">Geri</button>
+            <button id="restartRoundBtn" class="ghost">Baştan</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="gameOverScreen" class="card" hidden>
+        <h2>Canların bitti!</h2>
+        <p class="life-info">3 dakika sonra 1 can yenilenir. İstersen reklam izleyerek 1 saat sınırsız can kazan.</p>
+        <button id="newGameBtn">Yeni Oyuna Başla</button>
+      </section>
+    </main>
+
+    <div id="adOverlay" hidden>
+      <div class="ad-card">
+        <h2>Reklam izleniyor…</h2>
+        <p class="life-info">5 saniye sonra 1 saat sınırsız can!</p>
+        <div class="progress" aria-hidden="true"><div id="adBar"></div></div>
+        <p id="adCountdown" class="life-info" style="margin-top:8px;">5</p>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+  </div>
+
+  <script>
+    const MAX_LIVES = 3;
+    const LIFE_REGEN_MS = 3 * 60 * 1000; // 3 dakika
+    const AD_DURATION_MS = 5000; // sahte reklam 5 sn
+    const UNLIMITED_MS = 60 * 60 * 1000; // 1 saat
+
+    const LS_KEYS = {
+      lives: 'animalquiz_lives',
+      regenAt: 'animalquiz_regenAt',
+      unlimitedUntil: 'animalquiz_unlimitedUntil'
+    };
+
+    const TURKISH_ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
+
+    const CATEGORIES = {
+      'Kuşlar': [
+        { name: 'Kartal', emoji: '🦅' },
+        { name: 'Serçe', emoji: '🐦' },
+        { name: 'Tavuskuşu', emoji: '🦚' },
+        { name: 'Güvercin', emoji: '🕊️' },
+        { name: 'Baykuş', emoji: '🦉' },
+        { name: 'Tukan', emoji: '🦜' }
+      ],
+      'Sürüngenler': [
+        { name: 'Yılan', emoji: '🐍' },
+        { name: 'Timsah', emoji: '🐊' },
+        { name: 'Kertenkele', emoji: '🦎' },
+        { name: 'Kaplumbağa', emoji: '🐢' }
+      ],
+      'Balıklar': [
+        { name: 'Köpekbalığı', emoji: '🦈' },
+        { name: 'Sardalya', emoji: '🐟' },
+        { name: 'Mercan Balığı', emoji: '🐠' },
+        { name: 'Balon Balığı', emoji: '🐡' }
+      ],
+      'Eklem Bacaklılar': [
+        { name: 'Örümcek', emoji: '🕷️' },
+        { name: 'Yengeç', emoji: '🦀' },
+        { name: 'Kelebek', emoji: '🦋' },
+        { name: 'Arı', emoji: '🐝' },
+        { name: 'Karınca', emoji: '🐜' }
+      ],
+      'Omurgasızlar': [
+        { name: 'Ahtapot', emoji: '🐙' },
+        { name: 'Denizanası', emoji: '🪼' },
+        { name: 'Salyangoz', emoji: '🐌' },
+        { name: 'Solucan', emoji: '🪱' }
+      ],
+      'Dinozorlar': [
+        { name: 'T-Rex', emoji: '🦖' },
+        { name: 'Sauropod', emoji: '🦕' },
+        { name: 'Triceratops', emoji: '🦖' },
+        { name: 'Velociraptor', emoji: '🦕' }
+      ],
+      'Memeliler': [
+        { name: 'Aslan', emoji: '🦁' },
+        { name: 'Fil', emoji: '🐘' },
+        { name: 'Kaplan', emoji: '🐯' },
+        { name: 'Panda', emoji: '🐼' },
+        { name: 'Kedi', emoji: '🐱' },
+        { name: 'Köpek', emoji: '🐶' }
+      ]
+    };
+
+    const levels = ['Seviye 1', 'Seviye 2', 'Seviye 3', 'Tümü'];
+
+    const el = (sel) => document.querySelector(sel);
+    const homeScreen = el('#homeScreen');
+    const gameScreen = el('#gameScreen');
+    const overScreen = el('#gameOverScreen');
+    const categoriesEl = el('#categories');
+    const heartContainer = el('#heartContainer');
+    const lifeInfo = el('#lifeInfo');
+    const gameContainer = el('#gameContainer');
+    const progressEl = el('#progress');
+    const currentCatLvl = el('#currentCatLvl');
+    const adOverlay = el('#adOverlay');
+    const adBar = el('#adBar');
+    const adCountdown = el('#adCountdown');
+
+    const toastEl = el('#toast');
+
+    let state = {
+      lives: MAX_LIVES,
+      regenAt: null,
+      unlimitedUntil: 0,
+      categoryKey: null,
+      levelKey: null,
+      step: 0,
+      round: null
+    };
+
+    function init() {
+      loadLifeState();
+      renderCategories();
+      bindHeaderButtons();
+      updateLivesUI();
+      lifeTicker();
+    }
+
+    function bindHeaderButtons() {
+      el('#watchAdBtn').addEventListener('click', onWatchAd);
+      el('#backBtn').addEventListener('click', () => {
+        showHome();
+      });
+      el('#restartRoundBtn').addEventListener('click', () => {
+        if (!state.categoryKey || !state.levelKey) return;
+        startRound(state.categoryKey, state.levelKey);
+        showToast('Baştan başladın');
+      });
+      el('#newGameBtn').addEventListener('click', () => {
+        state.lives = MAX_LIVES;
+        state.regenAt = null;
+        saveLifeState();
+        updateLivesUI();
+        showHome();
+      });
+    }
+
+    function renderCategories() {
+      categoriesEl.innerHTML = '';
+      Object.entries(CATEGORIES).forEach(([catName, animals]) => {
+        const card = document.createElement('div');
+        card.className = 'card category';
+        const icon = document.createElement('div');
+        icon.className = 'icon';
+        icon.textContent = animals[0]?.emoji || '🐾';
+
+        const body = document.createElement('div');
+        const title = document.createElement('h3');
+        title.textContent = catName;
+        const sub = document.createElement('div');
+        sub.className = 'life-info';
+        sub.textContent = `${animals.length} hayvan`; 
+
+        const levelsWrap = document.createElement('div');
+        levelsWrap.className = 'levels';
+
+        levels.forEach(levelName => {
+          const btn = document.createElement('button');
+          btn.textContent = levelName;
+          btn.addEventListener('click', () => {
+            if (!hasLives()) { showOver(); return; }
+            startRound(catName, levelName);
+          });
+          levelsWrap.appendChild(btn);
+        });
+
+        body.appendChild(title);
+        body.appendChild(sub);
+        body.appendChild(levelsWrap);
+
+        card.appendChild(icon);
+        card.appendChild(body);
+        categoriesEl.appendChild(card);
+      });
+    }
+
+    function subsetByLevel(animals, levelName) {
+      if (levelName === 'Tümü') return animals.slice();
+      const size = Math.ceil(animals.length / 3);
+      const idx = levels.indexOf(levelName);
+      const start = Math.max(0, Math.min(2, idx)) * size; // 0, size, 2*size
+      return animals.slice(start, start + size);
+    }
+
+    function startRound(categoryKey, levelKey) {
+      state.categoryKey = categoryKey;
+      state.levelKey = levelKey;
+      state.step = 0;
+      const pool = subsetByLevel(CATEGORIES[categoryKey], levelKey);
+      state.round = makeRound(pool);
+      currentCatLvl.textContent = `${categoryKey} • ${levelKey}`;
+      progressEl.textContent = `Oyun 1/4`;
+      showGame();
+      renderCurrentStep();
+    }
+
+    function makeRound(pool) {
+      const uniquePool = pool.slice();
+      const pickOne = () => uniquePool[Math.floor(Math.random() * uniquePool.length)];
+      const g1 = pickOne();
+      const g2 = pickOne();
+      const g3 = pickOne();
+      const g4Choices = randomSample(pool, Math.min(4, pool.length));
+      return { g1, g2, g3, g4Choices };
+    }
+
+    function renderCurrentStep() {
+      const step = state.step;
+      progressEl.textContent = `Oyun ${step + 1}/4`;
+      gameContainer.innerHTML = '';
+      if (step === 0) renderGame1();
+      else if (step === 1) renderGame2();
+      else if (step === 2) renderGame3();
+      else if (step === 3) renderGame4();
+    }
+
+    function advance() {
+      state.step += 1;
+      if (state.step >= 4) {
+        showToast('Tebrikler! Tüm oyunları geçtin');
+        showHome();
+        return;
+      }
+      renderCurrentStep();
+    }
+
+    function handleWrong(reason = '') {
+      if (isUnlimited()) {
+        showToast('Yanlış! (Sınırsız can)');
+        startRound(state.categoryKey, state.levelKey);
+        return;
+      }
+      state.lives -= 1;
+      if (state.lives < 0) state.lives = 0;
+      if (state.lives < MAX_LIVES && state.regenAt == null) state.regenAt = Date.now() + LIFE_REGEN_MS;
+      saveLifeState();
+      updateLivesUI();
+      if (state.lives <= 0) {
+        showOver();
+      } else {
+        showToast('Yanlış cevap! -1 can');
+        startRound(state.categoryKey, state.levelKey);
+      }
+    }
+
+    function renderGame1() {
+      const target = state.round.g1;
+      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
+      const choices = shuffle([target, ...randomSample(pool.filter(a => a.name !== target.name), 3)]);
+
+      const hero = document.createElement('div');
+      hero.className = 'hero';
+      hero.textContent = target.emoji;
+
+      const ask = document.createElement('h2');
+      ask.textContent = 'Bu hangi hayvan?';
+
+      const opts = document.createElement('div');
+      opts.className = 'options';
+      choices.forEach(c => {
+        const b = document.createElement('button');
+        b.className = 'option-btn';
+        b.textContent = c.name;
+        b.addEventListener('click', () => {
+          if (!hasLives()) { showOver(); return; }
+          if (c.name === target.name) {
+            showToast('Doğru!');
+            advance();
+          } else {
+            handleWrong();
+          }
+        });
+        opts.appendChild(b);
+      });
+
+      gameContainer.appendChild(hero);
+      gameContainer.appendChild(ask);
+      gameContainer.appendChild(opts);
+    }
+
+    function renderGame2() {
+      const target = state.round.g2;
+      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
+      const choices = shuffle([target, ...randomSample(pool.filter(a => a.name !== target.name), 3)]);
+
+      const ask = document.createElement('h2');
+      ask.textContent = `${target.name} hangisi?`;
+
+      const grid = document.createElement('div');
+      grid.className = 'image-options';
+
+      choices.forEach(c => {
+        const wrap = document.createElement('button');
+        wrap.className = 'image-option';
+        const em = document.createElement('div'); em.className = 'big'; em.textContent = c.emoji;
+        const nm = document.createElement('div'); nm.className = 'life-info'; nm.textContent = c.name;
+        wrap.appendChild(em); wrap.appendChild(nm);
+        wrap.addEventListener('click', () => {
+          if (!hasLives()) { showOver(); return; }
+          if (c.name === target.name) { showToast('Doğru!'); advance(); }
+          else { handleWrong(); }
+        });
+        grid.appendChild(wrap);
+      });
+
+      gameContainer.appendChild(ask);
+      gameContainer.appendChild(grid);
+    }
+
+    function renderGame3() {
+      const target = state.round.g3;
+      const clean = normalizeForLetters(target.name);
+      const hero = document.createElement('div'); hero.className = 'hero'; hero.textContent = target.emoji;
+      const ask = document.createElement('h2'); ask.textContent = 'Hayvanın adını yaz';
+
+      const slotsRow = document.createElement('div'); slotsRow.className = 'letter-row';
+      const slots = [];
+      for (let i = 0; i < clean.length; i++) {
+        const s = document.createElement('div'); s.className = 'slot'; s.textContent = '';
+        s.dataset.idx = String(i);
+        s.addEventListener('click', () => {
+          // remove last filled
+          for (let j = selections.length - 1; j >= 0; j--) {
+            if (selections[j].slotIdx === i) {
+              const tile = selections[j].tile;
+              tile.disabled = false;
+              selections.splice(j, 1);
+              s.textContent = '';
+              break;
+            }
+          }
+        });
+        slots.push(s); slotsRow.appendChild(s);
+      }
+
+      const letterArea = document.createElement('div'); letterArea.className = 'letters';
+      const pool = generateLetterPool(clean, 14);
+      const selections = [];
+
+      pool.forEach((ch, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'letter';
+        btn.textContent = ch;
+        btn.dataset.idx = String(idx);
+        btn.addEventListener('click', () => {
+          const next = slots.find(s => !s.textContent);
+          if (!next) return;
+          next.textContent = ch;
+          selections.push({ slotIdx: Number(next.dataset.idx), char: ch, tile: btn });
+          btn.disabled = true;
+
+          if (slots.every(s => s.textContent)) {
+            const attempt = slots.map(s => s.textContent).join('');
+            if (attempt === clean) { showToast('Doğru!'); advance(); }
+            else { handleWrong(); }
+          }
+        });
+        letterArea.appendChild(btn);
+      });
+
+      const tools = document.createElement('div'); tools.className = 'letter-row';
+      const backBtn = document.createElement('button'); backBtn.className = 'secondary'; backBtn.textContent = 'Sil';
+      backBtn.addEventListener('click', () => {
+        for (let i = selections.length - 1; i >= 0; i--) {
+          const { slotIdx, tile } = selections.pop();
+          tile.disabled = false;
+          slots[slotIdx].textContent = '';
+          break;
+        }
+      });
+      const clearBtn = document.createElement('button'); clearBtn.className = 'ghost'; clearBtn.textContent = 'Temizle';
+      clearBtn.addEventListener('click', () => {
+        while (selections.length) {
+          const { slotIdx, tile } = selections.pop();
+          tile.disabled = false;
+          slots[slotIdx].textContent = '';
+        }
+      });
+      tools.appendChild(backBtn); tools.appendChild(clearBtn);
+
+      gameContainer.appendChild(hero);
+      gameContainer.appendChild(ask);
+      gameContainer.appendChild(slotsRow);
+      gameContainer.appendChild(letterArea);
+      gameContainer.appendChild(tools);
+    }
+
+    function renderGame4() {
+      const picks = state.round.g4Choices;
+      const names = picks.map(p => p.name);
+
+      const ask = document.createElement('h2'); ask.textContent = 'Sürükle veya dokun-seç → kutuya dokun';
+
+      const zones = document.createElement('div'); zones.className = 'drag-grid';
+      const items = document.createElement('div'); items.className = 'drag-grid';
+
+      const assigned = new Map();
+      const itemsByName = new Map();
+      let selectedName = null;
+
+      function place(name, dz) {
+        if (!hasLives()) { showOver(); return; }
+        if (!name || dz.classList.contains('locked')) return;
+        if (name === dz.dataset.name) {
+          dz.classList.add('locked');
+          dz.textContent = '';
+          dz.innerHTML = `<div class="label">${dz.dataset.name}</div>`;
+          const indz = document.createElement('div'); indz.style.fontSize = '44px'; indz.textContent = picks.find(x => x.name === name)?.emoji || '🐾';
+          dz.appendChild(indz);
+          assigned.set(dz.dataset.name, name);
+          const itemEl = itemsByName.get(name);
+          if (itemEl) {
+            itemEl.classList.remove('selected');
+            itemEl.classList.add('placed');
+            itemEl.draggable = false;
+          }
+          selectedName = null;
+          if (assigned.size === picks.length) {
+            showToast('Harika!');
+            advance();
+          }
+        } else {
+          handleWrong();
+        }
+      }
+
+      picks.forEach(p => {
+        const dz = document.createElement('div'); dz.className = 'dropzone'; dz.dataset.name = p.name;
+        dz.innerHTML = `<div class="label">${p.name}</div>`;
+        dz.addEventListener('dragover', (e) => e.preventDefault());
+        dz.addEventListener('dragenter', (e) => { e.preventDefault(); dz.classList.add('highlight'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('highlight'));
+        dz.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dz.classList.remove('highlight');
+          if (!hasLives()) { showOver(); return; }
+          const droppedName = e.dataTransfer.getData('text/plain');
+          if (!droppedName) return;
+          place(droppedName, dz);
+        });
+        dz.addEventListener('click', () => {
+          if (!hasLives()) { showOver(); return; }
+          if (!selectedName) { showToast('Önce bir resim seç'); return; }
+          place(selectedName, dz);
+        });
+        zones.appendChild(dz);
+      });
+
+      shuffle(picks.slice()).forEach(p => {
+        const it = document.createElement('div'); it.className = 'drag-item'; it.textContent = p.emoji; it.draggable = true; it.dataset.name = p.name;
+        itemsByName.set(p.name, it);
+        it.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', p.name);
+        });
+        it.addEventListener('click', () => {
+          if (it.classList.contains('placed')) return;
+          if (selectedName === p.name) {
+            it.classList.remove('selected');
+            selectedName = null;
+          } else {
+            // deselect others
+            itemsByName.forEach((el) => el.classList.remove('selected'));
+            it.classList.add('selected');
+            selectedName = p.name;
+          }
+        });
+        items.appendChild(it);
+      });
+
+      gameContainer.appendChild(ask);
+      gameContainer.appendChild(zones);
+      gameContainer.appendChild(items);
+    }
+
+    function showHome() {
+      homeScreen.hidden = false; gameScreen.hidden = true; overScreen.hidden = true;
+    }
+    function showGame() {
+      homeScreen.hidden = true; gameScreen.hidden = false; overScreen.hidden = true;
+    }
+    function showOver() {
+      homeScreen.hidden = true; gameScreen.hidden = true; overScreen.hidden = false;
+    }
+
+    function hasLives() { return state.lives > 0 || isUnlimited(); }
+    function isUnlimited() { return Date.now() < state.unlimitedUntil; }
+
+    function loadLifeState() {
+      const lives = parseInt(localStorage.getItem(LS_KEYS.lives) || `${MAX_LIVES}`);
+      let regenAt = localStorage.getItem(LS_KEYS.regenAt);
+      regenAt = regenAt ? parseInt(regenAt) : null;
+      let unlimitedUntil = parseInt(localStorage.getItem(LS_KEYS.unlimitedUntil) || '0');
+
+      state.lives = isNaN(lives) ? MAX_LIVES : lives;
+      state.regenAt = regenAt;
+      state.unlimitedUntil = isNaN(unlimitedUntil) ? 0 : unlimitedUntil;
+
+      if (!isUnlimited() && state.lives < MAX_LIVES) {
+        if (state.regenAt == null) state.regenAt = Date.now() + LIFE_REGEN_MS;
+        const now = Date.now();
+        while (state.regenAt && now >= state.regenAt && state.lives < MAX_LIVES) {
+          state.lives += 1;
+          state.regenAt += LIFE_REGEN_MS;
+        }
+        if (state.lives >= MAX_LIVES) state.regenAt = null;
+      }
+
+      saveLifeState();
+    }
+
+    function saveLifeState() {
+      localStorage.setItem(LS_KEYS.lives, String(state.lives));
+      if (state.regenAt == null) localStorage.removeItem(LS_KEYS.regenAt); else localStorage.setItem(LS_KEYS.regenAt, String(state.regenAt));
+      localStorage.setItem(LS_KEYS.unlimitedUntil, String(state.unlimitedUntil || 0));
+    }
+
+    function updateLivesUI() {
+      const hearts = isUnlimited() ? '♾️' : '❤️'.repeat(state.lives) + '🖤'.repeat(MAX_LIVES - state.lives);
+      heartContainer.textContent = hearts;
+      if (isUnlimited()) {
+        const left = state.unlimitedUntil - Date.now();
+        lifeInfo.textContent = `Sınırsız: ${fmtMS(left)}`;
+      } else if (state.lives >= MAX_LIVES) {
+        lifeInfo.textContent = 'Tam can';
+      } else if (state.regenAt) {
+        const left = state.regenAt - Date.now();
+        lifeInfo.textContent = `+1 can: ${fmtMS(left)}`;
+      } else {
+        lifeInfo.textContent = '';
+      }
+    }
+
+    function fmtMS(ms) {
+      const s = Math.max(0, Math.ceil(ms / 1000));
+      const m = Math.floor(s / 60); const r = s % 60;
+      return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;
+    }
+
+    function lifeTicker() {
+      setInterval(() => {
+        // unlimited timer
+        if (isUnlimited()) {
+          if (Date.now() >= state.unlimitedUntil) {
+            state.unlimitedUntil = 0;
+            saveLifeState();
+          }
+        } else {
+          if (state.lives < MAX_LIVES && state.regenAt && Date.now() >= state.regenAt) {
+            state.lives += 1;
+            if (state.lives < MAX_LIVES) state.regenAt = Date.now() + LIFE_REGEN_MS; else state.regenAt = null;
+            saveLifeState();
+          }
+        }
+        updateLivesUI();
+      }, 1000);
+    }
+
+    function onWatchAd() {
+      adOverlay.hidden = false;
+      adBar.style.width = '0%';
+      let left = AD_DURATION_MS;
+      adCountdown.textContent = String(Math.ceil(left / 1000));
+      const started = Date.now();
+      const t = setInterval(() => {
+        left = Math.max(0, AD_DURATION_MS - (Date.now() - started));
+        const p = 100 - Math.floor((left / AD_DURATION_MS) * 100);
+        adBar.style.width = p + '%';
+        adCountdown.textContent = String(Math.ceil(left / 1000));
+        if (left <= 0) {
+          clearInterval(t);
+          adOverlay.hidden = true;
+          state.unlimitedUntil = Date.now() + UNLIMITED_MS;
+          saveLifeState();
+          updateLivesUI();
+          showToast('1 saat sınırsız can kazandın!');
+        }
+      }, 120);
+    }
+
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(() => toastEl.classList.remove('show'), 1400);
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function randomSample(arr, n) {
+      const a = arr.slice();
+      const out = [];
+      while (a.length && out.length < n) {
+        const idx = Math.floor(Math.random() * a.length);
+        out.push(a.splice(idx, 1)[0]);
+      }
+      return out;
+    }
+
+    function normalizeForLetters(name) {
+      const up = name.toLocaleUpperCase('tr-TR');
+      return up.replace(/[^A-ZÇĞİÖŞÜ]/g, '');
+    }
+
+    function generateLetterPool(clean, size) {
+      const letters = clean.split('');
+      const pool = letters.slice();
+      while (pool.length < size) {
+        const ch = TURKISH_ALPHABET[Math.floor(Math.random() * TURKISH_ALPHABET.length)];
+        pool.push(ch);
+      }
+      return shuffle(pool).slice(0, size);
+    }
+
+    function showGameOrOver() {
+      if (hasLives()) showGame(); else showOver();
+    }
+
+    init();
+  </script>
+</body>
+</html>
