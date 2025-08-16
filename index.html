@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Hayvan Tahmin Oyunu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-accent: #111827;
+      --card: #0b1220;
+      --muted: #9ca3af;
+      --text: #e5e7eb;
+      --primary: #22c55e;
+      --primary-700: #16a34a;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #38bdf8;
+      --shadow: 0 10px 25px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --maxw: 920px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(17,24,39,0.98)),
+        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    #app {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--maxw);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(17,24,39,0.65);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hearts {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 18px;
+    }
+    .heart {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(239,68,68,0.15);
+      color: #fecaca;
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 6px;
+    }
+    .heart.off { opacity: 0.35; filter: grayscale(0.4); }
+    .badge-chip {
+      background: rgba(34,197,94,0.12);
+      color: #bbf7d0;
+      border: 1px solid rgba(34,197,94,0.25);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .screen {
+      display: none;
+    }
+    .screen.active { display: block; }
+
+    .card {
+      background: rgba(11,18,32,0.78);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      text-align: center;
+      align-items: center;
+      justify-items: center;
+      padding: 12px;
+    }
+    .hero img.hero-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 18px;
+      object-fit: cover;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero h1 { margin: 8px 0 0; font-size: 24px; letter-spacing: 0.3px; }
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .row.center { justify-content: center; }
+
+    .btn {
+      background: linear-gradient(180deg, rgba(34,197,94,0.95), rgba(22,163,74,0.95));
+      border: 1px solid rgba(34,197,94,0.4);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.05s ease, opacity 0.2s ease, background 0.2s ease;
+      box-shadow: 0 6px 16px rgba(34,197,94,0.3);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); opacity: 0.9; }
+    .btn.secondary {
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.35);
+      color: #bae6fd;
+      box-shadow: none;
+      font-weight: 600;
+    }
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--text);
+      font-weight: 600;
+    }
+    .btn.warn {
+      background: rgba(245,158,11,0.18);
+      border: 1px solid rgba(245,158,11,0.4);
+      color: #fde68a;
+    }
+    .btn.danger {
+      background: rgba(239,68,68,0.18);
+      border: 1px solid rgba(239,68,68,0.4);
+      color: #fecaca;
+    }
+
+    .input {
+      background: rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      outline: none;
+      width: 100%;
+      transition: border 0.2s ease;
+    }
+    .input:focus { border-color: rgba(56,189,248,0.5); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (min-width: 860px) {
+      .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    .category {
+      background: rgba(2,6,23,0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.08s ease, border 0.2s ease;
+    }
+    .category:hover { transform: translateY(-1px); border-color: rgba(56,189,248,0.35); }
+    .category .thumb {
+      height: 90px;
+      background-size: cover;
+      background-position: center;
+    }
+    .category .label {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .store-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 12px; }
+    @media (min-width: 620px) { .store-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .store-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      background: rgba(2,6,23,0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .store-item img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+
+    .split {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+
+    .options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    @media (min-width: 600px) { .options { grid-template-columns: repeat(2, 1fr); } }
+
+    .option-btn {
+      background: rgba(2,6,23,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.05s ease, background 0.15s ease, border 0.15s ease, opacity 0.2s ease;
+      text-align: center;
+      font-weight: 600;
+    }
+    .option-btn.correct { background: rgba(34,197,94,0.22); border-color: rgba(34,197,94,0.5); }
+    .option-btn.wrong { background: rgba(239,68,68,0.22); border-color: rgba(239,68,68,0.5); }
+    .option-btn.hidden { opacity: 0.2; pointer-events: none; }
+
+    .question-img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+    }
+
+    .timer {
+      display: inline-flex; align-items: center; gap: 8px; font-weight: 700;
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.35);
+      color: #bae6fd;
+      padding: 6px 10px;
+      border-radius: 10px;
+    }
+
+    .toast {
+      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+      background: rgba(2,6,23,0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 50;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .toast.show { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(-4px); }
+
+    .overlay {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px;
+      background: rgba(2,6,23,0.6);
+      z-index: 40;
+    }
+    .overlay.active { display: flex; }
+
+    .pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    details.guide {
+      background: rgba(2,6,23,0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    details.guide summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .lang-select {
+      background: rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    .small { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="topbar" id="topbar" style="display:none">
+        <div class="player-info">
+          <div class="logo">
+            <img id="gameLogo" alt="logo" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+            <div>
+              <div id="gameTitle" style="font-weight:700">WildGuess</div>
+              <div class="muted small" id="playerNameTop">-</div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="gap: 14px; align-items: center;">
+          <div class="hearts" id="hearts"></div>
+          <div class="badge-chip" id="pointsChip">0 ⭐</div>
+        </div>
+      </div>
+
+      <section id="welcomeScreen" class="screen active">
+        <div class="card hero">
+          <img class="hero-logo" alt="logo" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+          <h1 id="titleText">Hayvan Tahmin Oyunu</h1>
+          <div class="muted" id="subtitleText">1 dakikada olabildiğince çok hayvanı bil!</div>
+          <div class="row center" style="margin-top: 6px;">
+            <button class="btn" id="playBtn">Tek Oyna</button>
+            <button class="btn secondary" id="badgesBtnWelcome">Rozetlerim</button>
+            <select id="langSelectWelcome" class="lang-select">
+              <option value="tr">Türkçe</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="muted small" id="continueAs" style="display:none"></div>
+        </div>
+
+        <div class="card" id="nameCard" style="display:none; margin-top: 12px;">
+          <div style="font-weight:700; margin-bottom: 8px;" id="enterNameLbl">İsminizi girin</div>
+          <div class="row">
+            <input id="nameInput" class="input" placeholder="Adınız" maxlength="24" />
+            <button class="btn" id="saveNameBtn">Kaydet</button>
+          </div>
+          <div class="muted small" style="margin-top: 6px;" id="nameHint">Bu isim cihazınızda saklanır.</div>
+        </div>
+      </section>
+
+      <section id="mainMenu" class="screen">
+        <div class="card" style="margin-bottom: 12px;">
+          <div class="split">
+            <div style="font-weight:700;" id="categoriesLbl">Kategoriler</div>
+            <div class="row">
+              <button class="btn ghost" id="storeBtn">Mağaza</button>
+              <button class="btn ghost" id="badgesBtn">Rozetlerim</button>
+              <select id="langSelectMain" class="lang-select">
+                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid" id="categoriesGrid" style="margin-top: 10px;"></div>
+        </div>
+
+        <details class="guide">
+          <summary>Kullanma Kılavuzu</summary>
+          <div id="guideContent" class="muted" style="margin-top: 8px; line-height: 1.7;"></div>
+        </details>
+      </section>
+
+      <section id="difficultyScreen" class="screen">
+        <div class="card">
+          <div class="split" style="margin-bottom: 12px;">
+            <div style="font-weight:700" id="chooseDifficultyLbl">Zorluk Seçin</div>
+            <button class="btn ghost" id="backToMainBtn">Geri</button>
+          </div>
+          <div class="row center" style="gap:12px;">
+            <button class="btn" data-diff="kolay" id="diffEasy">Kolay</button>
+            <button class="btn" data-diff="orta" id="diffMedium">Orta</button>
+            <button class="btn" data-diff="zor" id="diffHard">Zor</button>
+          </div>
+          <div class="muted small" style="margin-top: 10px;" id="lifeCostHint">Bu turu başlatmak 1 can harcar.</div>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen">
+        <div class="card">
+          <div class="split" style="margin-bottom: 10px;">
+            <div class="row" style="gap:8px; align-items:center;">
+              <span class="timer" id="timer">60</span>
+              <span class="pill" id="roundScore">0 ⭐</span>
+              <span class="pill" id="roundCategory">-</span>
+              <span class="pill" id="roundDifficulty">-</span>
+            </div>
+            <button class="btn ghost" id="quitGameBtn">Bırak</button>
+          </div>
+
+          <img id="questionImg" class="question-img" alt="animal" src="" />
+          <div style="margin-top: 10px; font-weight:700;" id="questionText">Bu hayvan nedir?</div>
+
+          <div class="options" id="options"></div>
+
+          <div class="row" style="margin-top: 10px; gap: 8px;">
+            <button class="btn secondary" id="useEliminateBtn">Şık Eleme (0)</button>
+            <button class="btn warn" id="useAutoBtn">Oto Cevap (0)</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="storeScreen" class="screen">
+        <div class="card">
+          <div class="split" style="margin-bottom: 10px;">
+            <div style="font-weight:700" id="storeTitle">Mağaza</div>
+            <div class="row">
+              <div class="badge-chip" id="storePoints">0 ⭐</div>
+              <button class="btn ghost" id="backFromStoreBtn">Geri</button>
+            </div>
+          </div>
+          <div class="store-grid">
+            <div class="store-item">
+              <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="infinite" />
+              <div>
+                <div style="font-weight:700" id="storeLivesTitle">10 dk Sınırsız Can</div>
+                <div class="muted small" id="storeLivesDesc">100 puan. Süre boyunca can harcamadan tur başlat.</div>
+              </div>
+              <button class="btn" data-item="unlimited" id="buyUnlimitedBtn">100 ⭐</button>
+            </div>
+
+            <div class="store-item">
+              <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="eliminate" />
+              <div>
+                <div style="font-weight:700" id="storeEliminateTitle">Şık Eleme</div>
+                <div class="muted small" id="storeEliminateDesc">2 yanlış seçeneği kaldır. Tek kullanımlık.</div>
+              </div>
+              <button class="btn" data-item="eliminate" id="buyEliminateBtn">20 ⭐</button>
+            </div>
+
+            <div class="store-item">
+              <img src="https://cdn-icons-png.flaticon.com/512/167/167755.png" alt="auto" />
+              <div>
+                <div style="font-weight:700" id="storeAutoTitle">Oto Cevap</div>
+                <div class="muted small" id="storeAutoDesc">Doğru cevabı otomatik işaretle. Tek kullanımlık.</div>
+              </div>
+              <button class="btn" data-item="auto" id="buyAutoBtn">50 ⭐</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="badgesScreen" class="screen">
+        <div class="card">
+          <div class="split" style="margin-bottom: 10px;">
+            <div style="font-weight:700" id="badgesTitle">Rozetlerim</div>
+            <button class="btn ghost" id="backFromBadgesBtn">Geri</button>
+          </div>
+          <div id="badgesList" class="grid"></div>
+        </div>
+      </section>
+
+      <div id="gameOverOverlay" class="overlay">
+        <div class="card" style="max-width: 520px; width: 100%; text-align:center;">
+          <div style="font-weight:700; margin-bottom: 6px;" id="gameOverLbl">Oyun Bitti</div>
+          <div class="muted" id="earnedLbl">Kazandığın Puan</div>
+          <div style="font-size: 40px; font-weight: 700; margin: 6px 0;" id="earnedScore">0</div>
+          <div class="row center" style="gap:10px;">
+            <button class="btn" id="goHomeBtn">Ana Menü</button>
+            <button class="btn secondary" id="playAgainBtn">Tekrar Oyna</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast">-</div>
+    </div>
+  </div>
+
+  <script>
+    // ---------------- I18N ----------------
+    const translations = {
+      tr: {
+        title: 'Hayvan Tahmin Oyunu',
+        subtitle: '1 dakikada olabildiğince çok hayvanı bil!',
+        singlePlay: 'Tek Oyna',
+        badges: 'Rozetlerim',
+        enterName: 'İsminizi girin',
+        save: 'Kaydet',
+        nameHint: 'Bu isim cihazınızda saklanır.',
+        continueAs: (n) => `Devam: ${n}`,
+        categories: 'Kategoriler',
+        store: 'Mağaza',
+        guideTitle: 'Kullanma Kılavuzu',
+        chooseDifficulty: 'Zorluk Seçin',
+        easy: 'Kolay', medium: 'Orta', hard: 'Zor',
+        lifeCostHint: 'Bu turu başlatmak 1 can harcar.',
+        quit: 'Bırak',
+        time: 'Süre',
+        whatAnimal: 'Bu hayvan nedir?',
+        eliminate: 'Şık Eleme',
+        auto: 'Oto Cevap',
+        storeTitle: 'Mağaza',
+        unlimitedLives: '10 dk Sınırsız Can',
+        unlimitedLivesDesc: '100 puan. Süre boyunca can harcamadan tur başlat.',
+        eliminateTitle: 'Şık Eleme', eliminateDesc: '2 yanlış seçeneği kaldır. Tek kullanımlık.',
+        autoTitle: 'Oto Cevap', autoDesc: 'Doğru cevabı otomatik işaretle. Tek kullanımlık.',
+        back: 'Geri',
+        gameOver: 'Oyun Bitti',
+        earnedPoints: 'Kazandığın Puan',
+        home: 'Ana Menü', playAgain: 'Tekrar Oyna',
+        notEnoughLives: 'Yetersiz can. Mağazadan sınırsız can alın veya bekleyin.',
+        notEnoughPoints: 'Yetersiz puan.',
+        bought: 'Satın alındı!',
+        noMoreItems: 'Bu öğe tükendi.',
+        eliminateUsed: 'Bu soruda şık eleme kullanıldı.',
+        items: 'Öğeler',
+        // Categories
+        cat_birds: 'Kuşlar',
+        cat_reptiles: 'Sürüngenler',
+        cat_fish: 'Balıklar',
+        cat_arthropods: 'Eklem Bacaklılar',
+        cat_invertebrates: 'Omurgasızlar',
+        cat_dinosaurs: 'Dinozorlar',
+        cat_mammals: 'Memeliler',
+        // Guide (TR)
+        guide: `
+1) Hayvan Ekleme
+- Tüm veriler tek dosyada, sayfanın en altındaki JavaScript bölümündeki "animalsData" dizisinde bulunur.
+- Yeni hayvan eklemek için aşağıdaki örneği kopyalayıp uygun kategori ve zorlukla diziye ekleyin:
+{
+  nameTR: 'Panda',
+  nameEN: 'Panda',
+  category: 'memeliler', // 'kuslar' | 'surungenler' | 'baliklar' | 'eklembacaklilar' | 'omurgasizlar' | 'dinozorlar' | 'memeliler'
+  difficulty: 'orta',     // 'kolay' | 'orta' | 'zor'
+  imageUrl: 'https://upload.wikimedia.org/.../panda.jpg'
+}
+- İpucu: Doğru şık üretimi için aynı kategori ve zorlukta en az 4 farklı hayvan olması önerilir.
+
+2) Görsel Ekleme
+- "imageUrl" alanına direkt bir resim bağlantısı (HTTPS) girin. En güvenlisi "upload.wikimedia.org" gibi kaynaklardır.
+- Geniş ve yatay görseller (en az 800px) daha iyi görünür.
+
+3) Kategoriler ve Zorluklar
+- Kategori anahtarları sabittir: kuslar, surungenler, baliklar, eklembacaklilar, omurgasizlar, dinozorlar, memeliler.
+- Zorluk: kolay, orta, zor. Seçtiğiniz zorluk için filtreleme yapılır. Yeterli veri yoksa aynı kategoriden diğer zorluklar ile tamamlanır.
+
+4) Can ve Puan
+- Her tur başlatmak 1 can harcar. 2 dakikada bir can yenilenir (maks 3). "Sınırsız Can" (10 dk) ürünü açıkken can harcanmaz.
+- Her doğru cevap 1 puandır; tur bitince toplam puanınıza eklenir.
+
+5) Mağaza ve Öğeler
+- Sınırsız Can (10 dk): 100 puan
+- Şık Eleme: 20 puan (soru başına 2 yanlış şık gizler)
+- Oto Cevap: 50 puan (doğru cevabı işaretler)
+- Hepsi tek kullanımlık stok mantığıyla çalışır; satın aldıkça envanter artar.
+
+6) Rozetler
+- İlk Oyun, 50+ Puan, 200+ Puan, Hızlı 10 gibi rozetler otomatik kazanılır. "Rozetlerim" bölümünden görüntülenir.
+
+7) Dil
+- Sağ üstteki dil seçiciden Türkçe/English arasında geçiş yapabilirsiniz. Yeni hayvan adları için iki dil alanı vardır (nameTR/nameEN).
+        `,
+      },
+      en: {
+        title: 'Animal Guessing Game',
+        subtitle: 'Name as many animals as you can in 60 seconds!',
+        singlePlay: 'Single Play',
+        badges: 'My Badges',
+        enterName: 'Enter your name',
+        save: 'Save',
+        nameHint: 'Your name is stored on this device.',
+        continueAs: (n) => `Continue as: ${n}`,
+        categories: 'Categories',
+        store: 'Store',
+        guideTitle: 'User Guide',
+        chooseDifficulty: 'Choose Difficulty',
+        easy: 'Easy', medium: 'Medium', hard: 'Hard',
+        lifeCostHint: 'Starting a round costs 1 life.',
+        quit: 'Quit',
+        time: 'Time',
+        whatAnimal: 'Which animal is this?',
+        eliminate: 'Remove Options',
+        auto: 'Auto Answer',
+        storeTitle: 'Store',
+        unlimitedLives: 'Unlimited Lives (10 min)',
+        unlimitedLivesDesc: '100 points. Start rounds without spending lives for 10 minutes.',
+        eliminateTitle: 'Remove Options', eliminateDesc: 'Removes 2 wrong choices. Single use.',
+        autoTitle: 'Auto Answer', autoDesc: 'Automatically selects the correct answer. Single use.',
+        back: 'Back',
+        gameOver: 'Time Up',
+        earnedPoints: 'Points Earned',
+        home: 'Main Menu', playAgain: 'Play Again',
+        notEnoughLives: 'Not enough lives. Buy unlimited lives or wait.',
+        notEnoughPoints: 'Not enough points.',
+        bought: 'Purchased!',
+        noMoreItems: 'No more items.',
+        eliminateUsed: 'Elimination already used for this question.',
+        items: 'Items',
+        // Categories
+        cat_birds: 'Birds',
+        cat_reptiles: 'Reptiles',
+        cat_fish: 'Fish',
+        cat_arthropods: 'Arthropods',
+        cat_invertebrates: 'Invertebrates',
+        cat_dinosaurs: 'Dinosaurs',
+        cat_mammals: 'Mammals',
+        // Guide (EN)
+        guide: `
+1) Add Animals
+- Data lives in a single file inside the JS section as the "animalsData" array.
+- Add new entries like below with the correct category and difficulty:
+{
+  nameTR: 'Panda',
+  nameEN: 'Panda',
+  category: 'memeliler', // 'kuslar' | 'surungenler' | 'baliklar' | 'eklembacaklilar' | 'omurgasizlar' | 'dinozorlar' | 'memeliler'
+  difficulty: 'orta',     // 'kolay' | 'orta' | 'zor'
+  imageUrl: 'https://upload.wikimedia.org/.../panda.jpg'
+}
+- Tip: Keep at least 4 animals in the same category & difficulty for better distractors.
+
+2) Images
+- Provide a direct HTTPS image link in "imageUrl". "upload.wikimedia.org" is a reliable source.
+- Wide landscape images (>= 800px) render best.
+
+3) Categories and Difficulties
+- Category keys are fixed: kuslar, surungenler, baliklar, eklembacaklilar, omurgasizlar, dinozorlar, memeliler.
+- Difficulty: kolay, orta, zor. If too few entries exist, we fill from same category with mixed difficulties.
+
+4) Lives & Points
+- Starting a round costs 1 life. 1 life regenerates every 2 minutes (max 3). With Unlimited Lives active (10 min), starting a round is free.
+- Each correct answer = 1 point. Added to your total after the round.
+
+5) Store & Items
+- Unlimited Lives (10 min): 100 points
+- Remove Options: 20 points (removes two wrong options)
+- Auto Answer: 50 points (marks the correct answer)
+- All are single-use items; your inventory increases as you buy.
+
+6) Badges
+- Earn badges like First Game, 50+ Points, 200+ Points, Quick 10. See them in the Badges section.
+
+7) Language
+- Switch between Türkçe/English using the selector on the top. For animals, provide both nameTR/nameEN.
+        `,
+      }
+    };
+
+    const t = (key, ...args) => {
+      const lang = state.lang || 'tr';
+      const pack = translations[lang] || translations.tr;
+      const val = pack[key];
+      if (typeof val === 'function') return val(...args);
+      return val ?? key;
+    };
+
+    // ------------- Data -------------
+    const categories = [
+      { key: 'kuslar',      labelTR: 'Kuşlar',           labelEN: 'Birds',          image: 'https://images.unsplash.com/photo-1542461927-dd68c85dcc90?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'surungenler', labelTR: 'Sürüngenler',      labelEN: 'Reptiles',       image: 'https://images.unsplash.com/photo-1508182311256-e3f6f3b1c8ba?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'baliklar',    labelTR: 'Balıklar',         labelEN: 'Fish',           image: 'https://images.unsplash.com/photo-1544551763-7ef420be2ab5?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'eklembacaklilar', labelTR: 'Eklem Bacaklılar', labelEN: 'Arthropods', image: 'https://images.unsplash.com/photo-1520287397033-98cdbd4b9ae5?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'omurgasizlar', labelTR: 'Omurgasızlar',    labelEN: 'Invertebrates',  image: 'https://images.unsplash.com/photo-1546500840-ae38253aba9b?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'dinozorlar',  labelTR: 'Dinozorlar',       labelEN: 'Dinosaurs',      image: 'https://images.unsplash.com/photo-1582966785116-c68242c7d4ec?q=80&w=1200&auto=format&fit=crop' },
+      { key: 'memeliler',   labelTR: 'Memeliler',        labelEN: 'Mammals',        image: 'https://images.unsplash.com/photo-1474511014056-0b039d3ef4c1?q=80&w=1200&auto=format&fit=crop' },
+    ];
+
+    // Minimal but diverse set. Add more using the guide below.
+    const animalsData = [
+      // Kuşlar
+      { nameTR: 'Serçe', nameEN: 'Sparrow', category: 'kuslar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/House_Sparrow_mar08.jpg' },
+      { nameTR: 'Kartal', nameEN: 'Eagle', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Bald_Eagle_Portrait.jpg' },
+      { nameTR: 'Penguen', nameEN: 'Penguin', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_chick-8.jpg' },
+      { nameTR: 'Tavus kuşu', nameEN: 'Peacock', category: 'kuslar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Peacock_Emerald.jpg' },
+      { nameTR: 'Baykuş', nameEN: 'Owl', category: 'kuslar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Bleeding_heart_dove.jpg' },
+      { nameTR: 'Flamingo', nameEN: 'Flamingo', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Flamingos_Laguna_Colorada.jpg' },
+
+      // Sürüngenler
+      { nameTR: 'Kaplumbağa', nameEN: 'Turtle', category: 'surungenler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chelonia_mydas_is_going_for_the_air.jpg' },
+      { nameTR: 'Kobra', nameEN: 'Cobra', category: 'surungenler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Goldencobra.jpg' },
+      { nameTR: 'İguana', nameEN: 'Iguana', category: 'surungenler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Green_iguana.jpg' },
+      { nameTR: 'Timsah', nameEN: 'Crocodile', category: 'surungenler', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/NileCrocodile.jpg' },
+
+      // Balıklar
+      { nameTR: 'Palyaço balığı', nameEN: 'Clownfish', category: 'baliklar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Amphiprion_ocellaris_%28Clown_anemonefish%29_%282118571933%29.jpg' },
+      { nameTR: 'Beyaz köpekbalığı', nameEN: 'Great white shark', category: 'baliklar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/56/White_shark.jpg' },
+      { nameTR: 'Somon', nameEN: 'Salmon', category: 'baliklar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Sockeye_Salmon.jpg' },
+      { nameTR: 'Betta', nameEN: 'Betta', category: 'baliklar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Betta_mahachaiensis_01.jpg' },
+
+      // Eklem bacaklılar (arthropods)
+      { nameTR: 'Kelebek', nameEN: 'Butterfly', category: 'eklembacaklilar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Monarch_In_May.jpg' },
+      { nameTR: 'Örümcek', nameEN: 'Spider', category: 'eklembacaklilar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/09/Araneus_diadematus_3.jpg' },
+      { nameTR: 'Yengeç', nameEN: 'Crab', category: 'eklembacaklilar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Blue_crab_on_soil.jpg' },
+      { nameTR: 'Akrep', nameEN: 'Scorpion', category: 'eklembacaklilar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Scorpion_Photograph.jpg' },
+      { nameTR: 'Uğur böceği', nameEN: 'Ladybug', category: 'eklembacaklilar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Coccinella_septempunctata_on_a_leaf.jpg' },
+
+      // Omurgasızlar (non-arthropod examples)
+      { nameTR: 'Ahtapot', nameEN: 'Octopus', category: 'omurgasizlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Octopus2.jpg' },
+      { nameTR: 'Denizanası', nameEN: 'Jellyfish', category: 'omurgasizlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Blue_jellyfish.jpg' },
+      { nameTR: 'Denizyıldızı', nameEN: 'Starfish', category: 'omurgasizlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Starfish_10.jpg' },
+      { nameTR: 'Sünger', nameEN: 'Sponge', category: 'omurgasizlar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Sponges_marine.jpg' },
+      { nameTR: 'Toprak solucanı', nameEN: 'Earthworm', category: 'omurgasizlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Lumbricus_terrestris.jpg' },
+
+      // Dinozorlar
+      { nameTR: 'Tiranosaurus', nameEN: 'Tyrannosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Tyrannosaurus_Rex_Holotype.jpg' },
+      { nameTR: 'Triceratops', nameEN: 'Triceratops', category: 'dinozorlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Triceratops_BW.jpg' },
+      { nameTR: 'Brachiosaurus', nameEN: 'Brachiosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Brachiosaurus_stechowi.jpg' },
+      { nameTR: 'Stegosaurus', nameEN: 'Stegosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Stegosaurus_ungulatus.jpg' },
+      { nameTR: 'Velociraptor', nameEN: 'Velociraptor', category: 'dinozorlar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Velociraptor_mongoliensis.jpg' },
+
+      // Memeliler
+      { nameTR: 'Aslan', nameEN: 'Lion', category: 'memeliler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Lion_waiting_in_Namibia.jpg' },
+      { nameTR: 'Fil', nameEN: 'Elephant', category: 'memeliler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/37/African_Bush_Elephant.jpg' },
+      { nameTR: 'Ayı', nameEN: 'Bear', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ursus_arctos_arctos_%28cropped%29.jpg' },
+      { nameTR: 'Yunus', nameEN: 'Dolphin', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Bottlenose_Dolphin_KSC04pd0178.jpg' },
+      { nameTR: 'Koala', nameEN: 'Koala', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg' },
+      { nameTR: 'Kanguru', nameEN: 'Kangaroo', category: 'memeliler', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Kangaroo_Australia_01_11_2008_-_retouch.jpg' },
+    ];
+
+    // ------------- State -------------
+    const state = {
+      lang: localStorage.getItem('ag_lang') || (navigator.language?.startsWith('tr') ? 'tr' : 'en'),
+      playerName: localStorage.getItem('ag_playerName') || null,
+      totalPoints: Number(localStorage.getItem('ag_points') || '0'),
+      lives: JSON.parse(localStorage.getItem('ag_lives') || '{"count":3,"last":0}'),
+      unlimitedLivesUntil: Number(localStorage.getItem('ag_unlimitedUntil') || '0'),
+      inventory: JSON.parse(localStorage.getItem('ag_inventory') || '{"eliminate":0,"auto":0}'),
+      badges: JSON.parse(localStorage.getItem('ag_badges') || '{}'),
+      currentCategory: null,
+      currentDifficulty: null,
+      round: {
+        score: 0,
+        startMs: 0,
+        timerId: null,
+        pool: [],
+        asked: new Set(),
+        eliminateUsedForQuestion: false,
+      }
+    };
+
+    // Safe init for lives
+    if (!state.lives || typeof state.lives.count !== 'number') {
+      state.lives = { count: 3, last: Date.now() };
+    }
+
+    // ------------- Utils -------------
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const shuffle = (arr) => arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+
+    function saveState() {
+      localStorage.setItem('ag_lang', state.lang);
+      if (state.playerName) localStorage.setItem('ag_playerName', state.playerName);
+      localStorage.setItem('ag_points', String(state.totalPoints));
+      localStorage.setItem('ag_lives', JSON.stringify(state.lives));
+      localStorage.setItem('ag_unlimitedUntil', String(state.unlimitedLivesUntil));
+      localStorage.setItem('ag_inventory', JSON.stringify(state.inventory));
+      localStorage.setItem('ag_badges', JSON.stringify(state.badges));
+    }
+
+    function toast(msg) {
+      const el = $('#toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(()=> el.classList.remove('show'), 1600);
+    }
+
+    function setScreen(id) {
+      $$('.screen').forEach(s => s.classList.remove('active'));
+      $('#'+id)?.classList.add('active');
+      // Show/hide topbar
+      const topbar = $('#topbar');
+      topbar.style.display = (id === 'welcomeScreen') ? 'none' : 'flex';
+    }
+
+    function renderTopbar() {
+      // Logo and headings from web
+      $('#gameLogo').src = 'https://cdn-icons-png.flaticon.com/512/616/616408.png';
+      $('#gameTitle').textContent = 'WildGuess';
+      $('#playerNameTop').textContent = state.playerName ? state.playerName : '';
+
+      // Lives
+      renderLives();
+
+      // Points
+      $('#pointsChip').textContent = `${state.totalPoints} ⭐`;
+    }
+
+    function isUnlimitedLivesActive() {
+      return Date.now() < state.unlimitedLivesUntil;
+    }
+
+    function renderLives() {
+      const hearts = $('#hearts');
+      hearts.innerHTML = '';
+      if (isUnlimitedLivesActive()) {
+        const span = document.createElement('span');
+        span.className = 'badge-chip';
+        span.textContent = '∞';
+        hearts.appendChild(span);
+        return;
+      }
+      const count = clamp(state.lives.count, 0, 3);
+      for (let i=0;i<3;i++) {
+        const d = document.createElement('div');
+        d.className = 'heart' + (i < count ? '' : ' off');
+        d.textContent = '❤';
+        hearts.appendChild(d);
+      }
+    }
+
+    function regenLivesTick() {
+      if (isUnlimitedLivesActive()) {
+        renderLives();
+        return;
+      }
+      const now = Date.now();
+      if (state.lives.count >= 3) {
+        state.lives.last = now; // keep last seen
+        return;
+      }
+      const last = state.lives.last || now;
+      const diff = now - last;
+      const interval = 120000; // 2 minutes per life
+      if (diff >= interval) {
+        const gained = Math.floor(diff / interval);
+        state.lives.count = clamp(state.lives.count + gained, 0, 3);
+        state.lives.last = last + gained * interval;
+        saveState();
+        renderLives();
+      }
+    }
+
+    // ------------- UI Binding -------------
+    function renderWelcome() {
+      $('#titleText').textContent = t('title');
+      $('#subtitleText').textContent = t('subtitle');
+      $('#playBtn').textContent = t('singlePlay');
+      $('#badgesBtnWelcome').textContent = t('badges');
+      $('#enterNameLbl').textContent = t('enterName');
+      $('#saveNameBtn').textContent = t('save');
+      $('#nameHint').textContent = t('nameHint');
+      $('#continueAs').style.display = state.playerName ? 'block' : 'none';
+      $('#continueAs').textContent = state.playerName ? t('continueAs', state.playerName) : '';
+      $('#langSelectWelcome').value = state.lang;
+    }
+
+    function renderMain() {
+      $('#categoriesLbl').textContent = t('categories');
+      $('#storeBtn').textContent = t('store');
+      $('#badgesBtn').textContent = t('badges');
+      $('#langSelectMain').value = state.lang;
+      renderCategories();
+
+      // Guide text
+      $('#guideContent').textContent = t('guide');
+    }
+
+    function renderCategories() {
+      const grid = $('#categoriesGrid');
+      grid.innerHTML = '';
+      categories.forEach(cat => {
+        const d = document.createElement('div');
+        d.className = 'category';
+        d.onclick = () => openDifficulty(cat.key);
+
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        thumb.style.backgroundImage = `url('${cat.image}')`;
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        const nm = document.createElement('div');
+        nm.style.fontWeight = '700';
+        const langIsTR = state.lang === 'tr';
+        nm.textContent = langIsTR ? cat.labelTR : cat.labelEN;
+        const hint = document.createElement('div');
+        hint.className = 'muted small';
+        hint.textContent = langIsTR ? cat.labelEN : cat.labelTR;
+        const right = document.createElement('div');
+        right.appendChild(hint);
+
+        label.appendChild(nm);
+        label.appendChild(right);
+
+        d.appendChild(thumb);
+        d.appendChild(label);
+        grid.appendChild(d);
+      });
+    }
+
+    function openDifficulty(catKey) {
+      state.currentCategory = catKey;
+      $('#chooseDifficultyLbl').textContent = t('chooseDifficulty');
+      $('#diffEasy').textContent = t('easy');
+      $('#diffMedium').textContent = t('medium');
+      $('#diffHard').textContent = t('hard');
+      $('#lifeCostHint').textContent = t('lifeCostHint');
+      setScreen('difficultyScreen');
+    }
+
+    function canStartRound() {
+      if (isUnlimitedLivesActive()) return true;
+      return state.lives.count > 0;
+    }
+
+    function consumeLifeIfNeeded() {
+      if (isUnlimitedLivesActive()) return true;
+      if (state.lives.count > 0) {
+        state.lives.count -= 1;
+        state.lives.last = Date.now();
+        saveState();
+        renderLives();
+        return true;
+      }
+      return false;
+    }
+
+    function startRound(diff) {
+      state.currentDifficulty = diff;
+      if (!canStartRound()) {
+        toast(t('notEnoughLives'));
+        return;
+      }
+      if (!consumeLifeIfNeeded()) return;
+
+      // Prepare pool
+      const primary = animalsData.filter(a => a.category === state.currentCategory && a.difficulty === diff);
+      let pool = [...primary];
+      if (pool.length < 6) {
+        const fill = animalsData.filter(a => a.category === state.currentCategory && a.difficulty !== diff);
+        pool = [...pool, ...shuffle(fill)].slice(0, Math.max(6, pool.length));
+      }
+      state.round.pool = shuffle(pool);
+      state.round.asked = new Set();
+      state.round.score = 0;
+      state.round.eliminateUsedForQuestion = false;
+      state.round.startMs = Date.now();
+
+      $('#roundScore').textContent = `0 ⭐`;
+      $('#roundCategory').textContent = categoryLabel(state.currentCategory);
+      $('#roundDifficulty').textContent = difficultyLabel(diff);
+      $('#timer').textContent = '60';
+      $('#useEliminateBtn').textContent = `${t('eliminate')} (${state.inventory.eliminate || 0})`;
+      $('#useAutoBtn').textContent = `${t('auto')} (${state.inventory.auto || 0})`;
+      $('#questionText').textContent = t('whatAnimal');
+
+      setScreen('gameScreen');
+      nextQuestion();
+      startTimer();
+    }
+
+    function difficultyLabel(d) {
+      if (state.lang === 'tr') return d === 'kolay' ? 'Kolay' : d === 'orta' ? 'Orta' : 'Zor';
+      return d === 'kolay' ? 'Easy' : d === 'orta' ? 'Medium' : 'Hard';
+    }
+
+    function categoryLabel(key) {
+      const cat = categories.find(c => c.key === key);
+      if (!cat) return key;
+      return state.lang === 'tr' ? cat.labelTR : cat.labelEN;
+    }
+
+    function startTimer() {
+      clearInterval(state.round.timerId);
+      let remain = 60;
+      state.round.timerId = setInterval(() => {
+        remain -= 1;
+        $('#timer').textContent = String(remain);
+        if (remain <= 0) {
+          clearInterval(state.round.timerId);
+          endRound();
+        }
+      }, 1000);
+    }
+
+    function selectRandomFromPool(exceptNames = []) {
+      const left = state.round.pool.filter(a => !state.round.asked.has(keyOf(a)));
+      if (left.length === 0) return null;
+      const rnd = left[Math.floor(Math.random() * left.length)];
+      return rnd;
+    }
+
+    function keyOf(a) { return `${a.category}|${a.nameTR}|${a.imageUrl}`; }
+
+    function nextQuestion() {
+      state.round.eliminateUsedForQuestion = false;
+      const q = selectRandomFromPool();
+      if (!q) {
+        endRound();
+        return;
+      }
+      state.round.asked.add(keyOf(q));
+
+      const langIsTR = state.lang === 'tr';
+      const allInCat = animalsData.filter(x => x.category === q.category);
+      const wrongs = shuffle(allInCat.filter(x => x !== q)).slice(0, 3);
+      const opts = shuffle([q, ...wrongs]);
+
+      $('#questionImg').src = q.imageUrl;
+      $('#questionText').textContent = t('whatAnimal');
+
+      const options = $('#options');
+      options.innerHTML = '';
+      opts.forEach(item => {
+        const b = document.createElement('button');
+        b.className = 'option-btn';
+        b.textContent = langIsTR ? item.nameTR : item.nameEN;
+        b.dataset.correct = (item === q) ? '1' : '0';
+        b.onclick = () => onAnswer(b, item === q);
+        options.appendChild(b);
+      });
+    }
+
+    function onAnswer(btn, isCorrect) {
+      // Prevent double click
+      $$('#options .option-btn').forEach(b => b.onclick = null);
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        state.round.score += 1;
+        $('#roundScore').textContent = `${state.round.score} ⭐`;
+      } else {
+        btn.classList.add('wrong');
+        // highlight correct
+        $$('#options .option-btn').forEach(b => {
+          if (b.dataset.correct === '1') b.classList.add('correct');
+        });
+      }
+
+      setTimeout(() => {
+        nextQuestion();
+      }, 700);
+    }
+
+    function endRound() {
+      clearInterval(state.round.timerId);
+      const earned = state.round.score;
+      state.totalPoints += earned;
+      saveState();
+      renderTopbar();
+
+      // badges
+      if (!state.badges.firstGame) awardBadge('firstGame');
+      if (state.totalPoints >= 50 && !state.badges.score50) awardBadge('score50');
+      if (state.totalPoints >= 200 && !state.badges.score200) awardBadge('score200');
+      if (state.round.score >= 10 && !state.badges.quick10) awardBadge('quick10');
+
+      $('#earnedScore').textContent = String(earned);
+      $('#gameOverOverlay').classList.add('active');
+    }
+
+    function awardBadge(code) {
+      const catalog = badgesCatalog();
+      if (!catalog[code]) return;
+      state.badges[code] = {
+        at: Date.now()
+      };
+      saveState();
+    }
+
+    function badgesCatalog() {
+      return {
+        firstGame: { name: 'İlk Oyun', nameEN: 'First Game', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'İlk turunuzu tamamladınız.' },
+        score50:   { name: '50+ Puan', nameEN: '50+ Points', icon: 'https://cdn-icons-png.flaticon.com/512/992/992700.png', desc: 'Toplam 50 veya daha fazla puan.' },
+        score200:  { name: '200+ Puan', nameEN: '200+ Points', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'Toplam 200 veya daha fazla puan.' },
+        quick10:   { name: 'Hızlı 10', nameEN: 'Quick 10', icon: 'https://cdn-icons-png.flaticon.com/512/2421/2421939.png', desc: 'Bir turda 10+ doğru.' },
+        shopper:   { name: 'İlk Alışveriş', nameEN: 'First Purchase', icon: 'https://cdn-icons-png.flaticon.com/512/3081/3081648.png', desc: 'Mağazadan ilk alışveriş.' },
+      };
+    }
+
+    function renderBadges() {
+      const list = $('#badgesList');
+      list.innerHTML = '';
+      const cat = badgesCatalog();
+      Object.keys(cat).forEach(code => {
+        const earned = !!state.badges[code];
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.padding = '10px';
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.style.alignItems = 'center';
+        const img = document.createElement('img');
+        img.src = cat[code].icon;
+        img.alt = 'badge';
+        img.style.width = '48px';
+        img.style.height = '48px';
+        img.style.borderRadius = '10px';
+        const tit = document.createElement('div');
+        tit.style.fontWeight = '700';
+        tit.textContent = (state.lang === 'tr' ? cat[code].name : cat[code].nameEN);
+        const sub = document.createElement('div');
+        sub.className = 'muted small';
+        sub.textContent = cat[code].desc;
+        const grow = document.createElement('div');
+        grow.style.flex = '1';
+        const right = document.createElement('div');
+        const tag = document.createElement('div');
+        tag.className = 'badge-chip';
+        tag.textContent = earned ? '✓' : '—';
+        right.appendChild(tag);
+
+        const col = document.createElement('div');
+        col.appendChild(tit);
+        col.appendChild(sub);
+
+        row.appendChild(img);
+        row.appendChild(col);
+        row.appendChild(grow);
+        row.appendChild(right);
+        card.appendChild(row);
+        list.appendChild(card);
+      });
+    }
+
+    // ------------- Store -------------
+    const COSTS = { unlimited: 100, eliminate: 20, auto: 50 };
+
+    function openStore() {
+      setScreen('storeScreen');
+      $('#storePoints').textContent = `${state.totalPoints} ⭐`;
+      $('#storeTitle').textContent = t('storeTitle');
+      $('#storeLivesTitle').textContent = t('unlimitedLives');
+      $('#storeLivesDesc').textContent = t('unlimitedLivesDesc');
+      $('#storeEliminateTitle').textContent = t('eliminateTitle');
+      $('#storeEliminateDesc').textContent = t('eliminateDesc');
+      $('#storeAutoTitle').textContent = t('autoTitle');
+      $('#storeAutoDesc').textContent = t('autoDesc');
+      $('#buyUnlimitedBtn').textContent = `${COSTS.unlimited} ⭐`;
+      $('#buyEliminateBtn').textContent = `${COSTS.eliminate} ⭐`;
+      $('#buyAutoBtn').textContent = `${COSTS.auto} ⭐`;
+    }
+
+    function buy(item) {
+      const cost = COSTS[item];
+      if (state.totalPoints < cost) {
+        toast(t('notEnoughPoints'));
+        return;
+      }
+      state.totalPoints -= cost;
+      if (item === 'unlimited') {
+        const now = Date.now();
+        const extra = 10 * 60 * 1000; // 10 mins
+        state.unlimitedLivesUntil = Math.max(now, state.unlimitedLivesUntil) + extra;
+      } else if (item === 'eliminate') {
+        state.inventory.eliminate = (state.inventory.eliminate || 0) + 1;
+      } else if (item === 'auto') {
+        state.inventory.auto = (state.inventory.auto || 0) + 1;
+      }
+      if (!state.badges.shopper) awardBadge('shopper');
+      saveState();
+      renderTopbar();
+      openStore();
+      toast(t('bought'));
+    }
+
+    function useEliminate() {
+      if ((state.inventory.eliminate || 0) <= 0) { toast(t('noMoreItems')); return; }
+      if (state.round.eliminateUsedForQuestion) { toast(t('eliminateUsed')); return; }
+      const opts = Array.from($$('#options .option-btn'));
+      const wrongs = opts.filter(b => b.dataset.correct !== '1');
+      if (wrongs.length <= 1) { toast(t('eliminateUsed')); return; }
+      const toHide = shuffle(wrongs).slice(0, Math.min(2, wrongs.length-1));
+      toHide.forEach(b => b.classList.add('hidden'));
+      state.round.eliminateUsedForQuestion = true;
+      state.inventory.eliminate -= 1;
+      saveState();
+      $('#useEliminateBtn').textContent = `${t('eliminate')} (${state.inventory.eliminate || 0})`;
+    }
+
+    function useAuto() {
+      if ((state.inventory.auto || 0) <= 0) { toast(t('noMoreItems')); return; }
+      const opts = Array.from($$('#options .option-btn'));
+      const correct = opts.find(b => b.dataset.correct === '1');
+      if (!correct) return;
+      state.inventory.auto -= 1;
+      saveState();
+      $('#useAutoBtn').textContent = `${t('auto')} (${state.inventory.auto || 0})`;
+      onAnswer(correct, true);
+    }
+
+    // ------------- Events -------------
+    function bindEvents() {
+      $('#playBtn').onclick = () => {
+        if (!state.playerName) {
+          $('#nameCard').style.display = 'block';
+        } else {
+          toMainMenu();
+        }
+      };
+      $('#badgesBtnWelcome').onclick = () => { renderBadges(); setScreen('badgesScreen'); };
+      $('#saveNameBtn').onclick = () => {
+        const val = ($('#nameInput').value || '').trim();
+        if (val.length < 2) { toast('Lütfen geçerli bir isim yazın.'); return; }
+        state.playerName = val;
+        saveState();
+        renderTopbar();
+        toMainMenu();
+      };
+      $('#langSelectWelcome').onchange = (e) => { state.lang = e.target.value; saveState(); rerenderAll(); };
+
+      $('#storeBtn').onclick = openStore;
+      $('#badgesBtn').onclick = () => { renderBadges(); setScreen('badgesScreen'); };
+      $('#langSelectMain').onchange = (e) => { state.lang = e.target.value; saveState(); rerenderAll(); };
+
+      $('#backToMainBtn').onclick = () => toMainMenu();
+      $('#backFromStoreBtn').onclick = () => toMainMenu();
+      $('#backFromBadgesBtn').onclick = () => toMainMenu();
+
+      $('#diffEasy').onclick = () => startRound('kolay');
+      $('#diffMedium').onclick = () => startRound('orta');
+      $('#diffHard').onclick = () => startRound('zor');
+
+      $('#quitGameBtn').onclick = () => { endRound(); };
+
+      $('#buyUnlimitedBtn').onclick = () => buy('unlimited');
+      $('#buyEliminateBtn').onclick = () => buy('eliminate');
+      $('#buyAutoBtn').onclick = () => buy('auto');
+
+      $('#useEliminateBtn').onclick = useEliminate;
+      $('#useAutoBtn').onclick = useAuto;
+
+      $('#goHomeBtn').onclick = () => { $('#gameOverOverlay').classList.remove('active'); toMainMenu(); };
+      $('#playAgainBtn').onclick = () => {
+        $('#gameOverOverlay').classList.remove('active');
+        if (state.currentCategory && state.currentDifficulty) {
+          startRound(state.currentDifficulty);
+        } else {
+          toMainMenu();
+        }
+      };
+
+      // Life regen ticker
+      setInterval(() => {
+        regenLivesTick();
+        // Also refresh unlimited lives UI
+        if (isUnlimitedLivesActive()) {
+          renderLives();
+        }
+      }, 1000);
+    }
+
+    function toMainMenu() {
+      renderTopbar();
+      renderMain();
+      setScreen('mainMenu');
+    }
+
+    function rerenderAll() {
+      renderWelcome();
+      renderTopbar();
+      renderMain();
+    }
+
+    // ------------- Init -------------
+    document.addEventListener('DOMContentLoaded', () => {
+      renderWelcome();
+      renderTopbar();
+
+      if (state.playerName) {
+        toMainMenu();
+      } else {
+        setScreen('welcomeScreen');
+      }
+
+      bindEvents();
+    });
+  </script>
+</body>
+</html>
