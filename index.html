@@ -30,7 +30,7 @@
       background-attachment: fixed;
     }
 
-    #app { max-width: 520px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+    #app { max-width: 560px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
 
     header {
       position: sticky; top: 0; z-index: 10;
@@ -38,13 +38,17 @@
       padding: 12px 14px; backdrop-filter: blur(12px);
       background: linear-gradient(180deg, rgba(15,18,38,0.85), rgba(15,18,38,0.35));
       border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .brand { font-weight: 800; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
     .brand .logo { font-size: 20px; }
 
+    .top-right { display: flex; align-items: center; gap: 8px; }
     .lives { display: flex; align-items: center; gap: 8px; }
     .life-info { font-size: 12px; color: var(--muted); }
+    #playerBadge { font-size: 12px; color: var(--muted); }
 
     button {
       appearance: none; border: none; outline: none; cursor: pointer;
@@ -72,28 +76,36 @@
 
     .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
-    .category {
-      display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center;
-      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    }
-    .category .icon { font-size: 36px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4)); }
-    .category h3 { font-size: 16px; margin-bottom: 4px; }
-    .category .levels { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
-    .category .levels button { padding: 10px 8px; font-size: 12px; border-radius: 10px; }
+    /* Start menu */
+    .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .menu-btn { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; padding: 14px; }
 
-    #homeScreen .subtitle { color: var(--muted); margin-bottom: 12px; }
+    /* Category list */
+    .category-btn {
+      display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 8px; text-align: left;
+    }
+    .category-btn img { width: 72px; height: 72px; object-fit: cover; border-radius: 12px; }
+    .category-btn h3 { font-size: 16px; margin: 0; }
+    .category-btn .muted { font-size: 12px; color: var(--muted); }
+
+    .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .level-grid button { padding: 10px 8px; font-size: 12px; border-radius: 10px; }
 
     #gameScreen .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     #progress { font-size: 13px; color: var(--muted); }
     #gameContainer { display: grid; gap: 12px; }
-    #gameContainer .hero { text-align: center; font-size: 80px; line-height: 1; }
+    #gameContainer .hero { text-align: center; }
+    .hero img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 12px; background: rgba(255,255,255,0.08); }
 
     .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
     .option-btn { width: 100%; }
 
     .image-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .image-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.06); }
-    .image-option .big { font-size: 64px; }
+    .image-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.06); }
+    .image-option img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
 
     .letter-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
     .slot { width: 44px; height: 52px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px dashed rgba(255,255,255,0.18); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; }
@@ -102,11 +114,12 @@
     .letter[disabled] { opacity: 0.35; filter: grayscale(0.6); }
 
     .drag-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .dropzone { height: 82px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); display: grid; place-items: center; background: rgba(255,255,255,0.05); position: relative; }
+    .dropzone { min-height: 100px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); display: grid; place-items: center; background: rgba(255,255,255,0.05); position: relative; padding: 8px; }
     .dropzone.locked { border-style: solid; border-color: var(--ok); background: rgba(39,208,125,0.12); }
     .dropzone .label { position: absolute; bottom: -8px; left: 10px; font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.35); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
 
-    .drag-item { user-select: none; -webkit-user-drag: element; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .drag-item { user-select: none; -webkit-user-drag: element; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 6px; display: flex; align-items: center; justify-content: center; }
+    .drag-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
     .drag-item.selected { outline: 2px solid var(--accent2); box-shadow: 0 0 0 3px rgba(0,227,162,0.25) inset; }
     .drag-item.placed { opacity: 0.45; filter: grayscale(0.6); pointer-events: none; }
     .dropzone.highlight { border-color: var(--accent2); background: rgba(0,227,162,0.08); }
@@ -123,8 +136,17 @@
     #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 30; }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
 
-    @media (min-width: 480px) {
-      .options { grid-template-columns: 1fr 1fr; }
+    /* Achievements */
+    .achievements { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .badge { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px; text-align: center; }
+    .badge .icon { font-size: 36px; }
+    .badge.locked { filter: grayscale(1); opacity: 0.6; }
+
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th, .table td { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px; text-align: left; }
+
+    @media (min-width: 520px) {
+      .image-options { grid-template-columns: repeat(4, 1fr); }
       .letters { grid-template-columns: repeat(8, 1fr); }
     }
   </style>
@@ -136,40 +158,145 @@
         <div class="logo">🧠</div>
         <div>Hayvan Tahmin</div>
       </div>
-      <div class="lives">
-        <div id="heartContainer" aria-live="polite">❤️❤️❤️</div>
-        <span id="lifeInfo" class="life-info"></span>
+      <div id="playerBadge" class="life-info"></div>
+      <div class="top-right">
+        <div class="lives">
+          <div id="heartContainer" aria-live="polite">❤️❤️❤️</div>
+          <span id="lifeInfo" class="life-info"></span>
+        </div>
         <button id="watchAdBtn" title="1 Saat Sınırsız Can">Reklam İzle</button>
       </div>
     </header>
 
     <main>
-      <section id="homeScreen" class="grid">
+      <!-- Start Menu -->
+      <section id="startScreen" class="grid">
         <div class="card">
           <h1>Hayvan Tahmin Yarışması</h1>
-          <div class="subtitle">Kategorini ve seviyeni seç, 4 mini-oyunu art arda doğru tamamla!</div>
+          <div class="life-info">Tek başına ya da arkadaşınla oyna, puan topla, rozetleri aç!</div>
         </div>
-        <div id="categories" class="grid"></div>
+        <div class="start-grid">
+          <button id="btnSingle" class="menu-btn">🎯 Tek Oyna</button>
+          <button id="btnMulti" class="menu-btn">👫 Arkadaşınla Oyna</button>
+          <button id="btnBadges" class="menu-btn">🏅 Rozetlerim</button>
+          <button id="btnParent" class="menu-btn">🛡️ Ebeveyn Kontrolü</button>
+        </div>
       </section>
 
+      <!-- Single Setup -->
+      <section id="singleSetupScreen" class="card" hidden>
+        <h2>Tek Oyuncu Ayarları</h2>
+        <div class="grid">
+          <label>İsminiz
+            <input id="singleName" type="text" placeholder="Adınız" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <label>Yaşınız
+            <input id="singleAge" type="number" min="3" max="18" placeholder="Yaş" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <div class="controls">
+            <button id="singleSetupNext">Devam</button>
+            <button class="ghost" id="backToStart1">Geri</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Multi Setup -->
+      <section id="multiSetupScreen" class="card" hidden>
+        <h2>İki Oyuncu</h2>
+        <div class="grid">
+          <label>Oyuncu 1
+            <input id="p1Name" type="text" placeholder="Oyuncu 1" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <label>Oyuncu 2
+            <input id="p2Name" type="text" placeholder="Oyuncu 2" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <div class="controls">
+            <button id="multiSetupNext">Devam</button>
+            <button class="ghost" id="backToStart2">Geri</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Select -->
+      <section id="categoryScreen" class="grid" hidden>
+        <div class="card">
+          <h2>Kategori Seç</h2>
+          <div class="life-info">Sol tarafta görsel, sağda başlık ile listelenir</div>
+        </div>
+        <div id="categoryList" class="grid"></div>
+        <div class="controls"><button id="backToStart3" class="ghost">Geri</button></div>
+      </section>
+
+      <!-- Level Select -->
+      <section id="levelScreen" class="grid" hidden>
+        <div class="card">
+          <h2 id="levelTitle">Seviye Seç</h2>
+          <div class="level-grid">
+            <button data-level="Seviye 1">Seviye 1</button>
+            <button data-level="Seviye 2">Seviye 2</button>
+            <button data-level="Seviye 3">Seviye 3</button>
+            <button data-level="Tümü">Tümü</button>
+          </div>
+          <div class="controls"><button id="backToCategories" class="ghost">Geri</button></div>
+        </div>
+      </section>
+
+      <!-- Game -->
       <section id="gameScreen" hidden>
         <div class="card">
           <div class="topbar">
-            <div id="progress">Oyun 1/4</div>
+            <div id="progress">Soru 1/10 • Oyun 1/4</div>
             <div id="currentCatLvl" class="life-info"></div>
           </div>
           <div id="gameContainer"></div>
           <div class="controls">
-            <button id="backBtn" class="secondary">Geri</button>
-            <button id="restartRoundBtn" class="ghost">Baştan</button>
+            <button id="restartQuestionBtn" class="ghost">Soruyu Baştan</button>
+            <button id="quitToStartBtn" class="secondary">Menü</button>
           </div>
         </div>
       </section>
 
+      <!-- Game Over (single) -->
       <section id="gameOverScreen" class="card" hidden>
         <h2>Canların bitti!</h2>
         <p class="life-info">3 dakika sonra 1 can yenilenir. İstersen reklam izleyerek 1 saat sınırsız can kazan.</p>
-        <button id="newGameBtn">Yeni Oyuna Başla</button>
+        <div class="controls">
+          <button id="newGameBtn">Yeni Oyuna Başla</button>
+          <button id="goMenuFromOver" class="ghost">Menü</button>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="resultsScreen" class="card" hidden>
+        <h2>Sonuçlar</h2>
+        <div id="resultsBody" class="life-info"></div>
+        <div class="controls">
+          <button id="resultsToMenu">Ana Menü</button>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section id="achievementsScreen" class="grid" hidden>
+        <div class="card">
+          <h2>Rozetlerim</h2>
+          <div>Toplam Puan: <b id="totalPointsLabel">0</b></div>
+        </div>
+        <div id="badgeList" class="achievements"></div>
+        <div class="controls"><button id="backFromBadges" class="ghost">Geri</button></div>
+      </section>
+
+      <!-- Parent Control -->
+      <section id="parentScreen" class="grid" hidden>
+        <div class="card" id="parentAuth"></div>
+        <div class="card" id="parentStats" hidden>
+          <h2>Ebeveyn Paneli</h2>
+          <div class="life-info">Kategori performansı</div>
+          <table class="table" id="statsTable"></table>
+          <div class="controls">
+            <button id="resetStatsBtn" class="secondary">İstatistikleri Sıfırla</button>
+            <button id="backFromParent" class="ghost">Geri</button>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -190,157 +317,358 @@
     const LIFE_REGEN_MS = 3 * 60 * 1000; // 3 dakika
     const AD_DURATION_MS = 5000; // sahte reklam 5 sn
     const UNLIMITED_MS = 60 * 60 * 1000; // 1 saat
+    const POINTS_PER_CORRECT = 10;
+    const QUESTION_COUNTS = { 'Seviye 1': 10, 'Seviye 2': 15, 'Seviye 3': 20, 'Tümü': 30 };
 
     const LS_KEYS = {
       lives: 'animalquiz_lives',
       regenAt: 'animalquiz_regenAt',
-      unlimitedUntil: 'animalquiz_unlimitedUntil'
+      unlimitedUntil: 'animalquiz_unlimitedUntil',
+      totalPoints: 'animalquiz_totalPoints',
+      parentName: 'animalquiz_parentName',
+      parentPIN: 'animalquiz_parentPIN',
+      stats: 'animalquiz_stats'
     };
 
     const TURKISH_ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
 
+    function animalImageUrl(name) {
+      const q = encodeURIComponent(name + ',animal');
+      return `https://source.unsplash.com/512x512/?${q}`;
+    }
+    function categoryImageUrl(cat) {
+      const map = {
+        'Kuşlar': 'bird', 'Sürüngenler': 'reptile', 'Balıklar': 'fish', 'Eklem Bacaklılar': 'arthropod', 'Omurgasızlar': 'invertebrate', 'Dinozorlar': 'dinosaur', 'Memeliler': 'mammal'
+      };
+      const q = encodeURIComponent(map[cat] || 'animal');
+      return `https://source.unsplash.com/256x256/?${q}`;
+    }
+
+    const INFO_DB = {
+      'Aslan': 'Aslanlar günde 20 saate kadar dinlenebilir ve sürü halinde yaşarlar.',
+      'Fil': 'Fillere özgü uzun hortumları 40 binden fazla kas içerir.',
+      'Kaplan': 'Kaplanlar kedigillerin en güçlü yüzücülerindendir.',
+      'Panda': 'Pandalar günün büyük kısmını bambu yiyerek geçirir.',
+      'Kedi': 'Kediler karanlıkta insanlardan altı kat daha iyi görür.',
+      'Köpek': 'Köpekler kokuları bizden 10.000 kat güçlü algılar.',
+      'Kartal': 'Kartallar 3 km öteden avını görebilir.',
+      'Serçe': 'Serçeler şehir yaşamına en iyi uyum sağlayan kuşlardandır.',
+      'Tavuskuşu': 'Erkek tavuskuşunun gösterişli tüyleri dişileri etkilemek içindir.',
+      'Güvercin': 'Güvercinler çok iyi yön bulur ve yüzlerce km uzaktan yuvasını bulabilir.',
+      'Baykuş': 'Baykuşlar başlarını 270 dereceye kadar çevirebilir.',
+      'Tukan': 'Tukanların gagası hafif ama çok hacimlidir.',
+      'Yılan': 'Yılanlar alt çenelerini ayırarak büyük avları yutabilir.',
+      'Timsah': 'Timsahların ısırma gücü hayvanlar alemindeki en yükseklerdendir.',
+      'Kertenkele': 'Bazı kertenkele türleri kuyruklarını koparıp kaçabilir.',
+      'Kaplumbağa': 'Deniz kaplumbağaları binlerce km yol alabilir.',
+      'Köpekbalığı': 'Köpekbalıkları milyonlarca yıldır çok az değişmiştir.',
+      'Sardalya': 'Sürüler halinde yüzer, avcılara karşı korunurlar.',
+      'Mercan Balığı': 'Mercan resiflerinin renkli sakinleridir.',
+      'Balon Balığı': 'Tehlikede şişerek kendini büyütür.',
+      'Örümcek': 'Örümcek ağları çelikten daha sağlam olabilir.',
+      'Yengeç': 'Yengeçler yan yan yürümeleriyle bilinir.',
+      'Kelebek': 'Kelebekler ayaklarıyla tat alırlar.',
+      'Arı': 'Arılar dans ederek haberleşir.',
+      'Karınca': 'Karıncalar kendi ağırlıklarının kat kat fazlasını taşıyabilir.',
+      'Ahtapot': 'Ahtapotların üç kalbi vardır ve çok zekidirler.',
+      'Denizanası': 'Bazı denizanaları neredeyse ölümsüzdür.',
+      'Salyangoz': 'Salyangozlar hem karada hem suda yaşar.',
+      'Solucan': 'Toprağı havalandırarak doğaya fayda sağlar.',
+      'T-Rex': 'T-Rex güçlü çenesiyle ünlüdür.',
+      'Sauropod': 'Sauropodlar dev boyunlarıyla bilinir.',
+      'Triceratops': 'Üç boynuzu ve iri bir baş kalkanı vardır.',
+      'Velociraptor': 'Küçük ama hızlı ve çevik bir avcıydı.'
+    };
+
     const CATEGORIES = {
       'Kuşlar': [
-        { name: 'Kartal', emoji: '🦅' },
-        { name: 'Serçe', emoji: '🐦' },
-        { name: 'Tavuskuşu', emoji: '🦚' },
-        { name: 'Güvercin', emoji: '🕊️' },
-        { name: 'Baykuş', emoji: '🦉' },
-        { name: 'Tukan', emoji: '🦜' }
+        { name: 'Kartal' }, { name: 'Serçe' }, { name: 'Tavuskuşu' }, { name: 'Güvercin' }, { name: 'Baykuş' }, { name: 'Tukan' }
       ],
       'Sürüngenler': [
-        { name: 'Yılan', emoji: '🐍' },
-        { name: 'Timsah', emoji: '🐊' },
-        { name: 'Kertenkele', emoji: '🦎' },
-        { name: 'Kaplumbağa', emoji: '🐢' }
+        { name: 'Yılan' }, { name: 'Timsah' }, { name: 'Kertenkele' }, { name: 'Kaplumbağa' }
       ],
       'Balıklar': [
-        { name: 'Köpekbalığı', emoji: '🦈' },
-        { name: 'Sardalya', emoji: '🐟' },
-        { name: 'Mercan Balığı', emoji: '🐠' },
-        { name: 'Balon Balığı', emoji: '🐡' }
+        { name: 'Köpekbalığı' }, { name: 'Sardalya' }, { name: 'Mercan Balığı' }, { name: 'Balon Balığı' }
       ],
       'Eklem Bacaklılar': [
-        { name: 'Örümcek', emoji: '🕷️' },
-        { name: 'Yengeç', emoji: '🦀' },
-        { name: 'Kelebek', emoji: '🦋' },
-        { name: 'Arı', emoji: '🐝' },
-        { name: 'Karınca', emoji: '🐜' }
+        { name: 'Örümcek' }, { name: 'Yengeç' }, { name: 'Kelebek' }, { name: 'Arı' }, { name: 'Karınca' }
       ],
       'Omurgasızlar': [
-        { name: 'Ahtapot', emoji: '🐙' },
-        { name: 'Denizanası', emoji: '🪼' },
-        { name: 'Salyangoz', emoji: '🐌' },
-        { name: 'Solucan', emoji: '🪱' }
+        { name: 'Ahtapot' }, { name: 'Denizanası' }, { name: 'Salyangoz' }, { name: 'Solucan' }
       ],
       'Dinozorlar': [
-        { name: 'T-Rex', emoji: '🦖' },
-        { name: 'Sauropod', emoji: '🦕' },
-        { name: 'Triceratops', emoji: '🦖' },
-        { name: 'Velociraptor', emoji: '🦕' }
+        { name: 'T-Rex' }, { name: 'Sauropod' }, { name: 'Triceratops' }, { name: 'Velociraptor' }
       ],
       'Memeliler': [
-        { name: 'Aslan', emoji: '🦁' },
-        { name: 'Fil', emoji: '🐘' },
-        { name: 'Kaplan', emoji: '🐯' },
-        { name: 'Panda', emoji: '🐼' },
-        { name: 'Kedi', emoji: '🐱' },
-        { name: 'Köpek', emoji: '🐶' }
+        { name: 'Aslan' }, { name: 'Fil' }, { name: 'Kaplan' }, { name: 'Panda' }, { name: 'Kedi' }, { name: 'Köpek' }
       ]
     };
 
     const levels = ['Seviye 1', 'Seviye 2', 'Seviye 3', 'Tümü'];
 
     const el = (sel) => document.querySelector(sel);
-    const homeScreen = el('#homeScreen');
+
+    // Screens
+    const startScreen = el('#startScreen');
+    const singleSetupScreen = el('#singleSetupScreen');
+    const multiSetupScreen = el('#multiSetupScreen');
+    const categoryScreen = el('#categoryScreen');
+    const levelScreen = el('#levelScreen');
     const gameScreen = el('#gameScreen');
     const overScreen = el('#gameOverScreen');
-    const categoriesEl = el('#categories');
+    const achievementsScreen = el('#achievementsScreen');
+    const parentScreen = el('#parentScreen');
+    const resultsScreen = el('#resultsScreen');
+
+    // UI elements
+    const categoriesEl = el('#categoryList');
     const heartContainer = el('#heartContainer');
     const lifeInfo = el('#lifeInfo');
+    const playerBadge = el('#playerBadge');
     const gameContainer = el('#gameContainer');
     const progressEl = el('#progress');
     const currentCatLvl = el('#currentCatLvl');
     const adOverlay = el('#adOverlay');
     const adBar = el('#adBar');
     const adCountdown = el('#adCountdown');
-
     const toastEl = el('#toast');
 
+    // Achievements
+    const badgeList = el('#badgeList');
+    const totalPointsLabel = el('#totalPointsLabel');
+
+    // Parent
+    const parentAuth = el('#parentAuth');
+    const parentStatsCard = el('#parentStats');
+    const statsTable = el('#statsTable');
+
     let state = {
+      mode: null, // 'single' | 'multi'
+      single: { name: '', age: '' },
+      multi: { players: ['', ''], points: [0,0], currentIdx: 0 },
       lives: MAX_LIVES,
       regenAt: null,
       unlimitedUntil: 0,
       categoryKey: null,
       levelKey: null,
-      step: 0,
-      round: null
+      step: 0,          // subgame idx (0..3)
+      questionIndex: 0, // current question
+      questionsTotal: 0,
+      questionTargets: [], // array of animal objects
+      round: null,
+      points: 0 // single session points
     };
 
     function init() {
+      bindStartMenu();
+      bindCommonButtons();
       loadLifeState();
-      renderCategories();
-      bindHeaderButtons();
       updateLivesUI();
       lifeTicker();
+      renderBadges();
+      showStart();
     }
 
-    function bindHeaderButtons() {
+    function bindStartMenu() {
+      el('#btnSingle').addEventListener('click', () => { showSingleSetup(); });
+      el('#btnMulti').addEventListener('click', () => { showMultiSetup(); });
+      el('#btnBadges').addEventListener('click', () => { showBadges(); });
+      el('#btnParent').addEventListener('click', () => { showParent(); });
+
+      el('#backToStart1').addEventListener('click', showStart);
+      el('#backToStart2').addEventListener('click', showStart);
+      el('#backToStart3').addEventListener('click', showStart);
+      el('#backToCategories').addEventListener('click', showCategories);
+
+      el('#singleSetupNext').addEventListener('click', () => {
+        const name = (el('#singleName').value || '').trim();
+        const age = (el('#singleAge').value || '').trim();
+        if (!name) { showToast('İsim gerekli'); return; }
+        state.mode = 'single';
+        state.single.name = name; state.single.age = age;
+        updatePlayerBadge();
+        showCategories();
+      });
+
+      el('#multiSetupNext').addEventListener('click', () => {
+        const p1 = (el('#p1Name').value || '').trim();
+        const p2 = (el('#p2Name').value || '').trim();
+        if (!p1 || !p2) { showToast('İki isim de gerekli'); return; }
+        state.mode = 'multi';
+        state.multi.players = [p1, p2];
+        state.multi.points = [0,0];
+        state.multi.currentIdx = 0;
+        updatePlayerBadge();
+        showCategories();
+      });
+
+      el('#resultsToMenu').addEventListener('click', showStart);
+      el('#backFromBadges').addEventListener('click', showStart);
+      el('#backFromParent').addEventListener('click', showStart);
+    }
+
+    function updatePlayerBadge() {
+      if (state.mode === 'single') {
+        playerBadge.textContent = `Oyuncu: ${state.single.name}${state.single.age ? `, ${state.single.age} yaş` : ''}`;
+      } else if (state.mode === 'multi') {
+        const cur = state.multi.currentIdx;
+        playerBadge.textContent = `Sıra: ${state.multi.players[cur]} • Skor: ${state.multi.points[0]} - ${state.multi.points[1]}`;
+      } else {
+        playerBadge.textContent = '';
+      }
+    }
+
+    function bindCommonButtons() {
       el('#watchAdBtn').addEventListener('click', onWatchAd);
-      el('#backBtn').addEventListener('click', () => {
-        showHome();
+      el('#restartQuestionBtn').addEventListener('click', () => {
+        restartQuestion();
+        showToast('Soru başa alındı');
       });
-      el('#restartRoundBtn').addEventListener('click', () => {
-        if (!state.categoryKey || !state.levelKey) return;
-        startRound(state.categoryKey, state.levelKey);
-        showToast('Baştan başladın');
-      });
+      el('#quitToStartBtn').addEventListener('click', showStart);
       el('#newGameBtn').addEventListener('click', () => {
-        state.lives = MAX_LIVES;
-        state.regenAt = null;
-        saveLifeState();
-        updateLivesUI();
-        showHome();
+        state.lives = MAX_LIVES; state.regenAt = null; saveLifeState(); updateLivesUI(); showStart();
+      });
+      el('#goMenuFromOver').addEventListener('click', showStart);
+
+      // Level buttons
+      levelScreen.querySelectorAll('button[data-level]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          startSession(state.categoryKey, btn.dataset.level);
+        });
       });
     }
 
-    function renderCategories() {
+    function hideAll() {
+      [startScreen, singleSetupScreen, multiSetupScreen, categoryScreen, levelScreen, gameScreen, overScreen, achievementsScreen, parentScreen, resultsScreen].forEach(s => s.hidden = true);
+    }
+
+    function showStart() {
+      hideAll();
+      state.mode = null;
+      updatePlayerBadge();
+      startScreen.hidden = false;
+    }
+    function showSingleSetup() { hideAll(); singleSetupScreen.hidden = false; }
+    function showMultiSetup() { hideAll(); multiSetupScreen.hidden = false; }
+
+    function renderCategoryList() {
       categoriesEl.innerHTML = '';
       Object.entries(CATEGORIES).forEach(([catName, animals]) => {
-        const card = document.createElement('div');
-        card.className = 'card category';
-        const icon = document.createElement('div');
-        icon.className = 'icon';
-        icon.textContent = animals[0]?.emoji || '🐾';
-
-        const body = document.createElement('div');
-        const title = document.createElement('h3');
-        title.textContent = catName;
-        const sub = document.createElement('div');
-        sub.className = 'life-info';
-        sub.textContent = `${animals.length} hayvan`; 
-
-        const levelsWrap = document.createElement('div');
-        levelsWrap.className = 'levels';
-
-        levels.forEach(levelName => {
-          const btn = document.createElement('button');
-          btn.textContent = levelName;
-          btn.addEventListener('click', () => {
-            if (!hasLives()) { showOver(); return; }
-            startRound(catName, levelName);
-          });
-          levelsWrap.appendChild(btn);
-        });
-
-        body.appendChild(title);
-        body.appendChild(sub);
-        body.appendChild(levelsWrap);
-
-        card.appendChild(icon);
-        card.appendChild(body);
-        categoriesEl.appendChild(card);
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.innerHTML = `
+          <img src="${categoryImageUrl(catName)}" alt="${catName}">
+          <div>
+            <h3>${catName}</h3>
+            <div class="muted">${animals.length} hayvan</div>
+          </div>`;
+        btn.addEventListener('click', () => { state.categoryKey = catName; showLevels(catName); });
+        categoriesEl.appendChild(btn);
       });
+    }
+
+    function showCategories() { hideAll(); renderCategoryList(); categoryScreen.hidden = false; }
+    function showLevels(catName) {
+      hideAll();
+      el('#levelTitle').textContent = `${catName} • Seviye Seç`;
+      levelScreen.hidden = false;
+    }
+
+    function showGame() { hideAll(); gameScreen.hidden = false; }
+    function showOver() { hideAll(); overScreen.hidden = false; }
+
+    function showBadges() { hideAll(); renderBadges(); achievementsScreen.hidden = false; }
+
+    function showParent() {
+      hideAll();
+      renderParentAuth();
+      parentScreen.hidden = false;
+    }
+
+    function renderBadges() {
+      const total = getTotalPoints();
+      totalPointsLabel.textContent = String(total);
+      const badges = [
+        { name: 'Bronz Pati', need: 100, icon: '🥉' },
+        { name: 'Gümüş Pençe', need: 300, icon: '🥈' },
+        { name: 'Altın Yele', need: 600, icon: '🥇' },
+        { name: 'Efsane Avcı', need: 1000, icon: '🏆' }
+      ];
+      badgeList.innerHTML = '';
+      badges.forEach(b => {
+        const d = document.createElement('div'); d.className = 'badge' + (total >= b.need ? '' : ' locked');
+        d.innerHTML = `<div class="icon">${b.icon}</div><div>${b.name}</div><div class="life-info">${b.need} puan</div>`;
+        badgeList.appendChild(d);
+      });
+    }
+
+    function renderParentAuth() {
+      const name = localStorage.getItem(LS_KEYS.parentName) || '';
+      const pin = localStorage.getItem(LS_KEYS.parentPIN) || '';
+      parentStatsCard.hidden = true;
+      if (!pin) {
+        parentAuth.innerHTML = `
+          <h2>Ebeveyn Kurulumu</h2>
+          <div class="grid">
+            <label>Adınız
+              <input id="parentNameInput" type="text" placeholder="Ebeveyn adı" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <label>PIN belirle (4 hane)
+              <input id="parentPinInput" type="password" maxlength="4" placeholder="1234" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <div class="controls">
+              <button id="saveParentSetup">Kaydet</button>
+              <button id="backFromParent" class="ghost">Geri</button>
+            </div>
+          </div>`;
+        el('#saveParentSetup').addEventListener('click', () => {
+          const n = (el('#parentNameInput').value || '').trim();
+          const p = (el('#parentPinInput').value || '').trim();
+          if (!n || p.length !== 4) { showToast('İsim ve 4 haneli PIN gerekli'); return; }
+          localStorage.setItem(LS_KEYS.parentName, n);
+          localStorage.setItem(LS_KEYS.parentPIN, p);
+          showToast('Kaydedildi');
+          renderParentAuth();
+        });
+      } else {
+        parentAuth.innerHTML = `
+          <h2>Ebeveyn Girişi</h2>
+          <div class="grid">
+            <label>PIN
+              <input id="parentPinLogin" type="password" maxlength="4" placeholder="PIN" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <div class="controls">
+              <button id="enterParent">Giriş</button>
+              <button id="backFromParent" class="ghost">Geri</button>
+            </div>
+          </div>`;
+        el('#enterParent').addEventListener('click', () => {
+          const p = (el('#parentPinLogin').value || '').trim();
+          if (p === localStorage.getItem(LS_KEYS.parentPIN)) {
+            renderStatsTable();
+            parentStatsCard.hidden = false;
+          } else {
+            showToast('PIN hatalı');
+          }
+        });
+      }
+      el('#backFromParent').addEventListener('click', showStart);
+      el('#resetStatsBtn')?.addEventListener('click', () => { localStorage.removeItem(LS_KEYS.stats); renderStatsTable(); showToast('Sıfırlandı'); });
+    }
+
+    function getStats() {
+      try { return JSON.parse(localStorage.getItem(LS_KEYS.stats) || '{}'); } catch { return {}; }
+    }
+    function saveStats(stats) { localStorage.setItem(LS_KEYS.stats, JSON.stringify(stats)); }
+
+    function renderStatsTable() {
+      const stats = getStats();
+      const rows = [['Kategori', 'Doğru', 'Yanlış']];
+      Object.keys(CATEGORIES).forEach(cat => {
+        const s = stats[cat] || { correct: 0, wrong: 0 };
+        rows.push([cat, String(s.correct||0), String(s.wrong||0)]);
+      });
+      statsTable.innerHTML = rows.map((r,i) => `<tr>${r.map((c,ci) => `<${i===0?'th':'td'}>${c}</${i===0?'th':'td'}>`).join('')}</tr>`).join('');
     }
 
     function subsetByLevel(animals, levelName) {
@@ -351,52 +679,115 @@
       return animals.slice(start, start + size);
     }
 
-    function startRound(categoryKey, levelKey) {
+    function startSession(categoryKey, levelKey) {
       state.categoryKey = categoryKey;
       state.levelKey = levelKey;
       state.step = 0;
+      state.questionIndex = 0;
+      state.questionsTotal = QUESTION_COUNTS[levelKey] || 10;
+      state.points = 0;
+      if (state.mode === 'multi') { state.multi.points = [0,0]; state.multi.currentIdx = 0; }
+
       const pool = subsetByLevel(CATEGORIES[categoryKey], levelKey);
-      state.round = makeRound(pool);
+      // build targets with replacement if needed
+      state.questionTargets = [];
+      for (let i = 0; i < state.questionsTotal; i++) {
+        const t = pool[Math.floor(Math.random() * pool.length)];
+        state.questionTargets.push(t);
+      }
+
       currentCatLvl.textContent = `${categoryKey} • ${levelKey}`;
-      progressEl.textContent = `Oyun 1/4`;
       showGame();
+      startQuestion();
+    }
+
+    function startQuestion() {
+      state.step = 0;
+      updateProgress();
+      const target = state.questionTargets[state.questionIndex];
+      state.round = makeRoundForTarget(target);
       renderCurrentStep();
     }
 
-    function makeRound(pool) {
-      const uniquePool = pool.slice();
-      const pickOne = () => uniquePool[Math.floor(Math.random() * uniquePool.length)];
-      const g1 = pickOne();
-      const g2 = pickOne();
-      const g3 = pickOne();
-      const g4Choices = randomSample(pool, Math.min(4, pool.length));
-      return { g1, g2, g3, g4Choices };
+    function restartQuestion() { startQuestion(); }
+
+    function makeRoundForTarget(target) {
+      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
+      const decoys = (excludeName, count) => {
+        const others = pool.filter(a => a.name !== excludeName);
+        let res = randomSample(others, Math.min(count, others.length));
+        // fill from global if not enough
+        if (res.length < count) {
+          const allOthers = allAnimals().filter(a => a.name !== excludeName);
+          const need = count - res.length;
+          res = res.concat(randomSample(allOthers, need));
+        }
+        return res;
+      };
+
+      const g1Choices = shuffle([target, ...decoys(target.name, 3)]);
+      const g2Choices = shuffle([target, ...decoys(target.name, 3)]);
+      const g3Letters = normalizeForLetters(target.name);
+      const g4Choices = shuffle([target, ...decoys(target.name, 3)]); // 4 adet sürükle-bırak
+      return { target, g1Choices, g2Choices, g3Letters, g4Choices };
+    }
+
+    function allAnimals() {
+      return Object.values(CATEGORIES).flat();
+    }
+
+    function updateProgress() {
+      const q = state.questionIndex + 1;
+      const t = state.questionsTotal;
+      const s = state.step + 1;
+      progressEl.textContent = `Soru ${q}/${t} • Oyun ${s}/4`;
+      updatePlayerBadge();
     }
 
     function renderCurrentStep() {
-      const step = state.step;
-      progressEl.textContent = `Oyun ${step + 1}/4`;
       gameContainer.innerHTML = '';
+      const step = state.step;
       if (step === 0) renderGame1();
       else if (step === 1) renderGame2();
       else if (step === 2) renderGame3();
       else if (step === 3) renderGame4();
     }
 
-    function advance() {
-      state.step += 1;
-      if (state.step >= 4) {
-        showToast('Tebrikler! Tüm oyunları geçtin');
-        showHome();
-        return;
+    function awardPoints() {
+      if (state.mode === 'single') {
+        state.points += POINTS_PER_CORRECT;
+        addTotalPoints(POINTS_PER_CORRECT);
+      } else if (state.mode === 'multi') {
+        const i = state.multi.currentIdx;
+        state.multi.points[i] += POINTS_PER_CORRECT;
+        addTotalPoints(POINTS_PER_CORRECT);
       }
-      renderCurrentStep();
+      renderBadges();
     }
 
-    function handleWrong(reason = '') {
-      if (isUnlimited()) {
-        showToast('Yanlış! (Sınırsız can)');
-        startRound(state.categoryKey, state.levelKey);
+    function markStats(correct) {
+      if (!state.categoryKey) return;
+      const stats = getStats();
+      stats[state.categoryKey] = stats[state.categoryKey] || { correct: 0, wrong: 0 };
+      if (correct) stats[state.categoryKey].correct += 1; else stats[state.categoryKey].wrong += 1;
+      saveStats(stats);
+    }
+
+    function nextStepOrInfo() {
+      state.step += 1;
+      if (state.step >= 4) {
+        showInfoCardThenNext();
+      } else {
+        updateProgress();
+        renderCurrentStep();
+      }
+    }
+
+    function handleWrong() {
+      markStats(false);
+      if (state.mode === 'multi' || isUnlimited()) {
+        showToast('Yanlış! Soru başa alındı');
+        startQuestion();
         return;
       }
       state.lives -= 1;
@@ -407,95 +798,119 @@
       if (state.lives <= 0) {
         showOver();
       } else {
-        showToast('Yanlış cevap! -1 can');
-        startRound(state.categoryKey, state.levelKey);
+        showToast('Yanlış! -1 can');
+        startQuestion();
       }
     }
 
-    function renderGame1() {
-      const target = state.round.g1;
-      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
-      const choices = shuffle([target, ...randomSample(pool.filter(a => a.name !== target.name), 3)]);
+    function correctAndAdvance() {
+      awardPoints();
+      markStats(true);
+      showToast('Doğru! +' + POINTS_PER_CORRECT);
+      nextStepOrInfo();
+    }
 
-      const hero = document.createElement('div');
-      hero.className = 'hero';
-      hero.textContent = target.emoji;
-
-      const ask = document.createElement('h2');
-      ask.textContent = 'Bu hangi hayvan?';
-
-      const opts = document.createElement('div');
-      opts.className = 'options';
-      choices.forEach(c => {
-        const b = document.createElement('button');
-        b.className = 'option-btn';
-        b.textContent = c.name;
-        b.addEventListener('click', () => {
-          if (!hasLives()) { showOver(); return; }
-          if (c.name === target.name) {
-            showToast('Doğru!');
-            advance();
-          } else {
-            handleWrong();
+    function showInfoCardThenNext() {
+      const { target } = state.round;
+      const info = INFO_DB[target.name] || `${target.name} hakkında daha sonra bilgi eklenecek.`;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="hero"><img src="${animalImageUrl(target.name)}" alt="${target.name}"></div>
+        <h2>${target.name}</h2>
+        <p class="life-info">${info}</p>
+        <div class="controls"><button id="nextQuestionBtn">Devam</button></div>
+      `;
+      gameContainer.innerHTML = '';
+      gameContainer.appendChild(card);
+      el('#nextQuestionBtn').addEventListener('click', () => {
+        state.questionIndex += 1;
+        if (state.questionIndex >= state.questionsTotal) {
+          endSession();
+        } else {
+          // switch player in multi
+          if (state.mode === 'multi') {
+            state.multi.currentIdx = (state.multi.currentIdx + 1) % 2;
+            updatePlayerBadge();
           }
+          startQuestion();
+        }
+      });
+      updateProgress();
+    }
+
+    function endSession() {
+      hideAll();
+      const body = el('#resultsBody');
+      if (state.mode === 'single') {
+        body.innerHTML = `
+          <div>Oyuncu: <b>${state.single.name || 'Tek Oyuncu'}</b></div>
+          <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
+          <div>Toplam Puan: <b>${state.points}</b></div>
+        `;
+      } else {
+        const [p1, p2] = state.multi.players;
+        const [s1, s2] = state.multi.points;
+        const winner = s1 === s2 ? 'Berabere' : (s1 > s2 ? p1 : p2);
+        body.innerHTML = `
+          <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
+          <table class="table" style="margin-top:8px;">
+            <tr><th>Oyuncu</th><th>Puan</th></tr>
+            <tr><td>${p1}</td><td>${s1}</td></tr>
+            <tr><td>${p2}</td><td>${s2}</td></tr>
+          </table>
+          <div style="margin-top:8px;">Kazanan: <b>${winner}</b></div>
+        `;
+      }
+      resultsScreen.hidden = false;
+    }
+
+    // Game 1: Resim -> 4 isim
+    function renderGame1() {
+      const { target, g1Choices } = state.round;
+      const hero = document.createElement('div'); hero.className = 'hero'; hero.innerHTML = `<img src="${animalImageUrl(target.name)}" alt="${target.name}">`;
+      const ask = document.createElement('h2'); ask.textContent = 'Bu hangi hayvan?';
+      const opts = document.createElement('div'); opts.className = 'options';
+      g1Choices.forEach(c => {
+        const b = document.createElement('button'); b.className = 'option-btn'; b.textContent = c.name;
+        b.addEventListener('click', () => {
+          if (c.name === target.name) correctAndAdvance(); else handleWrong();
         });
         opts.appendChild(b);
       });
-
-      gameContainer.appendChild(hero);
-      gameContainer.appendChild(ask);
-      gameContainer.appendChild(opts);
+      gameContainer.appendChild(hero); gameContainer.appendChild(ask); gameContainer.appendChild(opts);
     }
 
+    // Game 2: İsim -> 4 resim
     function renderGame2() {
-      const target = state.round.g2;
-      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
-      const choices = shuffle([target, ...randomSample(pool.filter(a => a.name !== target.name), 3)]);
-
-      const ask = document.createElement('h2');
-      ask.textContent = `${target.name} hangisi?`;
-
-      const grid = document.createElement('div');
-      grid.className = 'image-options';
-
-      choices.forEach(c => {
-        const wrap = document.createElement('button');
-        wrap.className = 'image-option';
-        const em = document.createElement('div'); em.className = 'big'; em.textContent = c.emoji;
-        const nm = document.createElement('div'); nm.className = 'life-info'; nm.textContent = c.name;
-        wrap.appendChild(em); wrap.appendChild(nm);
-        wrap.addEventListener('click', () => {
-          if (!hasLives()) { showOver(); return; }
-          if (c.name === target.name) { showToast('Doğru!'); advance(); }
-          else { handleWrong(); }
-        });
+      const { target, g2Choices } = state.round;
+      const ask = document.createElement('h2'); ask.textContent = `${target.name} hangisi?`;
+      const grid = document.createElement('div'); grid.className = 'image-options';
+      g2Choices.forEach(c => {
+        const wrap = document.createElement('button'); wrap.className = 'image-option';
+        wrap.innerHTML = `<img alt="${c.name}" src="${animalImageUrl(c.name)}"><div class="life-info">${c.name}</div>`;
+        wrap.addEventListener('click', () => { if (c.name === target.name) correctAndAdvance(); else handleWrong(); });
         grid.appendChild(wrap);
       });
-
-      gameContainer.appendChild(ask);
-      gameContainer.appendChild(grid);
+      gameContainer.appendChild(ask); gameContainer.appendChild(grid);
     }
 
+    // Game 3: Resim -> Harflerle yaz
     function renderGame3() {
-      const target = state.round.g3;
-      const clean = normalizeForLetters(target.name);
-      const hero = document.createElement('div'); hero.className = 'hero'; hero.textContent = target.emoji;
+      const { target, g3Letters } = state.round;
+      const hero = document.createElement('div'); hero.className = 'hero'; hero.innerHTML = `<img src="${animalImageUrl(target.name)}" alt="${target.name}">`;
       const ask = document.createElement('h2'); ask.textContent = 'Hayvanın adını yaz';
 
+      const clean = g3Letters;
       const slotsRow = document.createElement('div'); slotsRow.className = 'letter-row';
       const slots = [];
       for (let i = 0; i < clean.length; i++) {
         const s = document.createElement('div'); s.className = 'slot'; s.textContent = '';
         s.dataset.idx = String(i);
         s.addEventListener('click', () => {
-          // remove last filled
           for (let j = selections.length - 1; j >= 0; j--) {
             if (selections[j].slotIdx === i) {
-              const tile = selections[j].tile;
-              tile.disabled = false;
-              selections.splice(j, 1);
-              s.textContent = '';
-              break;
+              const tile = selections[j].tile; tile.disabled = false; selections.splice(j, 1); s.textContent = ''; break;
             }
           }
         });
@@ -507,21 +922,13 @@
       const selections = [];
 
       pool.forEach((ch, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'letter';
-        btn.textContent = ch;
-        btn.dataset.idx = String(idx);
+        const btn = document.createElement('button'); btn.className = 'letter'; btn.textContent = ch; btn.dataset.idx = String(idx);
         btn.addEventListener('click', () => {
-          const next = slots.find(s => !s.textContent);
-          if (!next) return;
-          next.textContent = ch;
-          selections.push({ slotIdx: Number(next.dataset.idx), char: ch, tile: btn });
-          btn.disabled = true;
-
+          const next = slots.find(s => !s.textContent); if (!next) return;
+          next.textContent = ch; selections.push({ slotIdx: Number(next.dataset.idx), char: ch, tile: btn }); btn.disabled = true;
           if (slots.every(s => s.textContent)) {
             const attempt = slots.map(s => s.textContent).join('');
-            if (attempt === clean) { showToast('Doğru!'); advance(); }
-            else { handleWrong(); }
+            if (attempt === clean) { correctAndAdvance(); } else { handleWrong(); }
           }
         });
         letterArea.appendChild(btn);
@@ -531,34 +938,20 @@
       const backBtn = document.createElement('button'); backBtn.className = 'secondary'; backBtn.textContent = 'Sil';
       backBtn.addEventListener('click', () => {
         for (let i = selections.length - 1; i >= 0; i--) {
-          const { slotIdx, tile } = selections.pop();
-          tile.disabled = false;
-          slots[slotIdx].textContent = '';
-          break;
+          const { slotIdx, tile } = selections.pop(); tile.disabled = false; slots[slotIdx].textContent = ''; break;
         }
       });
       const clearBtn = document.createElement('button'); clearBtn.className = 'ghost'; clearBtn.textContent = 'Temizle';
-      clearBtn.addEventListener('click', () => {
-        while (selections.length) {
-          const { slotIdx, tile } = selections.pop();
-          tile.disabled = false;
-          slots[slotIdx].textContent = '';
-        }
-      });
+      clearBtn.addEventListener('click', () => { while (selections.length) { const { slotIdx, tile } = selections.pop(); tile.disabled = false; slots[slotIdx].textContent = ''; } });
       tools.appendChild(backBtn); tools.appendChild(clearBtn);
 
-      gameContainer.appendChild(hero);
-      gameContainer.appendChild(ask);
-      gameContainer.appendChild(slotsRow);
-      gameContainer.appendChild(letterArea);
-      gameContainer.appendChild(tools);
+      gameContainer.appendChild(hero); gameContainer.appendChild(ask); gameContainer.appendChild(slotsRow); gameContainer.appendChild(letterArea); gameContainer.appendChild(tools);
     }
 
+    // Game 4: 4 sürükle-bırak
     function renderGame4() {
-      const picks = state.round.g4Choices;
-      const names = picks.map(p => p.name);
-
-      const ask = document.createElement('h2'); ask.textContent = 'Sürükle veya dokun-seç → kutuya dokun';
+      const picks = state.round.g4Choices; // 4 adet
+      const ask = document.createElement('h2'); ask.textContent = 'Resimleri doğru kutulara sürükle (veya dokun-seç → kutuya dokun)';
 
       const zones = document.createElement('div'); zones.className = 'drag-grid';
       const items = document.createElement('div'); items.className = 'drag-grid';
@@ -568,26 +961,14 @@
       let selectedName = null;
 
       function place(name, dz) {
-        if (!hasLives()) { showOver(); return; }
         if (!name || dz.classList.contains('locked')) return;
         if (name === dz.dataset.name) {
-          dz.classList.add('locked');
-          dz.textContent = '';
-          dz.innerHTML = `<div class="label">${dz.dataset.name}</div>`;
-          const indz = document.createElement('div'); indz.style.fontSize = '44px'; indz.textContent = picks.find(x => x.name === name)?.emoji || '🐾';
-          dz.appendChild(indz);
+          dz.classList.add('locked'); dz.textContent = ''; dz.innerHTML = `<div class="label">${dz.dataset.name}</div>`;
+          const indz = document.createElement('div'); const im = document.createElement('img'); im.src = animalImageUrl(name); im.alt = name; im.style.width = '100%'; im.style.height = '100px'; im.style.objectFit = 'cover'; indz.appendChild(im); dz.appendChild(indz);
           assigned.set(dz.dataset.name, name);
-          const itemEl = itemsByName.get(name);
-          if (itemEl) {
-            itemEl.classList.remove('selected');
-            itemEl.classList.add('placed');
-            itemEl.draggable = false;
-          }
+          const itemEl = itemsByName.get(name); if (itemEl) { itemEl.classList.remove('selected'); itemEl.classList.add('placed'); itemEl.draggable = false; }
           selectedName = null;
-          if (assigned.size === picks.length) {
-            showToast('Harika!');
-            advance();
-          }
+          if (assigned.size === picks.length) { correctAndAdvance(); }
         } else {
           handleWrong();
         }
@@ -599,65 +980,34 @@
         dz.addEventListener('dragover', (e) => e.preventDefault());
         dz.addEventListener('dragenter', (e) => { e.preventDefault(); dz.classList.add('highlight'); });
         dz.addEventListener('dragleave', () => dz.classList.remove('highlight'));
-        dz.addEventListener('drop', (e) => {
-          e.preventDefault();
-          dz.classList.remove('highlight');
-          if (!hasLives()) { showOver(); return; }
-          const droppedName = e.dataTransfer.getData('text/plain');
-          if (!droppedName) return;
-          place(droppedName, dz);
-        });
-        dz.addEventListener('click', () => {
-          if (!hasLives()) { showOver(); return; }
-          if (!selectedName) { showToast('Önce bir resim seç'); return; }
-          place(selectedName, dz);
-        });
+        dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('highlight'); const droppedName = e.dataTransfer.getData('text/plain'); if (!droppedName) return; place(droppedName, dz); });
+        dz.addEventListener('click', () => { if (!selectedName) { showToast('Önce bir resim seç'); return; } place(selectedName, dz); });
         zones.appendChild(dz);
       });
 
       shuffle(picks.slice()).forEach(p => {
-        const it = document.createElement('div'); it.className = 'drag-item'; it.textContent = p.emoji; it.draggable = true; it.dataset.name = p.name;
+        const it = document.createElement('div'); it.className = 'drag-item'; it.draggable = true; it.dataset.name = p.name;
+        it.innerHTML = `<img alt="${p.name}" src="${animalImageUrl(p.name)}">`;
         itemsByName.set(p.name, it);
-        it.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', p.name);
-        });
+        it.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', p.name); });
         it.addEventListener('click', () => {
           if (it.classList.contains('placed')) return;
-          if (selectedName === p.name) {
-            it.classList.remove('selected');
-            selectedName = null;
-          } else {
-            // deselect others
-            itemsByName.forEach((el) => el.classList.remove('selected'));
-            it.classList.add('selected');
-            selectedName = p.name;
-          }
+          if (selectedName === p.name) { it.classList.remove('selected'); selectedName = null; }
+          else { itemsByName.forEach(el => el.classList.remove('selected')); it.classList.add('selected'); selectedName = p.name; }
         });
         items.appendChild(it);
       });
 
-      gameContainer.appendChild(ask);
-      gameContainer.appendChild(zones);
-      gameContainer.appendChild(items);
+      gameContainer.appendChild(ask); gameContainer.appendChild(zones); gameContainer.appendChild(items);
     }
 
-    function showHome() {
-      homeScreen.hidden = false; gameScreen.hidden = true; overScreen.hidden = true;
-    }
-    function showGame() {
-      homeScreen.hidden = true; gameScreen.hidden = false; overScreen.hidden = true;
-    }
-    function showOver() {
-      homeScreen.hidden = true; gameScreen.hidden = true; overScreen.hidden = false;
-    }
-
-    function hasLives() { return state.lives > 0 || isUnlimited(); }
+    // Lives / Ads
+    function hasLives() { return state.mode === 'multi' ? true : (state.lives > 0 || isUnlimited()); }
     function isUnlimited() { return Date.now() < state.unlimitedUntil; }
 
     function loadLifeState() {
       const lives = parseInt(localStorage.getItem(LS_KEYS.lives) || `${MAX_LIVES}`);
-      let regenAt = localStorage.getItem(LS_KEYS.regenAt);
-      regenAt = regenAt ? parseInt(regenAt) : null;
+      let regenAt = localStorage.getItem(LS_KEYS.regenAt); regenAt = regenAt ? parseInt(regenAt) : null;
       let unlimitedUntil = parseInt(localStorage.getItem(LS_KEYS.unlimitedUntil) || '0');
 
       state.lives = isNaN(lives) ? MAX_LIVES : lives;
@@ -667,13 +1017,9 @@
       if (!isUnlimited() && state.lives < MAX_LIVES) {
         if (state.regenAt == null) state.regenAt = Date.now() + LIFE_REGEN_MS;
         const now = Date.now();
-        while (state.regenAt && now >= state.regenAt && state.lives < MAX_LIVES) {
-          state.lives += 1;
-          state.regenAt += LIFE_REGEN_MS;
-        }
+        while (state.regenAt && now >= state.regenAt && state.lives < MAX_LIVES) { state.lives += 1; state.regenAt += LIFE_REGEN_MS; }
         if (state.lives >= MAX_LIVES) state.regenAt = null;
       }
-
       saveLifeState();
     }
 
@@ -687,48 +1033,16 @@
       const hearts = isUnlimited() ? '♾️' : '❤️'.repeat(state.lives) + '🖤'.repeat(MAX_LIVES - state.lives);
       heartContainer.textContent = hearts;
       if (isUnlimited()) {
-        const left = state.unlimitedUntil - Date.now();
-        lifeInfo.textContent = `Sınırsız: ${fmtMS(left)}`;
-      } else if (state.lives >= MAX_LIVES) {
-        lifeInfo.textContent = 'Tam can';
-      } else if (state.regenAt) {
-        const left = state.regenAt - Date.now();
-        lifeInfo.textContent = `+1 can: ${fmtMS(left)}`;
-      } else {
-        lifeInfo.textContent = '';
-      }
-    }
-
-    function fmtMS(ms) {
-      const s = Math.max(0, Math.ceil(ms / 1000));
-      const m = Math.floor(s / 60); const r = s % 60;
-      return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;
-    }
-
-    function lifeTicker() {
-      setInterval(() => {
-        // unlimited timer
-        if (isUnlimited()) {
-          if (Date.now() >= state.unlimitedUntil) {
-            state.unlimitedUntil = 0;
-            saveLifeState();
-          }
-        } else {
-          if (state.lives < MAX_LIVES && state.regenAt && Date.now() >= state.regenAt) {
-            state.lives += 1;
-            if (state.lives < MAX_LIVES) state.regenAt = Date.now() + LIFE_REGEN_MS; else state.regenAt = null;
-            saveLifeState();
-          }
-        }
-        updateLivesUI();
-      }, 1000);
+        const left = state.unlimitedUntil - Date.now(); lifeInfo.textContent = `Sınırsız: ${fmtMS(left)}`;
+      } else if (state.lives >= MAX_LIVES) { lifeInfo.textContent = 'Tam can'; }
+      else if (state.regenAt) { const left = state.regenAt - Date.now(); lifeInfo.textContent = `+1 can: ${fmtMS(left)}`; }
+      else { lifeInfo.textContent = ''; }
     }
 
     function onWatchAd() {
-      adOverlay.hidden = false;
-      adBar.style.width = '0%';
-      let left = AD_DURATION_MS;
-      adCountdown.textContent = String(Math.ceil(left / 1000));
+      if (state.mode === 'multi') { showToast('Bu modda can yok'); return; }
+      adOverlay.hidden = false; adBar.style.width = '0%';
+      let left = AD_DURATION_MS; adCountdown.textContent = String(Math.ceil(left / 1000));
       const started = Date.now();
       const t = setInterval(() => {
         left = Math.max(0, AD_DURATION_MS - (Date.now() - started));
@@ -736,59 +1050,30 @@
         adBar.style.width = p + '%';
         adCountdown.textContent = String(Math.ceil(left / 1000));
         if (left <= 0) {
-          clearInterval(t);
-          adOverlay.hidden = true;
-          state.unlimitedUntil = Date.now() + UNLIMITED_MS;
-          saveLifeState();
-          updateLivesUI();
-          showToast('1 saat sınırsız can kazandın!');
+          clearInterval(t); adOverlay.hidden = true; state.unlimitedUntil = Date.now() + UNLIMITED_MS; saveLifeState(); updateLivesUI(); showToast('1 saat sınırsız can!');
         }
       }, 120);
     }
 
-    function showToast(msg) {
-      toastEl.textContent = msg;
-      toastEl.classList.add('show');
-      setTimeout(() => toastEl.classList.remove('show'), 1400);
+    function fmtMS(ms) { const s = Math.max(0, Math.ceil(ms / 1000)); const m = Math.floor(s / 60); const r = s % 60; return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`; }
+
+    function lifeTicker() {
+      setInterval(() => {
+        if (isUnlimited()) { if (Date.now() >= state.unlimitedUntil) { state.unlimitedUntil = 0; saveLifeState(); } }
+        else { if (state.lives < MAX_LIVES && state.regenAt && Date.now() >= state.regenAt) { state.lives += 1; if (state.lives < MAX_LIVES) state.regenAt = Date.now() + LIFE_REGEN_MS; else state.regenAt = null; saveLifeState(); } }
+        updateLivesUI();
+      }, 1000);
     }
 
-    function shuffle(arr) {
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
+    // Helpers
+    function showToast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 1400); }
+    function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function randomSample(arr, n) { const a = arr.slice(); const out = []; while (a.length && out.length < n) { const idx = Math.floor(Math.random() * a.length); out.push(a.splice(idx, 1)[0]); } return out; }
+    function normalizeForLetters(name) { const up = name.toLocaleUpperCase('tr-TR'); return up.replace(/[^A-ZÇĞİÖŞÜ]/g, ''); }
+    function generateLetterPool(clean, size) { const letters = clean.split(''); const pool = letters.slice(); while (pool.length < size) { const ch = TURKISH_ALPHABET[Math.floor(Math.random() * TURKISH_ALPHABET.length)]; pool.push(ch); } return shuffle(pool).slice(0, size); }
 
-    function randomSample(arr, n) {
-      const a = arr.slice();
-      const out = [];
-      while (a.length && out.length < n) {
-        const idx = Math.floor(Math.random() * a.length);
-        out.push(a.splice(idx, 1)[0]);
-      }
-      return out;
-    }
-
-    function normalizeForLetters(name) {
-      const up = name.toLocaleUpperCase('tr-TR');
-      return up.replace(/[^A-ZÇĞİÖŞÜ]/g, '');
-    }
-
-    function generateLetterPool(clean, size) {
-      const letters = clean.split('');
-      const pool = letters.slice();
-      while (pool.length < size) {
-        const ch = TURKISH_ALPHABET[Math.floor(Math.random() * TURKISH_ALPHABET.length)];
-        pool.push(ch);
-      }
-      return shuffle(pool).slice(0, size);
-    }
-
-    function showGameOrOver() {
-      if (hasLives()) showGame(); else showOver();
-    }
+    function getTotalPoints() { return parseInt(localStorage.getItem(LS_KEYS.totalPoints) || '0'); }
+    function addTotalPoints(x) { const cur = getTotalPoints(); localStorage.setItem(LS_KEYS.totalPoints, String(cur + x)); totalPointsLabel.textContent = String(cur + x); }
 
     init();
   </script>
