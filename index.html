@@ -396,11 +396,6 @@
           </div>
           <div class="grid" id="categoriesGrid" style="margin-top: 10px;"></div>
         </div>
-
-        <details class="guide">
-          <summary>Kullanma Kılavuzu</summary>
-          <div id="guideContent" class="muted" style="margin-top: 8px; line-height: 1.7;"></div>
-        </details>
       </section>
 
       <section id="difficultyScreen" class="screen">
@@ -779,6 +774,7 @@
     const $$ = (sel) => document.querySelectorAll(sel);
     const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
     const shuffle = (arr) => arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+    const getName = (a) => (state.lang === 'tr' ? (a.nameTR || a.nameEN) : (a.nameEN || a.nameTR));
 
     function saveState() {
       localStorage.setItem('ag_lang', state.lang);
@@ -883,9 +879,6 @@
       $('#badgesBtn').textContent = t('badges');
       $('#langSelectMain').value = state.lang;
       renderCategories();
-
-      // Guide text
-      $('#guideContent').textContent = t('guide');
     }
 
     function renderCategories() {
@@ -1024,9 +1017,8 @@
       }
       state.round.asked.add(keyOf(q));
 
-      const langIsTR = state.lang === 'tr';
-      const allInCat = animalsData.filter(x => x.category === q.category);
-      const wrongs = shuffle(allInCat.filter(x => x !== q)).slice(0, 3);
+      const wrongPool = animalsData.filter(x => x !== q);
+      const wrongs = shuffle(wrongPool).slice(0, 3);
       const opts = shuffle([q, ...wrongs]);
 
       $('#questionImg').src = q.imageUrl;
@@ -1037,7 +1029,7 @@
       opts.forEach(item => {
         const b = document.createElement('button');
         b.className = 'option-btn';
-        b.textContent = langIsTR ? item.nameTR : item.nameEN;
+        b.textContent = getName(item);
         b.dataset.correct = (item === q) ? '1' : '0';
         b.onclick = () => onAnswer(b, item === q);
         options.appendChild(b);
