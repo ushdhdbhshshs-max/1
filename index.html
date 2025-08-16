@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hafıza Oyunu (Simon Says)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-glow: #00d4ff;
+            --secondary-glow: #ff6b35;
+            --accent-glow: #ffd700;
+            --success-glow: #00ff88;
+            --danger-glow: #ff4757;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .neon-glow {
+            text-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor,
+                0 0 20px currentColor;
+        }
+
+        .neon-border {
+            box-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor,
+                inset 0 0 5px currentColor;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .holographic {
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.2) 25%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.2) 75%, 
+                rgba(255,255,255,0.1) 100%);
+            background-size: 200% 200%;
+            animation: holographic 3s ease-in-out infinite;
+        }
+
+        @keyframes holographic {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .simon-pad {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simon-pad::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .simon-pad:hover::before {
+            left: 100%;
+        }
+
+        .simon-pad.lit {
+            filter: brightness(2) contrast(1.2);
+            box-shadow: 
+                0 0 20px currentColor,
+                0 0 40px currentColor,
+                0 0 60px currentColor;
+            transform: scale(1.05);
+        }
+
+        .level-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transition: all 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .level-button:hover::before {
+            width: 200%;
+            height: 200%;
+        }
+
+        .level-button:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px var(--primary-glow);
+                text-shadow: 0 0 10px var(--primary-glow);
+            }
+            50% { 
+                box-shadow: 0 0 40px var(--primary-glow), 0 0 60px var(--primary-glow);
+                text-shadow: 0 0 20px var(--primary-glow), 0 0 30px var(--primary-glow);
+            }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .modal-overlay {
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-content {
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .game-board {
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .world-unlock-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffd700);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleFloat 2s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0);
+            }
+        }
+
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .energy-field {
+            position: relative;
+        }
+
+        .energy-field::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00d4ff, #ff6b35, #ffd700, #00ff88);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+            border-radius: inherit;
+            z-index: -1;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="text-white min-h-screen relative">
+    <!-- Animated Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div id="app-container" class="relative z-10 w-full max-w-6xl mx-auto p-4 min-h-screen flex items-center justify-center">
+
+        <!-- Ana Menü -->
+        <div id="main-menu" class="w-full text-center">
+            <!-- Header with Lives -->
+            <div class="flex justify-between items-center mb-8">
+                <div id="lives-container" class="flex gap-2"></div>
+                <button id="watch-ad-for-lives-btn" class="hidden energy-field bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black text-sm font-bold px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-video"></i> CAN DOLDUR
+                </button>
+            </div>
+
+            <!-- Main Title Section -->
+            <div class="mb-12">
+                <div class="floating mb-6">
+                    <i class="fa-solid fa-brain text-8xl text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text neon-glow"></i>
+                </div>
+                <h1 class="text-6xl font-black text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 bg-clip-text neon-glow mb-4 font-['Orbitron']">
+                    HAFIZA OYUNU
+                </h1>
+                <h3 id="world-title" class="text-2xl font-semibold text-transparent bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text neon-glow"></h3>
+            </div>
+
+            <!-- Level Selection Grid -->
+            <div class="mb-8">
+                <div id="level-selection" class="grid grid-cols-4 gap-4 max-w-2xl mx-auto"></div>
+            </div>
+
+            <!-- World Unlock Section -->
+            <div id="world-unlock-container" class="mb-8"></div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center gap-6">
+                <button id="how-to-play-btn" class="glass-effect hover:bg-white/20 px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <i class="fas fa-question-circle"></i> Nasıl Oynanır?
+                </button>
+                <button id="reset-progress-btn" class="glass-effect hover:bg-red-500/20 px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <i class="fas fa-trash"></i> Sıfırla
+                </button>
+            </div>
+        </div>
+
+        <!-- Oyun Ekranı -->
+        <div id="game-screen" class="hidden w-full max-w-4xl mx-auto">
+            <!-- Game Header -->
+            <div class="flex justify-between items-center mb-8">
+                <h2 id="level-title" class="text-4xl font-bold text-transparent bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text neon-glow font-['Orbitron']"></h2>
+                <div id="lives-container-game" class="flex gap-2"></div>
+            </div>
+
+            <!-- Message Box -->
+            <div id="message-box" class="h-16 text-2xl text-transparent bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text neon-glow mb-8 text-center font-bold pulse-glow">
+                Sırayı izle...
+            </div>
+
+            <!-- Game Board -->
+            <div class="flex justify-center">
+                <div id="game-board" class="relative w-96 h-96 sm:w-[500px] sm:h-[500px] game-board rounded-full p-4">
+                    <div id="game-pads-container" class="w-full h-full relative"></div>
+                    
+                    <!-- Center Display -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 sm:w-40 sm:h-40 glass-effect rounded-full flex items-center justify-center border-2 border-cyan-400/30">
+                        <div class="text-center">
+                            <div class="text-sm text-cyan-300 mb-1">TUR</div>
+                            <div id="round-display" class="text-4xl font-bold text-cyan-400 neon-glow">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modallar -->
+    <div id="modal-container">
+        <!-- Kaybettin Modalı -->
+        <div id="game-over-modal" class="modal-overlay fixed inset-0 bg-black/80 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+            <div class="modal-content glass-effect rounded-2xl p-8 max-w-md w-full text-center border border-red-500/50">
+                <div class="mb-6">
+                    <i class="fas fa-times-circle text-6xl text-red-500 mb-4"></i>
+                    <h3 class="text-4xl font-bold text-red-500 neon-glow mb-4">Kaybettin!</h3>
+                    <p class="text-gray-300 text-lg">Bu seviyeyi tekrar oynamak 1 cana mal olacak.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button id="back-to-menu-from-gameover" class="glass-effect hover:bg-gray-600/50 px-6 py-3 rounded-full w-full font-semibold transition-all duration-300">
+                        Menüye Dön
+                    </button>
+                    <button id="retry-level-btn" class="energy-field bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 px-6 py-3 rounded-full w-full font-semibold transition-all duration-300 transform hover:scale-105">
+                        Yeniden Dene
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reklam Simülasyonu Modalı -->
+        <div id="ad-simulation-modal" class="modal-overlay fixed inset-0 bg-black/90 flex flex-col items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+            <div class="glass-effect rounded-2xl p-8 text-center">
+                <i class="fas fa-film text-8xl text-yellow-400 mb-6 floating"></i>
+                <h3 class="text-3xl font-bold text-white mb-4 neon-glow">Reklam Oynatılıyor...</h3>
+                <p class="text-gray-400 mb-6 text-lg">Ödülünüz için lütfen bekleyin.</p>
+                <div class="w-24 h-24 border-4 border-dashed border-yellow-400 rounded-full animate-spin flex items-center justify-center text-3xl font-bold text-yellow-400">
+                    <span id="ad-timer">5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Create animated stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create particle effect
+        function createParticle(x, y, color) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.backgroundColor = color;
+            particle.style.borderRadius = '50%';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 2000);
+        }
+
+        // --- Değişkenler ve DOM Elementleri ---
+        const mainMenu = document.getElementById('main-menu');
+        const gameScreen = document.getElementById('game-screen');
+        const levelSelectionContainer = document.getElementById('level-selection');
+        const messageBox = document.getElementById('message-box');
+        const levelTitle = document.getElementById('level-title');
+        const roundDisplay = document.getElementById('round-display');
+        const gamePadsContainer = document.getElementById('game-pads-container');
+        const worldTitle = document.getElementById('world-title');
+        const worldUnlockContainer = document.getElementById('world-unlock-container');
+        const livesContainers = [document.getElementById('lives-container'), document.getElementById('lives-container-game')];
+        const watchAdForLivesBtn = document.getElementById('watch-ad-for-lives-btn');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const retryLevelBtn = document.getElementById('retry-level-btn');
+        const backToMenuFromGameOverBtn = document.getElementById('back-to-menu-from-gameover');
+        const adSimulationModal = document.getElementById('ad-simulation-modal');
+        const adTimerSpan = document.getElementById('ad-timer');
+
+        let sequence = [], playerSequence = [], canClick = false, currentLevel = 1, highestUnlockedLevel = 1, highestViewableWorld = 1, currentPadCount = 0;
+        let playerLives = 5, maxLives = 5, lifeRegenStartTime = null, lifeRegenInterval = null;
+        const LIFE_REGEN_SECONDS = 180; // 3 dakika
+
+        const synth = new Tone.Synth().toDestination();
+        const notes = ['C4', 'E4', 'G4', 'A4', 'B4', 'C5'];
+        const wrongNote = 'C2';
+        const levelUpNotes = ['C5', 'E5', 'G5'];
+        const padColors = [
+            'bg-gradient-to-br from-green-400 to-green-600',
+            'bg-gradient-to-br from-red-400 to-red-600', 
+            'bg-gradient-to-br from-yellow-400 to-yellow-600',
+            'bg-gradient-to-br from-blue-400 to-blue-600',
+            'bg-gradient-to-br from-purple-400 to-purple-600',
+            'bg-gradient-to-br from-orange-400 to-orange-600'
+        ];
+
+        const worlds = [
+            { world: 1, name: "🌍 Aşama 1: 4 Renk", colors: 4, levels: 12 },
+            { world: 2, name: "🌍 Aşama 2: 5 Renk", colors: 5, levels: 20 },
+            { world: 3, name: "🌍 Aşama 3: 6 Renk", colors: 6, levels: 30 }
+        ];
+
+        const levelsConfig = [
+            // World 1 (12 seviye)
+            { level: 1, steps: 3, world: 1 },
+            { level: 2, steps: 4, world: 1 },
+            { level: 3, steps: 5, world: 1 },
+            { level: 4, steps: 6, world: 1 },
+            { level: 5, steps: 7, world: 1 },
+            { level: 6, steps: 8, world: 1 },
+            { level: 7, steps: 9, world: 1 },
+            { level: 8, steps: 10, world: 1 },
+            { level: 9, steps: 11, world: 1 },
+            { level: 10, steps: 12, world: 1 },
+            { level: 11, steps: 13, world: 1 },
+            { level: 12, steps: 14, world: 1 },
+
+            // World 2 (20 seviye: 13–32)
+            { level: 13, steps: 4, world: 2 },
+            { level: 14, steps: 5, world: 2 },
+            { level: 15, steps: 6, world: 2 },
+            { level: 16, steps: 7, world: 2 },
+            { level: 17, steps: 8, world: 2 },
+            { level: 18, steps: 9, world: 2 },
+            { level: 19, steps: 10, world: 2 },
+            { level: 20, steps: 11, world: 2 },
+            { level: 21, steps: 12, world: 2 },
+            { level: 22, steps: 13, world: 2 },
+            { level: 23, steps: 14, world: 2 },
+            { level: 24, steps: 15, world: 2 },
+            { level: 25, steps: 16, world: 2 },
+            { level: 26, steps: 17, world: 2 },
+            { level: 27, steps: 18, world: 2 },
+            { level: 28, steps: 19, world: 2 },
+            { level: 29, steps: 20, world: 2 },
+            { level: 30, steps: 21, world: 2 },
+            { level: 31, steps: 22, world: 2 },
+            { level: 32, steps: 23, world: 2 },
+
+            // World 3 (30 seviye: 33–62)
+            { level: 33, steps: 5, world: 3 },
+            { level: 34, steps: 6, world: 3 },
+            { level: 35, steps: 7, world: 3 },
+            { level: 36, steps: 8, world: 3 },
+            { level: 37, steps: 9, world: 3 },
+            { level: 38, steps: 10, world: 3 },
+            { level: 39, steps: 11, world: 3 },
+            { level: 40, steps: 12, world: 3 },
+            { level: 41, steps: 13, world: 3 },
+            { level: 42, steps: 14, world: 3 },
+            { level: 43, steps: 15, world: 3 },
+            { level: 44, steps: 16, world: 3 },
+            { level: 45, steps: 17, world: 3 },
+            { level: 46, steps: 18, world: 3 },
+            { level: 47, steps: 19, world: 3 },
+            { level: 48, steps: 20, world: 3 },
+            { level: 49, steps: 21, world: 3 },
+            { level: 50, steps: 22, world: 3 },
+            { level: 51, steps: 23, world: 3 },
+            { level: 52, steps: 24, world: 3 },
+            { level: 53, steps: 25, world: 3 },
+            { level: 54, steps: 26, world: 3 },
+            { level: 55, steps: 27, world: 3 },
+            { level: 56, steps: 28, world: 3 },
+            { level: 57, steps: 29, world: 3 },
+            { level: 58, steps: 30, world: 3 },
+            { level: 59, steps: 31, world: 3 },
+            { level: 60, steps: 32, world: 3 },
+            { level: 61, steps: 33, world: 3 },
+            { level: 62, steps: 34, world: 3 }
+        ];
+
+        // --- Yardımcı Fonksiyonlar ---
+        const showModal = (id) => document.getElementById(id)?.classList.add('visible');
+        const hideModal = (id) => document.getElementById(id)?.classList.remove('visible');
+
+        // --- İlerleme ve Can Yönetimi ---
+        function loadData() {
+            highestUnlockedLevel = parseInt(localStorage.getItem('simonHighestLevel') || '1', 10);
+            highestViewableWorld = parseInt(localStorage.getItem('simonHighestWorld') || '1', 10);
+            playerLives = parseInt(localStorage.getItem('simonPlayerLives') || maxLives.toString(), 10);
+            lifeRegenStartTime = parseInt(localStorage.getItem('simonLifeRegenStart') || '0', 10);
+            if (playerLives < maxLives && lifeRegenStartTime > 0) {
+                startLifeRegenTimer();
+            }
+            updateLivesDisplay();
+        }
+
+        function saveData() {
+            localStorage.setItem('simonHighestLevel', highestUnlockedLevel);
+            localStorage.setItem('simonHighestWorld', highestViewableWorld);
+            localStorage.setItem('simonPlayerLives', playerLives);
+            localStorage.setItem('simonLifeRegenStart', lifeRegenStartTime);
+        }
+        
+        function updateLivesDisplay() {
+            livesContainers.forEach(container => {
+                container.innerHTML = '';
+                for (let i = 0; i < maxLives; i++) {
+                    const heartClass = i < playerLives ? 'fas fa-heart text-red-500 heartbeat' : 'far fa-heart text-gray-600';
+                    container.innerHTML += `<i class="${heartClass} text-2xl"></i>`;
+                }
+            });
+            watchAdForLivesBtn.classList.toggle('hidden', playerLives === maxLives);
+        }
+
+        function startLifeRegenTimer() {
+            if (lifeRegenInterval) clearInterval(lifeRegenInterval);
+            lifeRegenInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - lifeRegenStartTime) / 1000);
+                const livesToRegen = Math.floor(elapsed / LIFE_REGEN_SECONDS);
+
+                if (livesToRegen > 0) {
+                    playerLives = Math.min(maxLives, playerLives + livesToRegen);
+                    lifeRegenStartTime = playerLives < maxLives ? lifeRegenStartTime + (livesToRegen * LIFE_REGEN_SECONDS * 1000) : 0;
+                    saveData();
+                    updateLivesDisplay();
+                }
+
+                if (playerLives >= maxLives) {
+                    clearInterval(lifeRegenInterval);
+                    lifeRegenInterval = null;
+                    worldUnlockContainer.querySelector('#regen-timer')?.remove();
+                } else {
+                    const remainingSeconds = LIFE_REGEN_SECONDS - (elapsed % LIFE_REGEN_SECONDS);
+                    const minutes = Math.floor(remainingSeconds / 60);
+                    const seconds = remainingSeconds % 60;
+                    const timerEl = worldUnlockContainer.querySelector('#regen-timer');
+                    if (timerEl) {
+                        timerEl.textContent = `Sonraki can: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                }
+            }, 1000);
+        }
+
+        // --- Reklam Simülasyonu ---
+        function showFakeAd(onComplete) {
+            showModal('ad-simulation-modal');
+            let timer = 5;
+            adTimerSpan.textContent = timer;
+            const interval = setInterval(() => {
+                timer--;
+                adTimerSpan.textContent = timer;
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    hideModal('ad-simulation-modal');
+                    onComplete();
+                }
+            }, 1000);
+        }
+
+        // --- Menü Yönetimi ---
+        function renderMenu() {
+            const currentWorldData = worlds.find(w => w.world === highestViewableWorld);
+            worldTitle.textContent = currentWorldData.name;
+            levelSelectionContainer.innerHTML = '';
+            
+            const worldLevels = levelsConfig.filter(l => l.world === highestViewableWorld);
+            worldLevels.forEach(levelConf => {
+                const isLocked = levelConf.level > highestUnlockedLevel;
+                const isDisabled = playerLives <= 0 && !isLocked;
+                const button = document.createElement('button');
+                button.className = `level-button p-4 rounded-2xl font-bold text-xl flex items-center justify-center aspect-square transition-all duration-300 ${
+                    isLocked ? 'glass-effect locked opacity-50' : 
+                    isDisabled ? 'glass-effect disabled opacity-75' : 
+                    'energy-field bg-gradient-to-br from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600'
+                }`;
+                button.dataset.level = levelConf.level;
+                button.disabled = isLocked || isDisabled;
+                button.innerHTML = isLocked ? `<i class="fas fa-lock text-2xl"></i>` : `<span class="neon-glow">${levelConf.level}</span>`;
+                button.addEventListener('click', () => !isLocked && !isDisabled && startGame(levelConf.level));
+                levelSelectionContainer.appendChild(button);
+            });
+
+            worldUnlockContainer.innerHTML = '';
+            const lastLevelOfCurrentWorld = worldLevels[worldLevels.length - 1].level;
+            if (highestUnlockedLevel > lastLevelOfCurrentWorld && highestViewableWorld < worlds.length) {
+                const nextWorld = worlds.find(w => w.world === highestViewableWorld + 1);
+                worldUnlockContainer.innerHTML = `<button id="unlock-world-btn" class="world-unlock-btn text-white font-bold py-4 px-8 rounded-full w-full max-w-md mx-auto flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-video text-xl"></i> 
+                    <span class="text-lg">${nextWorld.name} Kilidini Aç</span>
+                </button>`;
+                document.getElementById('unlock-world-btn').addEventListener('click', () => {
+                    showFakeAd(() => {
+                        highestViewableWorld++;
+                        saveData();
+                        renderMenu();
+                    });
+                });
+            } else if (playerLives < maxLives) {
+                worldUnlockContainer.innerHTML = `<div id="regen-timer" class="text-xl text-cyan-300 neon-glow"></div>`;
+                startLifeRegenTimer();
+            }
+        }
+        
+        // --- Oyun Mantığı ---
+        function startGame(level) {
+            if (playerLives <= 0) return;
+            currentLevel = level;
+            const levelConfig = levelsConfig.find(l => l.level === currentLevel);
+            const worldConfig = worlds.find(w => w.world === levelConfig.world);
+            
+            generateGameBoard(worldConfig.colors);
+            mainMenu.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            levelTitle.textContent = `Seviye ${currentLevel}`;
+            updateLivesDisplay();
+            startNextRound();
+        }
+        
+        function startNextRound() {
+            sequence = [];
+            playerSequence = [];
+            roundDisplay.textContent = '1';
+            computerTurn();
+        }
+
+        function computerTurn() {
+            canClick = false;
+            messageBox.textContent = 'Sırayı izle...';
+            playerSequence = [];
+            sequence.push(Math.floor(Math.random() * currentPadCount));
+            setTimeout(() => playSequence(), 1000);
+        }
+
+        function playSequence() {
+            let i = 0;
+            const delay = Math.max(150, 600 - (currentLevel * 20));
+            const interval = setInterval(() => {
+                lightUpPad(sequence[i]);
+                i++;
+                if (i >= sequence.length) {
+                    clearInterval(interval);
+                    canClick = true;
+                    messageBox.textContent = 'Sıra sende!';
+                }
+            }, delay);
+        }
+
+        function lightUpPad(colorIndex) {
+            const pad = document.querySelector(`.simon-pad[data-color='${colorIndex}']`);
+            if(pad) {
+                if (Tone.context.state === 'running') synth.triggerAttackRelease(notes[colorIndex], '8n');
+                pad.classList.add('lit');
+                
+                // Create particle effect
+                const rect = pad.getBoundingClientRect();
+                createParticle(rect.left + rect.width/2, rect.top + rect.height/2, getComputedStyle(pad).backgroundColor);
+                
+                setTimeout(() => pad.classList.remove('lit'), 300);
+            }
+        }
+
+        function handlePlayerClick(e) {
+            if (!canClick) return;
+            if (Tone.context.state !== 'running') Tone.start();
+
+            const clickedColor = parseInt(e.target.dataset.color);
+            playerSequence.push(clickedColor);
+            lightUpPad(clickedColor);
+
+            if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+                gameOver();
+                return;
+            }
+
+            if (playerSequence.length === sequence.length) {
+                const levelConfig = levelsConfig.find(l => l.level === currentLevel);
+                if (sequence.length >= levelConfig.steps) {
+                    levelComplete();
+                } else {
+                    canClick = false;
+                    roundDisplay.textContent = sequence.length + 1;
+                    setTimeout(computerTurn, 1000);
+                }
+            }
+        }
+
+        function gameOver() {
+            canClick = false;
+            if (Tone.context.state === 'running') {
+                synth.triggerAttackRelease(wrongNote, '4n', Tone.now() + 0.05);
+            }
+            
+            playerLives--;
+            if (playerLives < maxLives && lifeRegenStartTime === 0) {
+                lifeRegenStartTime = Date.now();
+            }
+            saveData();
+            updateLivesDisplay();
+            
+            retryLevelBtn.disabled = playerLives <= 0;
+            retryLevelBtn.classList.toggle('disabled', playerLives <= 0);
+            showModal('game-over-modal');
+        }
+
+        function levelComplete() {
+            canClick = false;
+            messageBox.textContent = 'SEVİYE TAMAMLANDI!';
+            if (Tone.context.state === 'running') {
+                const now = Tone.now();
+                levelUpNotes.forEach((note, i) => synth.triggerAttackRelease(note, '8n', now + 0.05 + i * 0.15));
+            }
+
+            if (currentLevel === highestUnlockedLevel) {
+                highestUnlockedLevel++;
+                saveData();
+            }
+            
+            setTimeout(() => {
+                mainMenu.classList.remove('hidden');
+                gameScreen.classList.add('hidden');
+                renderMenu();
+            }, 2000);
+        }
+        
+        function generateGameBoard(colorCount) {
+            gamePadsContainer.innerHTML = '';
+            gamePadsContainer.className = 'w-full h-full relative';
+            currentPadCount = colorCount;
+            const baseStyles = 'simon-pad cursor-pointer rounded-2xl border-2 border-white/20';
+
+            if (colorCount === 4) {
+                gamePadsContainer.classList.add('grid', 'grid-cols-2', 'gap-4');
+                for (let i = 0; i < 4; i++) {
+                    const pad = document.createElement('div');
+                    pad.className = `${baseStyles} ${padColors[i]} h-full`;
+                    pad.dataset.color = i;
+                    gamePadsContainer.appendChild(pad);
+                }
+            } else if (colorCount === 5) {
+                gamePadsContainer.classList.add('grid', 'grid-cols-2', 'gap-4');
+                // 2 üst, 1 orta, 2 alt
+                const pad0 = document.createElement('div'); pad0.className = `${baseStyles} ${padColors[0]} h-32`; pad0.dataset.color = 0;
+                const pad1 = document.createElement('div'); pad1.className = `${baseStyles} ${padColors[1]} h-32`; pad1.dataset.color = 1;
+                const pad2 = document.createElement('div'); pad2.className = `${baseStyles} ${padColors[2]} col-span-2 h-32`; pad2.dataset.color = 2;
+                const pad3 = document.createElement('div'); pad3.className = `${baseStyles} ${padColors[3]} h-32`; pad3.dataset.color = 3;
+                const pad4 = document.createElement('div'); pad4.className = `${baseStyles} ${padColors[4]} h-32`; pad4.dataset.color = 4;
+                gamePadsContainer.append(pad0, pad1, pad2, pad3, pad4);
+            } else if (colorCount === 6) {
+                gamePadsContainer.classList.add('grid', 'grid-cols-2', 'grid-rows-3', 'gap-4');
+                for (let i = 0; i < 6; i++) {
+                    const pad = document.createElement('div');
+                    pad.className = `${baseStyles} ${padColors[i]} h-24`;
+                    pad.dataset.color = i;
+                    gamePadsContainer.appendChild(pad);
+                }
+            }
+            document.querySelectorAll('.simon-pad').forEach(pad => pad.addEventListener('click', handlePlayerClick));
+        }
+
+        // --- Olay Dinleyicileri ---
+        retryLevelBtn.addEventListener('click', () => {
+            hideModal('game-over-modal');
+            startGame(currentLevel);
+        });
+
+        backToMenuFromGameOverBtn.addEventListener('click', () => {
+            hideModal('game-over-modal');
+            mainMenu.classList.remove('hidden');
+            gameScreen.classList.add('hidden');
+            renderMenu();
+        });
+        
+        watchAdForLivesBtn.addEventListener('click', () => {
+            showFakeAd(() => {
+                playerLives = maxLives;
+                lifeRegenStartTime = 0;
+                if(lifeRegenInterval) clearInterval(lifeRegenInterval);
+                lifeRegenInterval = null;
+                saveData();
+                updateLivesDisplay();
+                renderMenu();
+            });
+        });
+
+        // --- Başlangıç ---
+        function initialize() {
+            createStars();
+            loadData();
+            renderMenu();
+        }
+
+        initialize();
+    });
+    </script>
+</body>
+</html>
