@@ -177,7 +177,6 @@
         </div>
         <div class="start-grid">
           <button id="btnSingle" class="menu-btn">🎯 Tek Oyna</button>
-          <button id="btnMulti" class="menu-btn">👫 Arkadaşınla Oyna</button>
           <button id="btnBadges" class="menu-btn">🏅 Rozetlerim</button>
           <button id="btnParent" class="menu-btn">🛡️ Ebeveyn Kontrolü</button>
         </div>
@@ -196,23 +195,6 @@
           <div class="controls">
             <button id="singleSetupNext">Devam</button>
             <button class="ghost" id="backToStart1">Geri</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Multi Setup -->
-      <section id="multiSetupScreen" class="card" hidden>
-        <h2>İki Oyuncu</h2>
-        <div class="grid">
-          <label>Oyuncu 1
-            <input id="p1Name" type="text" placeholder="Oyuncu 1" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
-          </label>
-          <label>Oyuncu 2
-            <input id="p2Name" type="text" placeholder="Oyuncu 2" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
-          </label>
-          <div class="controls">
-            <button id="multiSetupNext">Devam</button>
-            <button class="ghost" id="backToStart2">Geri</button>
           </div>
         </div>
       </section>
@@ -411,7 +393,6 @@
     // Screens
     const startScreen = el('#startScreen');
     const singleSetupScreen = el('#singleSetupScreen');
-    const multiSetupScreen = el('#multiSetupScreen');
     const categoryScreen = el('#categoryScreen');
     const levelScreen = el('#levelScreen');
     const gameScreen = el('#gameScreen');
@@ -466,19 +447,19 @@
       updateLivesUI();
       lifeTicker();
       renderBadges();
-      showStart();
+      if (!location.hash) navigate('start'); else route();
     }
 
     function bindStartMenu() {
-      el('#btnSingle').addEventListener('click', () => { showSingleSetup(); });
-      el('#btnMulti').addEventListener('click', () => { showMultiSetup(); });
-      el('#btnBadges').addEventListener('click', () => { showBadges(); });
-      el('#btnParent').addEventListener('click', () => { showParent(); });
+      el('#btnSingle').addEventListener('click', () => { navigate('singleSetup'); });
+      // el('#btnMulti') kaldırıldı
+      el('#btnBadges').addEventListener('click', () => { navigate('badges'); });
+      el('#btnParent').addEventListener('click', () => { navigate('parent'); });
 
-      el('#backToStart1').addEventListener('click', showStart);
-      el('#backToStart2').addEventListener('click', showStart);
-      el('#backToStart3').addEventListener('click', showStart);
-      el('#backToCategories').addEventListener('click', showCategories);
+      el('#backToStart1').addEventListener('click', () => navigate('start'));
+      // backToStart2 kaldırıldı
+      el('#backToStart3').addEventListener('click', () => navigate('start'));
+      el('#backToCategories').addEventListener('click', () => navigate('categories'));
 
       el('#singleSetupNext').addEventListener('click', () => {
         const name = (el('#singleName').value || '').trim();
@@ -487,7 +468,7 @@
         state.mode = 'single';
         state.single.name = name; state.single.age = age;
         updatePlayerBadge();
-        showCategories();
+        navigate('categories');
       });
 
       el('#multiSetupNext').addEventListener('click', () => {
@@ -502,20 +483,13 @@
         showCategories();
       });
 
-      el('#resultsToMenu').addEventListener('click', showStart);
-      el('#backFromBadges').addEventListener('click', showStart);
-      el('#backFromParent').addEventListener('click', showStart);
+      el('#resultsToMenu').addEventListener('click', () => navigate('start'));
+      el('#backFromBadges').addEventListener('click', () => navigate('start'));
+      el('#backFromParent').addEventListener('click', () => navigate('start'));
     }
 
     function updatePlayerBadge() {
-      if (state.mode === 'single') {
-        playerBadge.textContent = `Oyuncu: ${state.single.name}${state.single.age ? `, ${state.single.age} yaş` : ''}`;
-      } else if (state.mode === 'multi') {
-        const cur = state.multi.currentIdx;
-        playerBadge.textContent = `Sıra: ${state.multi.players[cur]} • Skor: ${state.multi.points[0]} - ${state.multi.points[1]}`;
-      } else {
-        playerBadge.textContent = '';
-      }
+      playerBadge.textContent = state.single.name ? `Oyuncu: ${state.single.name}${state.single.age ? `, ${state.single.age} yaş` : ''}` : '';
     }
 
     function bindCommonButtons() {
@@ -524,7 +498,7 @@
         restartQuestion();
         showToast('Soru başa alındı');
       });
-      el('#quitToStartBtn').addEventListener('click', showStart);
+      el('#quitToStartBtn').addEventListener('click', () => navigate('start'));
       el('#newGameBtn').addEventListener('click', () => {
         state.lives = MAX_LIVES; state.regenAt = null; saveLifeState(); updateLivesUI(); showStart();
       });
@@ -539,17 +513,37 @@
     }
 
     function hideAll() {
-      [startScreen, singleSetupScreen, multiSetupScreen, categoryScreen, levelScreen, gameScreen, overScreen, achievementsScreen, parentScreen, resultsScreen].forEach(s => s.hidden = true);
+      [startScreen, singleSetupScreen, categoryScreen, levelScreen, gameScreen, overScreen, achievementsScreen, parentScreen, resultsScreen].forEach(s => s.hidden = true);
+    }
+
+    function navigate(page) {
+      history.pushState({ page }, '', `#${page}`);
+      route();
+    }
+
+    window.addEventListener('popstate', route);
+    window.addEventListener('hashchange', route);
+
+    function route() {
+      const page = (location.hash || '#start').replace('#','');
+      if (page === 'start') { showStart(); }
+      else if (page === 'singleSetup') { showSingleSetup(); }
+      else if (page === 'categories') { showCategories(); }
+      else if (page === 'levels') { if (!state.categoryKey) { navigate('categories'); } else { showLevels(state.categoryKey); } }
+      else if (page === 'game') { showGame(); }
+      else if (page === 'badges') { showBadges(); }
+      else if (page === 'parent') { showParent(); }
+      else if (page === 'results') { resultsScreen.hidden = false; }
+      else { showStart(); }
     }
 
     function showStart() {
       hideAll();
-      state.mode = null;
+      state.mode = 'single';
       updatePlayerBadge();
       startScreen.hidden = false;
     }
     function showSingleSetup() { hideAll(); singleSetupScreen.hidden = false; }
-    function showMultiSetup() { hideAll(); multiSetupScreen.hidden = false; }
 
     function renderCategoryList() {
       categoriesEl.innerHTML = '';
@@ -562,7 +556,7 @@
             <h3>${catName}</h3>
             <div class="muted">${animals.length} hayvan</div>
           </div>`;
-        btn.addEventListener('click', () => { state.categoryKey = catName; showLevels(catName); });
+        btn.addEventListener('click', () => { state.categoryKey = catName; navigate('levels'); });
         categoriesEl.appendChild(btn);
       });
     }
@@ -583,6 +577,7 @@
       hideAll();
       renderParentAuth();
       parentScreen.hidden = false;
+      // ebeveyn, ayrı sayfa hissi için hash ile yönlendirilir
     }
 
     function renderBadges() {
@@ -697,7 +692,7 @@
       }
 
       currentCatLvl.textContent = `${categoryKey} • ${levelKey}`;
-      showGame();
+      navigate('game');
       startQuestion();
     }
 
@@ -785,7 +780,7 @@
 
     function handleWrong() {
       markStats(false);
-      if (state.mode === 'multi' || isUnlimited()) {
+      if (isUnlimited()) {
         showToast('Yanlış! Soru başa alındı');
         startQuestion();
         return;
@@ -796,7 +791,7 @@
       saveLifeState();
       updateLivesUI();
       if (state.lives <= 0) {
-        showOver();
+        navigate('results');
       } else {
         showToast('Yanlış! -1 can');
         startQuestion();
@@ -842,27 +837,13 @@
     function endSession() {
       hideAll();
       const body = el('#resultsBody');
-      if (state.mode === 'single') {
-        body.innerHTML = `
-          <div>Oyuncu: <b>${state.single.name || 'Tek Oyuncu'}</b></div>
-          <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
-          <div>Toplam Puan: <b>${state.points}</b></div>
-        `;
-      } else {
-        const [p1, p2] = state.multi.players;
-        const [s1, s2] = state.multi.points;
-        const winner = s1 === s2 ? 'Berabere' : (s1 > s2 ? p1 : p2);
-        body.innerHTML = `
-          <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
-          <table class="table" style="margin-top:8px;">
-            <tr><th>Oyuncu</th><th>Puan</th></tr>
-            <tr><td>${p1}</td><td>${s1}</td></tr>
-            <tr><td>${p2}</td><td>${s2}</td></tr>
-          </table>
-          <div style="margin-top:8px;">Kazanan: <b>${winner}</b></div>
-        `;
-      }
+      body.innerHTML = `
+        <div>Oyuncu: <b>${state.single.name || 'Tek Oyuncu'}</b></div>
+        <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
+        <div>Toplam Puan: <b>${state.points}</b></div>
+      `;
       resultsScreen.hidden = false;
+      navigate('results');
     }
 
     // Game 1: Resim -> 4 isim
@@ -1002,7 +983,7 @@
     }
 
     // Lives / Ads
-    function hasLives() { return state.mode === 'multi' ? true : (state.lives > 0 || isUnlimited()); }
+    function hasLives() { return state.lives > 0 || isUnlimited(); }
     function isUnlimited() { return Date.now() < state.unlimitedUntil; }
 
     function loadLifeState() {
@@ -1040,7 +1021,7 @@
     }
 
     function onWatchAd() {
-      if (state.mode === 'multi') { showToast('Bu modda can yok'); return; }
+      // tek oyuncu modunda reklam izlenebilir
       adOverlay.hidden = false; adBar.style.width = '0%';
       let left = AD_DURATION_MS; adCountdown.textContent = String(Math.ceil(left / 1000));
       const started = Date.now();
