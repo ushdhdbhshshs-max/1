@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Hayvan Tahmin Oyunu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --bg-accent: #111827;
+            --card: #0b1220;
+            --muted: #9ca3af;
+            --text: #e5e7eb;
+            --primary: #22c55e;
+            --primary-700: #16a34a;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #38bdf8;
+            --shadow: 0 10px 25px rgba(0,0,0,0.35);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --maxw: 920px;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            color: var(--text);
+            background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(17,24,39,0.98)),
+                url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        #app {
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--maxw);
+            backdrop-filter: blur(8px);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(17,24,39,0.65);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 12px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: var(--shadow);
+        }
+
+        .hearts {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 18px;
+        }
+        .heart {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239,68,68,0.15);
+            color: #fecaca;
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 6px;
+        }
+        .heart.off { opacity: 0.35; filter: grayscale(0.4); }
+        .badge-chip {
+            background: rgba(34,197,94,0.12);
+            color: #bbf7d0;
+            border: 1px solid rgba(34,197,94,0.25);
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+
+        .screen {
+            display: none;
+        }
+        .screen.active { display: block; }
+
+        .card {
+            background: rgba(11,18,32,0.78);
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            padding: 18px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            text-align: center;
+            align-items: center;
+            justify-items: center;
+            padding: 12px;
+        }
+        .hero img.hero-logo {
+            width: 88px;
+            height: 88px;
+            border-radius: 18px;
+            object-fit: cover;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero h1 { margin: 8px 0 0; font-size: 24px; letter-spacing: 0.3px; }
+        .muted { color: var(--muted); font-size: 13px; }
+
+        .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .row.center { justify-content: center; }
+
+        .btn {
+            background: linear-gradient(180deg, rgba(34,197,94,0.95), rgba(22,163,74,0.95));
+            border: 1px solid rgba(34,197,94,0.4);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.05s ease, opacity 0.2s ease, background 0.2s ease;
+            box-shadow: 0 6px 16px rgba(34,197,94,0.3);
+            white-space: nowrap;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); opacity: 0.9; }
+        .btn.secondary {
+            background: rgba(56,189,248,0.12);
+            border: 1px solid rgba(56,189,248,0.35);
+            color: #bae6fd;
+            box-shadow: none;
+            font-weight: 600;
+        }
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.14);
+            color: var(--text);
+            font-weight: 600;
+        }
+        .btn.warn {
+            background: rgba(245,158,11,0.18);
+            border: 1px solid rgba(245,158,11,0.4);
+            color: #fde68a;
+        }
+        .btn.danger {
+            background: rgba(239,68,68,0.18);
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #fecaca;
+        }
+        .btn.toggled {
+            outline: 2px solid rgba(56,189,248,0.5);
+        }
+
+        .input {
+            background: rgba(2,6,23,0.6);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 12px 14px;
+            outline: none;
+            width: 100%;
+            transition: border 0.2s ease;
+        }
+        .input:focus { border-color: rgba(56,189,248,0.5); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+        @media (min-width: 560px) {
+            .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (min-width: 860px) {
+            .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+
+        .category {
+            background: rgba(2,6,23,0.55);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.08s ease, border 0.2s ease;
+            position: relative;
+        }
+        .category:hover { transform: translateY(-1px); border-color: rgba(56,189,248,0.35); }
+        .category .thumb {
+            height: 90px;
+            background-size: cover;
+            background-position: center;
+        }
+        .category .label {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .lock-badge {
+            position: absolute; top: 8px; right: 8px; background: rgba(2,6,23,0.75);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 4px 8px; font-size: 12px;
+        }
+
+        .store-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 12px; }
+        @media (min-width: 620px) { .store-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .store-item {
+            display: grid;
+            grid-template-columns: 72px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            background: rgba(2,6,23,0.55);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 10px;
+        }
+        .store-item img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+
+        .split {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+        }
+
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+        @media (min-width: 600px) { .options { grid-template-columns: repeat(2, 1fr); } }
+
+        .option-btn {
+            background: rgba(2,6,23,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.05s ease, background 0.15s ease, border 0.15s ease, opacity 0.2s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+        .option-btn.correct { background: rgba(34,197,94,0.22); border-color: rgba(34,197,94,0.5); }
+        .option-btn.wrong { background: rgba(239,68,68,0.22); border-color: rgba(239,68,68,0.5); }
+        .option-btn.hidden { opacity: 0.2; pointer-events: none; }
+
+        .image-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+        .image-option {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            background: rgba(2,6,23,0.55);
+            transition: transform 0.05s ease, border 0.15s ease, opacity 0.2s ease;
+        }
+        .image-option img { width: 100%; height: 140px; object-fit: cover; display: block; }
+        .image-option .caption { position: absolute; left: 8px; bottom: 8px; background: rgba(2,6,23,0.6); border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+        .image-option.correct { outline: 2px solid rgba(34,197,94,0.7); }
+        .image-option.wrong { outline: 2px solid rgba(239,68,68,0.7); filter: grayscale(0.2); }
+        .image-option.hidden { opacity: 0.2; pointer-events: none; }
+
+        .question-img {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: var(--shadow);
+            background-color: var(--bg-accent);
+        }
+
+        .timer {
+            display: inline-flex; align-items: center; gap: 8px; font-weight: 700;
+            background: rgba(56,189,248,0.12);
+            border: 1px solid rgba(56,189,248,0.35);
+            color: #bae6fd;
+            padding: 6px 10px;
+            border-radius: 10px;
+        }
+
+        .toast {
+            position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+            background: rgba(2,6,23,0.92);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 50;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .toast.show { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(-4px); }
+
+        .fact-card {
+            position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
+            width: min(92vw, 560px);
+            background: rgba(2,6,23,0.92);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 12px 14px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 45;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .fact-card.show { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(-4px); }
+
+        .overlay {
+            position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px;
+            background: rgba(2,6,23,0.6);
+            z-index: 40;
+        }
+        .overlay.active { display: flex; }
+
+        .pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .lang-select {
+            background: rgba(2,6,23,0.6);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 10px 12px;
+            outline: none;
+        }
+
+        .small { font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="topbar" id="topbar" style="display:none">
+                <div class="player-info">
+                    <div class="logo">
+                        <img id="gameLogo" alt="logo" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+                        <div>
+                            <div id="gameTitle" style="font-weight:700">WildGuess</div>
+                            <div class="muted small" id="playerNameTop">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="gap: 14px; align-items: center;">
+                    <div class="hearts" id="hearts"></div>
+                    <div class="badge-chip" id="levelChip">Lv 1</div>
+                    <div class="badge-chip" id="pointsChip">0 ⭐</div>
+                </div>
+            </div>
+
+            <section id="welcomeScreen" class="screen active">
+                <div class="card hero">
+                    <img class="hero-logo" alt="logo" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" />
+                    <h1 data-translate-key="title"></h1>
+                    <div class="muted" data-translate-key="subtitle"></div>
+                    <div class="row center" style="margin-top: 6px;">
+                        <button class="btn" id="playBtn" data-translate-key="singlePlay"></button>
+                        <button class="btn secondary" id="badgesBtnWelcome" data-translate-key="badges"></button>
+                        <select id="langSelectWelcome" class="lang-select">
+                            <option value="tr">Türkçe</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                    <div class="muted small" id="continueAs" style="display:none"></div>
+                </div>
+
+                <div class="card" id="nameCard" style="display:none; margin-top: 12px;">
+                    <div style="font-weight:700; margin-bottom: 8px;" data-translate-key="enterName"></div>
+                    <div class="row">
+                        <input id="nameInput" class="input" placeholder="Adınız" maxlength="24" />
+                        <button class="btn" id="saveNameBtn" data-translate-key="save"></button>
+                    </div>
+                    <div class="muted small" style="margin-top: 6px;" data-translate-key="nameHint"></div>
+                </div>
+            </section>
+
+            <section id="mainMenu" class="screen">
+                <div class="card" style="margin-bottom: 12px;">
+                    <div class="split">
+                        <div style="font-weight:700;" data-translate-key="categories"></div>
+                        <div class="row">
+                            <button class="btn ghost" id="storeBtn" data-translate-key="store"></button>
+                            <button class="btn ghost" id="encyclopediaBtn" data-translate-key="encyclopedia"></button>
+                            <button class="btn ghost" id="badgesBtn" data-translate-key="badges"></button>
+                            <select id="langSelectMain" class="lang-select">
+                                <option value="tr">Türkçe</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid" id="categoriesGrid" style="margin-top: 10px;"></div>
+                </div>
+            </section>
+
+            <section id="difficultyScreen" class="screen">
+                <div class="card">
+                    <div class="split" style="margin-bottom: 12px;">
+                        <div style="font-weight:700" data-translate-key="chooseDifficulty"></div>
+                        <button class="btn ghost" id="backToMainBtn" data-translate-key="back"></button>
+                    </div>
+                    <div class="row center" style="gap:10px; margin-bottom: 8px;">
+                        <span class="muted small" data-translate-key="chooseMode"></span>
+                        <button class="btn secondary toggled" data-mode="classic" id="modeClassicBtn" data-translate-key="modeClassic"></button>
+                        <button class="btn secondary" data-mode="survival" id="modeSurvivalBtn" data-translate-key="modeSurvival"></button>
+                        <button class="btn secondary" data-mode="reverse" id="modeReverseBtn" data-translate-key="modeReverse"></button>
+                    </div>
+                    <div class="row center" style="gap:12px;">
+                        <button class="btn" data-diff="kolay" data-translate-key="easy"></button>
+                        <button class="btn" data-diff="orta" data-translate-key="medium"></button>
+                        <button class="btn" data-diff="zor" data-translate-key="hard"></button>
+                    </div>
+                    <div class="muted small" style="margin-top: 10px;" data-translate-key="lifeCostHint"></div>
+                </div>
+            </section>
+
+            <section id="gameScreen" class="screen">
+                <div class="card">
+                    <div class="split" style="margin-bottom: 10px;">
+                        <div class="row" style="gap:8px; align-items:center;">
+                            <span class="timer" id="timer">60</span>
+                            <span class="pill" id="roundScore">0 ⭐</span>
+                            <span class="pill" id="roundStreak" style="display:none;">0 🔗</span>
+                            <span class="pill" id="roundCategory">-</span>
+                            <span class="pill" id="roundDifficulty">-</span>
+                            <span class="pill" id="roundMode">-</span>
+                        </div>
+                        <button class="btn ghost" id="quitGameBtn" data-translate-key="quit"></button>
+                    </div>
+
+                    <img id="questionImg" class="question-img" alt="animal" src="" />
+                    <div id="questionText" style="margin-top: 10px; font-weight:700; display:none;"></div>
+                    <div style="margin-top: 10px; font-weight:700;" id="questionPrompt" data-translate-key="whatAnimal"></div>
+
+                    <div class="options" id="options"></div>
+                    <div class="image-grid" id="imageOptions" style="display:none;"></div>
+
+                    <div class="row" style="margin-top: 10px; gap: 8px;">
+                        <button class="btn secondary" id="useEliminateBtn"></button>
+                        <button class="btn warn" id="useAutoBtn"></button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="storeScreen" class="screen">
+                <div class="card">
+                    <div class="split" style="margin-bottom: 10px;">
+                        <div style="font-weight:700" data-translate-key="storeTitle"></div>
+                        <div class="row">
+                            <div class="badge-chip" id="storePoints">0 ⭐</div>
+                            <button class="btn ghost" id="backFromStoreBtn" data-translate-key="back"></button>
+                        </div>
+                    </div>
+                    <div class="store-grid" id="coreStoreGrid">
+                        <div class="store-item">
+                            <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="infinite" />
+                            <div>
+                                <div style="font-weight:700" data-translate-key="unlimitedLives"></div>
+                                <div class="muted small" data-translate-key="unlimitedLivesDesc"></div>
+                            </div>
+                            <button class="btn" data-item="unlimited" id="buyUnlimitedBtn"></button>
+                        </div>
+
+                        <div class="store-item">
+                            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="eliminate" />
+                            <div>
+                                <div style="font-weight:700" data-translate-key="eliminateTitle"></div>
+                                <div class="muted small" data-translate-key="eliminateDesc"></div>
+                            </div>
+                            <button class="btn" data-item="eliminate" id="buyEliminateBtn"></button>
+                        </div>
+
+                        <div class="store-item">
+                            <img src="https://cdn-icons-png.flaticon.com/512/167/167755.png" alt="auto" />
+                            <div>
+                                <div style="font-weight:700" data-translate-key="autoTitle"></div>
+                                <div class="muted small" data-translate-key="autoDesc"></div>
+                            </div>
+                            <button class="btn" data-item="auto" id="buyAutoBtn"></button>
+                        </div>
+                    </div>
+
+                    <div class="split" style="margin: 12px 0 8px;">
+                        <div class="muted" data-translate-key="themes"></div>
+                    </div>
+                    <div class="store-grid" id="themesGrid"></div>
+
+                    <div class="split" style="margin: 12px 0 8px;">
+                        <div class="muted" data-translate-key="avatars"></div>
+                    </div>
+                    <div class="store-grid" id="avatarsGrid"></div>
+                </div>
+            </section>
+
+            <section id="badgesScreen" class="screen">
+                <div class="card">
+                    <div class="split" style="margin-bottom: 10px;">
+                        <div style="font-weight:700" data-translate-key="badges"></div>
+                        <button class="btn ghost" id="backFromBadgesBtn" data-translate-key="back"></button>
+                    </div>
+                    <div id="badgesList" class="grid"></div>
+                </div>
+            </section>
+
+            <section id="encyclopediaScreen" class="screen">
+                <div class="card">
+                    <div class="split" style="margin-bottom: 10px;">
+                        <div style="font-weight:700" data-translate-key="encyclopedia"></div>
+                        <button class="btn ghost" id="backFromEncyclopediaBtn" data-translate-key="back"></button>
+                    </div>
+                    <div id="encyclopediaList" class="grid"></div>
+                </div>
+            </section>
+
+            <div id="gameOverOverlay" class="overlay">
+                <div class="card" style="max-width: 520px; width: 100%; text-align:center;">
+                    <div style="font-weight:700; margin-bottom: 6px;" data-translate-key="gameOver"></div>
+                    <div class="muted" data-translate-key="earnedPoints"></div>
+                    <div style="font-size: 40px; font-weight: 700; margin: 6px 0;" id="earnedScore">0</div>
+                    <div class="row center" style="gap:10px;">
+                        <button class="btn" id="goHomeBtn" data-translate-key="home"></button>
+                        <button class="btn secondary" id="playAgainBtn" data-translate-key="playAgain"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="toast" class="toast">-</div>
+            <div id="factCard" class="fact-card"></div>
+        </div>
+    </div>
+
+    <script>
+    // ---------------- I18N (Internationalization) ----------------
+    // Tüm oyun metinleri burada. Yeni bir dil eklemek için bu yapıyı kopyalayın.
+    const translations = {
+        tr: {
+            title: 'Hayvan Tahmin Oyunu',
+            subtitle: '1 dakikada olabildiğince çok hayvanı bil!',
+            singlePlay: 'Tek Oyna',
+            badges: 'Rozetlerim',
+            enterName: 'İsminizi girin',
+            save: 'Kaydet',
+            nameHint: 'Bu isim cihazınızda saklanır.',
+            continueAs: (n) => `Devam et: ${n}`,
+            categories: 'Kategoriler',
+            store: 'Mağaza',
+            encyclopedia: 'Ansiklopedi',
+            chooseDifficulty: 'Zorluk Seçin',
+            chooseMode: 'Mod Seçin:',
+            modeClassic: 'Klasik',
+            modeSurvival: 'Hayatta Kalma',
+            modeReverse: 'Tersine Mücadele',
+            easy: 'Kolay', medium: 'Orta', hard: 'Zor',
+            lifeCostHint: 'Bu turu başlatmak 1 can harcar.',
+            quit: 'Bırak',
+            whatAnimal: 'Bu hangi hayvan?',
+            reversePrompt: 'Hangi resim bu hayvan?',
+            eliminate: (c) => `Şık Ele (${c})`,
+            auto: (c) => `Oto Cevap (${c})`,
+            storeTitle: 'Mağaza',
+            unlimitedLives: '10 dk Sınırsız Can',
+            unlimitedLivesDesc: 'Süre boyunca can harcamadan tur başlat.',
+            eliminateTitle: 'Şık Eleme', eliminateDesc: '2 yanlış seçeneği kaldır. Tek kullanımlık.',
+            autoTitle: 'Oto Cevap', autoDesc: 'Doğru cevabı otomatik işaretle. Tek kullanımlık.',
+            back: 'Geri',
+            gameOver: 'Oyun Bitti',
+            earnedPoints: 'Kazandığın Puan',
+            home: 'Ana Menü', playAgain: 'Tekrar Oyna',
+            notEnoughLives: 'Yetersiz can. Mağazadan sınırsız can alın veya bekleyin.',
+            notEnoughPoints: 'Yetersiz puan.',
+            bought: (item) => `${item} satın alındı!`,
+            equipped: 'Takılı',
+            equip: 'Tak',
+            noMoreItems: 'Bu öğeden kalmadı.',
+            eliminateUsed: 'Bu soruda şık eleme zaten kullanıldı.',
+            nameInvalid: 'Lütfen geçerli bir isim girin (en az 2 harf).',
+            streak: 'Seri',
+            levelShort: (lv) => `Sv ${lv}`,
+            themes: 'Temalar',
+            avatars: 'Avatarlar',
+            theme_ocean: 'Okyanus',
+            theme_desert: 'Çöl',
+            theme_polar: 'Kutup',
+            avatar_cat: 'Kedi',
+            avatar_fox: 'Tilki',
+            avatar_panda: 'Panda',
+            requiresLevel: (lv) => `🔒 Sv ${lv}`,
+            didYouKnow: 'Biliyor muydun?',
+            cat_memeliler: 'Memeliler',
+            cat_kuslar: 'Kuşlar',
+            cat_surungenler: 'Sürüngenler',
+            cat_baliklar: 'Balıklar',
+            cat_eklembacaklilar: 'Eklem bacaklılar',
+            cat_omurgasizlar: 'Omurgasızlar',
+            cat_dinozorlar: 'Dinozorlar',
+        },
+        en: {
+            title: 'Animal Guessing Game',
+            subtitle: 'Guess as many animals as you can in 60 seconds!',
+            singlePlay: 'Single Play',
+            badges: 'My Badges',
+            enterName: 'Enter your name',
+            save: 'Save',
+            nameHint: 'Your name is stored on this device.',
+            continueAs: (n) => `Continue as: ${n}`,
+            categories: 'Categories',
+            store: 'Store',
+            encyclopedia: 'Encyclopedia',
+            chooseDifficulty: 'Choose Difficulty',
+            chooseMode: 'Choose Mode:',
+            modeClassic: 'Classic',
+            modeSurvival: 'Survival',
+            modeReverse: 'Reverse Challenge',
+            easy: 'Easy', medium: 'Medium', hard: 'Hard',
+            lifeCostHint: 'Starting this round costs 1 life.',
+            quit: 'Quit',
+            whatAnimal: 'Which animal is this?',
+            reversePrompt: 'Which image matches this animal?',
+            eliminate: (c) => `Eliminate (${c})`,
+            auto: (c) => `Auto Answer (${c})`,
+            storeTitle: 'Store',
+            unlimitedLives: 'Unlimited Lives (10 min)',
+            unlimitedLivesDesc: 'Start rounds without spending lives for 10 minutes.',
+            eliminateTitle: 'Eliminate Options', eliminateDesc: 'Removes 2 wrong choices. Single use.',
+            autoTitle: 'Auto Answer', autoDesc: 'Automatically selects the correct answer. Single use.',
+            back: 'Back',
+            gameOver: 'Time\'s Up!',
+            earnedPoints: 'Points Earned',
+            home: 'Main Menu', playAgain: 'Play Again',
+            notEnoughLives: 'Not enough lives. Buy unlimited lives from the store or wait.',
+            notEnoughPoints: 'Not enough points.',
+            bought: (item) => `${item} purchased!`,
+            equipped: 'Equipped',
+            equip: 'Equip',
+            noMoreItems: 'You are out of this item.',
+            eliminateUsed: 'Elimination has already been used for this question.',
+            nameInvalid: 'Please enter a valid name (at least 2 characters).',
+            streak: 'Streak',
+            levelShort: (lv) => `Lv ${lv}`,
+            themes: 'Themes',
+            avatars: 'Avatars',
+            theme_ocean: 'Ocean',
+            theme_desert: 'Desert',
+            theme_polar: 'Polar',
+            avatar_cat: 'Cat',
+            avatar_fox: 'Fox',
+            avatar_panda: 'Panda',
+            requiresLevel: (lv) => `🔒 Lv ${lv}`,
+            didYouKnow: 'Did you know?',
+            cat_memeliler: 'Mammals',
+            cat_kuslar: 'Birds',
+            cat_surungenler: 'Reptiles',
+            cat_baliklar: 'Fish',
+            cat_eklembacaklilar: 'Arthropods',
+            cat_omurgasizlar: 'Invertebrates',
+            cat_dinozorlar: 'Dinosaurs',
+        }
+    };
+
+    // ------------- Data -------------
+    // Kategori tanımlamaları (Dinamik kategori listesi için)
+    const categories = [
+        { key: 'memeliler',       image: 'https://images.unsplash.com/photo-1474511014056-0b039d3ef4c1?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'kuslar',          image: 'https://images.unsplash.com/photo-1542461927-dd68c85dcc90?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'surungenler',     image: 'https://images.unsplash.com/photo-1508182311256-e3f6f3b1c8ba?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'baliklar',        image: 'https://images.unsplash.com/photo-1544551763-7ef420be2ab5?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'eklembacaklilar', image: 'https://images.unsplash.com/photo-1520287397033-98cdbd4b9ae5?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'omurgasizlar',    image: 'https://images.unsplash.com/photo-1546500840-ae38253aba9b?q=80&w=1200&auto=format&fit=crop' },
+        { key: 'dinozorlar',      image: 'https://images.unsplash.com/photo-1582966785116-c68242c7d4ec?q=80&w=1200&auto=format&fit=crop', minLevel: 3 },
+    ];
+
+    // TÜM HAYVAN VERİTABANI BURADA
+    // Yeni hayvan eklemek için bu listeye yeni bir obje ekleyin.
+    const animalsData = [
+        // Kuşlar
+        { nameTR: 'Serçe', nameEN: 'Sparrow', category: 'kuslar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/House_Sparrow_mar08.jpg' },
+        { nameTR: 'Kartal', nameEN: 'Eagle', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Bald_Eagle_Portrait.jpg' },
+        { nameTR: 'Penguen', nameEN: 'Penguin', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_chick-8.jpg' },
+        { nameTR: 'Tavus Kuşu', nameEN: 'Peacock', category: 'kuslar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Peacock_Emerald.jpg' },
+        { nameTR: 'Baykuş', nameEN: 'Owl', category: 'kuslar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Athene_cunicularia_at_the_Toronto_Zoo.jpg' },
+        { nameTR: 'Flamingo', nameEN: 'Flamingo', category: 'kuslar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Flamingos_Laguna_Colorada.jpg' },
+
+        // Sürüngenler
+        { nameTR: 'Kaplumbağa', nameEN: 'Turtle', category: 'surungenler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chelonia_mydas_is_going_for_the_air.jpg' },
+        { nameTR: 'Kobra', nameEN: 'Cobra', category: 'surungenler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Goldencobra.jpg' },
+        { nameTR: 'İguana', nameEN: 'Iguana', category: 'surungenler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Green_iguana.jpg' },
+        { nameTR: 'Timsah', nameEN: 'Crocodile', category: 'surungenler', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/NileCrocodile.jpg' },
+
+        // Balıklar
+        { nameTR: 'Palyaço Balığı', nameEN: 'Clownfish', category: 'baliklar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Amphiprion_ocellaris_%28Clown_anemonefish%29_%282118571933%29.jpg' },
+        { nameTR: 'Büyük Beyaz Köpekbalığı', nameEN: 'Great White Shark', category: 'baliklar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/56/White_shark.jpg' },
+        { nameTR: 'Somon', nameEN: 'Salmon', category: 'baliklar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Sockeye_Salmon.jpg' },
+        { nameTR: 'Betta', nameEN: 'Betta', category: 'baliklar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Betta_mahachaiensis_01.jpg' },
+
+        // Eklem bacaklılar
+        { nameTR: 'Kelebek', nameEN: 'Butterfly', category: 'eklembacaklilar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Monarch_In_May.jpg' },
+        { nameTR: 'Örümcek', nameEN: 'Spider', category: 'eklembacaklilar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/09/Araneus_diadematus_3.jpg' },
+        { nameTR: 'Yengeç', nameEN: 'Crab', category: 'eklembacaklilar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Blue_crab_on_soil.jpg' },
+        { nameTR: 'Akrep', nameEN: 'Scorpion', category: 'eklembacaklilar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Scorpion_Photograph.jpg' },
+        { nameTR: 'Uğur Böceği', nameEN: 'Ladybug', category: 'eklembacaklilar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Coccinella_septempunctata_on_a_leaf.jpg' },
+
+        // Omurgasızlar
+        { nameTR: 'Ahtapot', nameEN: 'Octopus', category: 'omurgasizlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Octopus2.jpg' },
+        { nameTR: 'Denizanası', nameEN: 'Jellyfish', category: 'omurgasizlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Blue_jellyfish.jpg' },
+        { nameTR: 'Denizyıldızı', nameEN: 'Starfish', category: 'omurgasizlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Starfish_10.jpg' },
+        { nameTR: 'Sünger', nameEN: 'Sponge', category: 'omurgasizlar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Sponges_marine.jpg' },
+        { nameTR: 'Toprak Solucanı', nameEN: 'Earthworm', category: 'omurgasizlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Lumbricus_terrestris.jpg' },
+
+        // Dinozorlar
+        { nameTR: 'Tiranazor', nameEN: 'Tyrannosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Tyrannosaurus_Rex_Holotype.jpg' },
+        { nameTR: 'Triceratops', nameEN: 'Triceratops', category: 'dinozorlar', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Triceratops_BW.jpg' },
+        { nameTR: 'Brachiosaurus', nameEN: 'Brachiosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Brachiosaurus_stechowi.jpg' },
+        { nameTR: 'Stegosaurus', nameEN: 'Stegosaurus', category: 'dinozorlar', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Stegosaurus_ungulatus.jpg' },
+        { nameTR: 'Velociraptor', nameEN: 'Velociraptor', category: 'dinozorlar', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Velociraptor_mongoliensis.jpg' },
+
+        // Memeliler
+        { nameTR: 'Aslan', nameEN: 'Lion', category: 'memeliler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Lion_waiting_in_Namibia.jpg' },
+        { nameTR: 'Fil', nameEN: 'Elephant', category: 'memeliler', difficulty: 'kolay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/37/African_Bush_Elephant.jpg' },
+        { nameTR: 'Ayı', nameEN: 'Bear', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Ursus_arctos_arctos_%28cropped%29.jpg' },
+        { nameTR: 'Yunus', nameEN: 'Dolphin', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Bottlenose_Dolphin_KSC04pd0178.jpg' },
+        { nameTR: 'Koala', nameEN: 'Koala', category: 'memeliler', difficulty: 'orta', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg' },
+        { nameTR: 'Kanguru', nameEN: 'Kangaroo', category: 'memeliler', difficulty: 'zor', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Kangaroo_Australia_01_11_2008_-_retouch.jpg' },
+    ];
+
+    // Basit bilgi kartları
+    const animalFacts = {
+        'Lion': { tr: 'Bir aslanın kükremesi 8 km uzaktan duyulabilir.', en: 'A lion\'s roar can be heard from 5 miles (8 km) away.' },
+        'Elephant': { tr: 'Filler asla zıplayamaz.', en: 'Elephants are the only mammals that can\'t jump.' },
+        'Dolphin': { tr: 'Yunuslar benzersiz ıslık isimlerine sahiptir.', en: 'Dolphins have unique signature whistles.' },
+        'Penguin': { tr: 'Penguenler uçamaz ama harika yüzücülerdir.', en: 'Penguins can\'t fly but they are excellent swimmers.' },
+        'Owl': { tr: 'Baykuşlar gözlerini hareket ettiremez; tüm kafalarını çevirir.', en: 'Owls can\'t move their eyes; they rotate their whole head.' },
+        'Turtle': { tr: 'Bazı deniz kaplumbağaları 100 yıldan fazla yaşayabilir.', en: 'Some sea turtles can live over 100 years.' },
+        'Koala': { tr: 'Koalaların parmak izi insanınkine çok benzer.', en: 'Koala fingerprints are strikingly similar to humans.' },
+        'Clownfish': { tr: 'Palyaço balıkları hayatları boyunca cinsiyet değiştirebilir.', en: 'Clownfish can change sex during their life.' },
+    };
+
+    // ------------- State (Oyunun Hafızası) -------------
+    const state = {
+        lang: localStorage.getItem('ag_lang') || (navigator.language?.startsWith('tr') ? 'tr' : 'en'),
+        playerName: localStorage.getItem('ag_playerName') || null,
+        totalPoints: Number(localStorage.getItem('ag_points') || '0'),
+        lives: JSON.parse(localStorage.getItem('ag_lives') || '{"count":3,"last":0}'),
+        unlimitedLivesUntil: Number(localStorage.getItem('ag_unlimitedUntil') || '0'),
+        inventory: JSON.parse(localStorage.getItem('ag_inventory') || '{"eliminate":0,"auto":0}'),
+        badges: JSON.parse(localStorage.getItem('ag_badges') || '{}'),
+        level: Number(localStorage.getItem('ag_level') || '1'),
+        xp: Number(localStorage.getItem('ag_xp') || '0'),
+        themesOwned: JSON.parse(localStorage.getItem('ag_themesOwned') || '[]'),
+        avatarsOwned: JSON.parse(localStorage.getItem('ag_avatarsOwned') || '[]'),
+        selectedTheme: localStorage.getItem('ag_selectedTheme') || 'default',
+        selectedAvatar: localStorage.getItem('ag_selectedAvatar') || '',
+        encyclopedia: JSON.parse(localStorage.getItem('ag_encyclopedia') || '{}'),
+        currentCategory: null,
+        currentDifficulty: null,
+        currentMode: 'classic',
+        round: {
+            score: 0,
+            timerId: null,
+            pool: [],
+            asked: new Set(),
+            eliminateUsedForQuestion: false,
+            currentQuestion: null,
+            streak: 0,
+        }
+    };
+
+    if (!state.lives || typeof state.lives.count !== 'number') {
+        state.lives = { count: 3, last: Date.now() };
+    }
+
+    // ------------- Utils (Yardımcı Fonksiyonlar) -------------
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const shuffle = (arr) => arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+    const getName = (a) => (state.lang === 'tr' ? (a.nameTR || a.nameEN) : (a.nameEN || a.nameTR));
+    const getKeyName = (a) => a.nameEN || a.nameTR;
+
+    // Çeviri fonksiyonu
+    const t = (key, ...args) => {
+        const pack = translations[state.lang] || translations.en;
+        const val = pack[key];
+        if (typeof val === 'function') return val(...args);
+        return val ?? key;
+    };
+
+    function saveState() {
+        localStorage.setItem('ag_lang', state.lang);
+        if (state.playerName) localStorage.setItem('ag_playerName', state.playerName);
+        localStorage.setItem('ag_points', String(state.totalPoints));
+        localStorage.setItem('ag_lives', JSON.stringify(state.lives));
+        localStorage.setItem('ag_unlimitedUntil', String(state.unlimitedLivesUntil));
+        localStorage.setItem('ag_inventory', JSON.stringify(state.inventory));
+        localStorage.setItem('ag_badges', JSON.stringify(state.badges));
+        localStorage.setItem('ag_level', String(state.level));
+        localStorage.setItem('ag_xp', String(state.xp));
+        localStorage.setItem('ag_themesOwned', JSON.stringify(state.themesOwned));
+        localStorage.setItem('ag_avatarsOwned', JSON.stringify(state.avatarsOwned));
+        localStorage.setItem('ag_selectedTheme', state.selectedTheme);
+        localStorage.setItem('ag_selectedAvatar', state.selectedAvatar);
+        localStorage.setItem('ag_encyclopedia', JSON.stringify(state.encyclopedia));
+    }
+
+    function toast(msg) {
+        const el = $('#toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        setTimeout(()=> el.classList.remove('show'), 1800);
+    }
+
+    function showFact(animal) {
+        const card = $('#factCard');
+        const key = getKeyName(animal);
+        const fact = animalFacts[key]?.[state.lang] || (state.lang === 'tr' ? 'Bugün yeni bir şey öğrendin!' : 'You learned something new today!');
+        card.innerHTML = `<div style="font-weight:700; margin-bottom:4px;">${t('didYouKnow')}</div><div class="small">${fact}</div>`;
+        card.classList.add('show');
+        setTimeout(()=> card.classList.remove('show'), 1600);
+    }
+
+    function setScreen(id) {
+        $$('.screen').forEach(s => s.classList.remove('active'));
+        $('#'+id)?.classList.add('active');
+        $('#topbar').style.display = (id === 'welcomeScreen') ? 'none' : 'flex';
+    }
+
+    // Kırık resimler için yedek resim gösteren fonksiyon
+    function setQuestionImage(url) {
+        const img = $('#questionImg');
+        img.src = url;
+        img.onerror = () => {
+            img.src = `https://placehold.co/800x400/0f172a/9ca3af?text=Resim+Yüklenemedi`;
+            img.onerror = null; // Sonsuz döngüyü engelle
+        };
+    }
+
+    function applyTheme() {
+        const themes = {
+            default: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop',
+            theme_ocean: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop',
+            theme_desert: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop',
+            theme_polar: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=1600&auto=format&fit=crop',
+        };
+        const url = themes[state.selectedTheme] || themes.default;
+        document.body.style.background = `linear-gradient(180deg, rgba(15,23,42,0.95), rgba(17,24,39,0.98)), url('${url}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundAttachment = 'fixed';
+    }
+
+    // ------------- UI Rendering (Arayüzü Güncelleme) -------------
+    function applyTranslations() {
+        document.querySelectorAll('[data-translate-key]').forEach(el => {
+            const key = el.dataset.translateKey;
+            el.textContent = t(key);
+        });
+
+        // Dinamik metinler (fonksiyon gerektirenler)
+        $('#continueAs').textContent = state.playerName ? t('continueAs', state.playerName) : '';
+        $('#useEliminateBtn').textContent = t('eliminate', state.inventory.eliminate);
+        $('#useAutoBtn').textContent = t('auto', state.inventory.auto);
+        $('#levelChip').textContent = t('levelShort', state.level);
+
+        const COSTS = getCosts();
+        $('#buyUnlimitedBtn').textContent = `${COSTS.unlimited} ⭐`;
+        $('#buyEliminateBtn').textContent = `${COSTS.eliminate} ⭐`;
+        $('#buyAutoBtn').textContent = `${COSTS.auto} ⭐`;
+
+        // Mode label on game
+        $('#roundMode').textContent = t('mode' + capitalize(state.currentMode));
+
+        // Update prompts
+        $('#questionPrompt').textContent = state.currentMode === 'reverse' ? t('reversePrompt') : t('whatAnimal');
+    }
+
+    function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+    function renderTopbar() {
+        $('#playerNameTop').textContent = state.playerName || '';
+        $('#pointsChip').textContent = `${state.totalPoints} ⭐`;
+        $('#levelChip').textContent = t('levelShort', state.level);
+        const logo = $('#gameLogo');
+        const avatarCfg = (typeof AVATAR_ITEMS !== 'undefined') ? AVATAR_ITEMS.find(x => x.id === state.selectedAvatar) : null;
+        logo.src = avatarCfg ? avatarCfg.img : 'https://cdn-icons-png.flaticon.com/512/616/616408.png';
+        renderLives();
+    }
+
+    function isUnlimitedLivesActive() {
+        return Date.now() < state.unlimitedLivesUntil;
+    }
+
+    function renderLives() {
+        const hearts = $('#hearts');
+        hearts.innerHTML = '';
+        if (isUnlimitedLivesActive()) {
+            const span = document.createElement('span');
+            span.className = 'badge-chip';
+            span.textContent = '∞';
+            hearts.appendChild(span);
+            return;
+        }
+        const count = clamp(state.lives.count, 0, 3);
+        for (let i=0;i<3;i++) {
+            const d = document.createElement('div');
+            d.className = 'heart' + (i < count ? '' : ' off');
+            d.textContent = '❤';
+            hearts.appendChild(d);
+        }
+    }
+
+    function regenLivesTick() {
+        if (isUnlimitedLivesActive()) {
+            renderLives(); // Sınırsız can bitti mi diye kontrol et
+            return;
+        }
+        const now = Date.now();
+        if (state.lives.count >= 3) {
+            state.lives.last = now;
+            return;
+        }
+        const last = state.lives.last || now;
+        const diff = now - last;
+        const interval = 120000; // 2 dakika
+        if (diff >= interval) {
+            const gained = Math.floor(diff / interval);
+            state.lives.count = clamp(state.lives.count + gained, 0, 3);
+            state.lives.last = now; // Zamanı sıfırla
+            saveState();
+            renderLives();
+        }
+    }
+
+    function renderCategories() {
+        const grid = $('#categoriesGrid');
+        grid.innerHTML = '';
+        categories.forEach(cat => {
+            const d = document.createElement('div');
+            d.className = 'category';
+            const locked = cat.minLevel && state.level < cat.minLevel;
+            d.onclick = () => { if (!locked) openDifficulty(cat.key); };
+
+            d.innerHTML = `
+                <div class="thumb" style="background-image: url('${cat.image}')"></div>
+                <div class="label">
+                    <div style="font-weight:700">${t('cat_' + cat.key)}</div>
+                </div>
+                ${locked ? `<div class="lock-badge">${t('requiresLevel', cat.minLevel)}</div>` : ''}
+            `;
+            grid.appendChild(d);
+        });
+    }
+
+    // ------------- Level & XP -------------
+    function xpForLevel(level) { return 50 + (level - 1) * 25; }
+
+    function addXP(amount) {
+        state.xp += amount;
+        while (state.xp >= xpForLevel(state.level)) {
+            state.xp -= xpForLevel(state.level);
+            state.level += 1;
+            state.badges['level' + state.level] = { at: Date.now() };
+            toast(t('levelShort', state.level));
+        }
+        saveState();
+        renderTopbar();
+    }
+
+    // ------------- Game Logic (Oyun Mantığı) -------------
+    function openDifficulty(catKey) {
+        state.currentCategory = catKey;
+        setScreen('difficultyScreen');
+    }
+
+    function canStartRound() {
+        if (isUnlimitedLivesActive()) return true;
+        return state.lives.count > 0;
+    }
+
+    function consumeLifeIfNeeded() {
+        if (isUnlimitedLivesActive()) return true;
+        if (state.lives.count > 0) {
+            state.lives.count -= 1;
+            state.lives.last = Date.now();
+            saveState();
+            renderLives();
+            return true;
+        }
+        return false;
+    }
+
+    function startRound(diff) {
+        state.currentDifficulty = diff;
+        if (!canStartRound()) {
+            toast(t('notEnoughLives'));
+            return;
+        }
+        consumeLifeIfNeeded();
+
+        // Soru havuzunu oluştur
+        const primaryPool = animalsData.filter(a => a.category === state.currentCategory && a.difficulty === diff);
+        let pool = [...primaryPool];
+        // Eğer havuz çok küçükse, aynı kategorideki diğer zorluklardan ekle
+        if (pool.length < 4) {
+            const fill = animalsData.filter(a => a.category === state.currentCategory && a.difficulty !== diff);
+            pool = [...pool, ...shuffle(fill)];
+        }
+        state.round.pool = shuffle(pool);
+        state.round.asked = new Set();
+        state.round.score = 0;
+        state.round.streak = 0;
+        state.round.eliminateUsedForQuestion = false;
+        state.round.currentQuestion = null;
+
+        $('#roundScore').textContent = `0 ⭐`;
+        $('#roundStreak').textContent = `0 🔗`;
+        $('#roundCategory').textContent = t('cat_' + state.currentCategory);
+        $('#roundDifficulty').textContent = t(state.currentDifficulty);
+        $('#roundMode').textContent = t('mode' + capitalize(state.currentMode));
+        $('#timer').textContent = '60';
+
+        // Mode-specific UI
+        const isSurvival = state.currentMode === 'survival';
+        $('#timer').style.display = isSurvival ? 'none' : 'inline-flex';
+        $('#roundStreak').style.display = isSurvival ? 'inline-flex' : 'none';
+        $('#questionImg').style.display = state.currentMode === 'reverse' ? 'none' : 'block';
+        $('#questionText').style.display = state.currentMode === 'reverse' ? 'block' : 'none';
+
+        setScreen('gameScreen');
+        nextQuestion();
+        if (!isSurvival) startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(state.round.timerId);
+        let remain = 60;
+        state.round.timerId = setInterval(() => {
+            remain -= 1;
+            $('#timer').textContent = String(remain);
+            if (remain <= 0) {
+                clearInterval(state.round.timerId);
+                endRound();
+            }
+        }, 1000);
+    }
+
+    function keyOf(a) { return `${a.category}|${a.nameTR}`; }
+
+    function makeOptionsForQuestion(correctAnimal) {
+        const options = [correctAnimal];
+        let wrongPool = animalsData.filter(a => a.category === correctAnimal.category && keyOf(a) !== keyOf(correctAnimal));
+        if (wrongPool.length < 3) {
+            wrongPool = [...wrongPool, ...animalsData.filter(a => a.category !== correctAnimal.category)];
+        }
+        const wrongs = shuffle(wrongPool).slice(0, 3);
+        return shuffle([correctAnimal, ...wrongs]);
+    }
+
+    function nextQuestion() {
+        state.round.eliminateUsedForQuestion = false;
+        const available = state.round.pool.filter(a => !state.round.asked.has(keyOf(a)));
+        if (available.length === 0) {
+            endRound();
+            return;
+        }
+        const q = available[Math.floor(Math.random() * available.length)];
+        state.round.asked.add(keyOf(q));
+        state.round.currentQuestion = q;
+
+        const finalOptions = makeOptionsForQuestion(q);
+
+        const optionsContainer = $('#options');
+        const imageOptionsContainer = $('#imageOptions');
+        optionsContainer.innerHTML = '';
+        imageOptionsContainer.innerHTML = '';
+
+        if (state.currentMode === 'reverse') {
+            // Show name, choose image
+            $('#questionText').textContent = getName(q);
+            $('#questionPrompt').textContent = t('reversePrompt');
+            $('#questionImg').style.display = 'none';
+            $('#questionText').style.display = 'block';
+            optionsContainer.style.display = 'none';
+            imageOptionsContainer.style.display = 'grid';
+
+            finalOptions.forEach(item => {
+                const wrap = document.createElement('div');
+                wrap.className = 'image-option';
+                wrap.dataset.correct = (item === q) ? '1' : '0';
+                const img = document.createElement('img');
+                img.src = item.imageUrl;
+                img.alt = getName(item);
+                img.onerror = () => { img.src = `https://placehold.co/400x300/0f172a/9ca3af?text=Resim`; };
+                const cap = document.createElement('div');
+                cap.className = 'caption';
+                cap.textContent = getName(item);
+                wrap.appendChild(img);
+                wrap.appendChild(cap);
+                wrap.onclick = () => onAnswer(wrap, item === q);
+                imageOptionsContainer.appendChild(wrap);
+            });
+        } else {
+            // Classic / Survival: show image, choose text
+            setQuestionImage(q.imageUrl);
+            $('#questionPrompt').textContent = t('whatAnimal');
+            optionsContainer.style.display = 'grid';
+            imageOptionsContainer.style.display = 'none';
+
+            finalOptions.forEach(item => {
+                const b = document.createElement('button');
+                b.className = 'option-btn';
+                b.textContent = getName(item);
+                b.dataset.correct = (item === q) ? '1' : '0';
+                b.onclick = () => onAnswer(b, item === q);
+                optionsContainer.appendChild(b);
+            });
+        }
+    }
+
+    function onAnswer(btn, isCorrect) {
+        // disable all clicks
+        $$('#options .option-btn').forEach(b => b.onclick = null);
+        $$('#imageOptions .image-option').forEach(b => b.onclick = null);
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            state.round.score += 1;
+            $('#roundScore').textContent = `${state.round.score} ⭐`;
+            if (state.currentMode === 'survival') {
+                state.round.streak += 1;
+                $('#roundStreak').textContent = `${state.round.streak} 🔗`;
+            }
+            if (state.round.currentQuestion) {
+                // Encyclopedia add
+                const k = getKeyName(state.round.currentQuestion);
+                if (!state.encyclopedia[k]) {
+                    state.encyclopedia[k] = {
+                        nameTR: state.round.currentQuestion.nameTR,
+                        nameEN: state.round.currentQuestion.nameEN,
+                        imageUrl: state.round.currentQuestion.imageUrl,
+                        at: Date.now(),
+                    };
+                }
+                saveState();
+                showFact(state.round.currentQuestion);
+            }
+            setTimeout(nextQuestion, 800);
+        } else {
+            btn.classList.add('wrong');
+            const correctSel = state.currentMode === 'reverse' ? '#imageOptions .image-option' : '#options .option-btn';
+            const correctBtn = document.querySelector(`${correctSel}[data-correct='1']`);
+            if (correctBtn) correctBtn.classList.add('correct');
+            if (state.currentMode === 'survival') {
+                setTimeout(endRound, 800);
+            } else {
+                setTimeout(nextQuestion, 800);
+            }
+        }
+    }
+
+    function endRound() {
+        clearInterval(state.round.timerId);
+        const earned = state.round.score;
+        state.totalPoints += earned;
+        addXP(earned);
+        awardBadges(); // Rozetleri kontrol et
+        saveState();
+        renderTopbar();
+
+        $('#earnedScore').textContent = String(earned);
+        $('#gameOverOverlay').classList.add('active');
+    }
+
+    // ... (Rozet, Mağaza ve Diğer Fonksiyonlar)
+    function awardBadges() {
+        const checkAndAward = (key, condition) => {
+            if (condition && !state.badges[key]) {
+                state.badges[key] = { at: Date.now() };
+            }
+        };
+        checkAndAward('firstGame', true);
+        checkAndAward('score50', state.totalPoints >= 50);
+        checkAndAward('score200', state.totalPoints >= 200);
+        checkAndAward('quick10', state.round.score >= 10);
+        checkAndAward('level5', state.level >= 5);
+        checkAndAward('level10', state.level >= 10);
+        const encyclopediaCount = Object.keys(state.encyclopedia || {}).length;
+        checkAndAward('ency5', encyclopediaCount >= 5);
+        checkAndAward('ency20', encyclopediaCount >= 20);
+    }
+
+    function badgesCatalog() {
+        return {
+            firstGame: { name: 'İlk Oyun', nameEN: 'First Game', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'İlk turunu tamamladın.', descEN: 'You completed your first round.' },
+            score50:   { name: '50+ Puan', nameEN: '50+ Points', icon: 'https://cdn-icons-png.flaticon.com/512/992/992700.png', desc: 'Toplam 50 puana ulaştın.', descEN: 'You reached a total of 50 points.' },
+            score200:  { name: '200+ Puan', nameEN: '200+ Points', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'Toplam 200 puana ulaştın.', descEN: 'You reached a total of 200 points.' },
+            quick10:   { name: 'Hızlı 10', nameEN: 'Quick 10', icon: 'https://cdn-icons-png.flaticon.com/512/2421/2421939.png', desc: 'Bir turda 10+ doğru bildin.', descEN: 'You got 10+ correct in a single round.' },
+            shopper:   { name: 'İlk Alışveriş', nameEN: 'First Purchase', icon: 'https://cdn-icons-png.flaticon.com/512/3081/3081648.png', desc: 'Mağazadan ilk ürününü aldın.', descEN: 'You bought your first item from the store.' },
+            level5:    { name: 'Seviye 5', nameEN: 'Level 5', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'Seviye 5 oldun.', descEN: 'You reached level 5.' },
+            level10:   { name: 'Seviye 10', nameEN: 'Level 10', icon: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', desc: 'Seviye 10 oldun.', descEN: 'You reached level 10.' },
+            ency5:     { name: 'Koleksiyon 5', nameEN: 'Collection 5', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png', desc: '5 hayvanı koleksiyonuna ekledin.', descEN: 'Added 5 animals to your collection.' },
+            ency20:    { name: 'Koleksiyon 20', nameEN: 'Collection 20', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png', desc: '20 hayvanı koleksiyonuna ekledin.', descEN: 'Added 20 animals to your collection.' },
+        };
+    }
+
+    function renderBadges() {
+        const list = $('#badgesList');
+        list.innerHTML = '';
+        const cat = badgesCatalog();
+        Object.keys(cat).forEach(code => {
+            const earned = !!state.badges[code];
+            const badge = cat[code];
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.padding = '10px';
+            card.style.opacity = earned ? '1' : '0.5';
+            card.innerHTML = `
+                <div class="row" style="align-items: center;">
+                    <img src="${badge.icon}" alt="badge" style="width:48px; height:48px; border-radius:10px;">
+                    <div>
+                        <div style="font-weight:700">${state.lang === 'tr' ? badge.name : badge.nameEN}</div>
+                        <div class="muted small">${state.lang === 'tr' ? badge.desc : badge.descEN}</div>
+                    </div>
+                    <div style="flex:1;"></div>
+                    <div class="badge-chip">${earned ? '✓' : '—'}</div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function getCosts() { return { unlimited: 100, eliminate: 20, auto: 50, theme: 80, avatar: 60 }; }
+
+    const THEME_ITEMS = [
+        { id: 'theme_ocean', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=300&auto=format&fit=crop' },
+        { id: 'theme_desert', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=300&auto=format&fit=crop' },
+        { id: 'theme_polar', img: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=300&auto=format&fit=crop' },
+    ];
+    const AVATAR_ITEMS = [
+        { id: 'avatar_cat', img: 'https://cdn-icons-png.flaticon.com/512/616/616408.png' },
+        { id: 'avatar_fox', img: 'https://cdn-icons-png.flaticon.com/512/616/616430.png' },
+        { id: 'avatar_panda', img: 'https://cdn-icons-png.flaticon.com/512/616/616554.png' },
+    ];
+
+    function renderStore() {
+        $('#storePoints').textContent = `${state.totalPoints} ⭐`;
+        const costs = getCosts();
+        const themesGrid = $('#themesGrid');
+        const avatarsGrid = $('#avatarsGrid');
+        themesGrid.innerHTML = '';
+        avatarsGrid.innerHTML = '';
+        THEME_ITEMS.forEach(item => {
+            const owned = state.themesOwned.includes(item.id);
+            const selected = state.selectedTheme === item.id;
+            const el = document.createElement('div');
+            el.className = 'store-item';
+            el.innerHTML = `
+                <img src="${item.img}" alt="${item.id}">
+                <div>
+                    <div style="font-weight:700">${t(item.id)}</div>
+                    <div class="muted small">${owned ? (selected ? t('equipped') : t('equip')) : `${costs.theme} ⭐`}</div>
+                </div>
+                <button class="btn" data-item="${item.id}">${owned ? (selected ? t('equipped') : t('equip')) : `${costs.theme} ⭐`}</button>
+            `;
+            const btn = el.querySelector('button');
+            btn.onclick = () => {
+                if (!owned) { buy(item.id); return; }
+                state.selectedTheme = item.id; saveState(); applyTheme(); renderStore();
+            };
+            themesGrid.appendChild(el);
+        });
+        AVATAR_ITEMS.forEach(item => {
+            const owned = state.avatarsOwned.includes(item.id);
+            const selected = state.selectedAvatar === item.id;
+            const el = document.createElement('div');
+            el.className = 'store-item';
+            el.innerHTML = `
+                <img src="${item.img}" alt="${item.id}">
+                <div>
+                    <div style="font-weight:700">${t(item.id)}</div>
+                    <div class="muted small">${owned ? (selected ? t('equipped') : t('equip')) : `${costs.avatar} ⭐`}</div>
+                </div>
+                <button class="btn" data-item="${item.id}">${owned ? (selected ? t('equipped') : t('equip')) : `${costs.avatar} ⭐`}</button>
+            `;
+            const btn = el.querySelector('button');
+            btn.onclick = () => {
+                if (!owned) { buy(item.id); return; }
+                state.selectedAvatar = item.id; saveState(); renderTopbar(); renderStore();
+            };
+            avatarsGrid.appendChild(el);
+        });
+    }
+
+    function buy(item) {
+        const costs = getCosts();
+        let cost = 0;
+        let itemName = '';
+        if (item === 'unlimited' || item === 'eliminate' || item === 'auto') {
+            cost = costs[item];
+        } else if (item.startsWith('theme_')) {
+            cost = costs.theme; itemName = t(item);
+        } else if (item.startsWith('avatar_')) {
+            cost = costs.avatar; itemName = t(item);
+        }
+        if (state.totalPoints < cost) { toast(t('notEnoughPoints')); return; }
+        state.totalPoints -= cost;
+
+        if (item === 'unlimited') {
+            const now = Date.now();
+            const extra = 10 * 60 * 1000;
+            state.unlimitedLivesUntil = Math.max(now, state.unlimitedLivesUntil) + extra;
+            itemName = t('unlimitedLives');
+        } else if (item === 'eliminate') {
+            state.inventory.eliminate = (state.inventory.eliminate || 0) + 1;
+            itemName = t('eliminateTitle');
+        } else if (item === 'auto') {
+            state.inventory.auto = (state.inventory.auto || 0) + 1;
+            itemName = t('autoTitle');
+        } else if (item.startsWith('theme_')) {
+            if (!state.themesOwned.includes(item)) state.themesOwned.push(item);
+            state.selectedTheme = item;
+            applyTheme();
+        } else if (item.startsWith('avatar_')) {
+            if (!state.avatarsOwned.includes(item)) state.avatarsOwned.push(item);
+            state.selectedAvatar = item;
+        }
+
+        awardBadges(); // Alışveriş rozetini kontrol et
+        if (!state.badges.shopper) state.badges.shopper = { at: Date.now() };
+
+        saveState();
+        renderTopbar();
+        $('#storePoints').textContent = `${state.totalPoints} ⭐`;
+        applyTranslations(); // Joker sayılarını güncelle
+        renderStore();
+        toast(t('bought', itemName));
+    }
+
+    function useEliminate() {
+        if ((state.inventory.eliminate || 0) <= 0) { toast(t('noMoreItems')); return; }
+        if (state.round.eliminateUsedForQuestion) { toast(t('eliminateUsed')); return; }
+
+        const selector = state.currentMode === 'reverse' ? "#imageOptions .image-option[data-correct='0']" : "#options .option-btn[data-correct='0']";
+        const wrongs = Array.from(document.querySelectorAll(selector));
+        if (wrongs.length < 2) return;
+
+        shuffle(Array.from(wrongs)).slice(0, 2).forEach(b => b.classList.add('hidden'));
+
+        state.round.eliminateUsedForQuestion = true;
+        state.inventory.eliminate -= 1;
+        saveState();
+        applyTranslations();
+    }
+
+    function useAuto() {
+        if ((state.inventory.auto || 0) <= 0) { toast(t('noMoreItems')); return; }
+
+        const selector = state.currentMode === 'reverse' ? "#imageOptions .image-option[data-correct='1']" : "#options .option-btn[data-correct='1']";
+        const correctBtn = document.querySelector(selector);
+        if (!correctBtn) return;
+
+        state.inventory.auto -= 1;
+        saveState();
+        applyTranslations();
+        onAnswer(correctBtn, true);
+    }
+
+    // Encyclopedia
+    function renderEncyclopedia() {
+        const list = $('#encyclopediaList');
+        list.innerHTML = '';
+        const entries = Object.values(state.encyclopedia || {});
+        if (entries.length === 0) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<div class="muted">${state.lang === 'tr' ? 'Henüz koleksiyon yok. Doğru bildiklerin burada birikecek.' : 'No collection yet. Correct guesses will appear here.'}</div>`;
+            list.appendChild(card);
+            return;
+        }
+        entries.sort((a,b) => a.nameEN.localeCompare(b.nameEN)).forEach(ent => {
+            const k = ent.nameEN || ent.nameTR;
+            const fact = animalFacts[k]?.[state.lang] || '';
+            const d = document.createElement('div');
+            d.className = 'card';
+            d.style.padding = '10px';
+            d.innerHTML = `
+                <div class="row" style="align-items:center;">
+                    <img src="${ent.imageUrl}" alt="${k}" style="width:64px; height:64px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.1);" />
+                    <div>
+                        <div style="font-weight:700;">${state.lang === 'tr' ? ent.nameTR : ent.nameEN}</div>
+                        ${fact ? `<div class="muted small">${fact}</div>` : ''}
+                    </div>
+                </div>
+            `;
+            list.appendChild(d);
+        });
+    }
+
+    // ------------- Events & Init -------------
+    function bindEvents() {
+        $('#playBtn').onclick = () => {
+            if (!state.playerName) {
+                $('#nameCard').style.display = 'block';
+            } else {
+                toMainMenu();
+            }
+        };
+        $('#saveNameBtn').onclick = () => {
+            const val = ($('#nameInput').value || '').trim();
+            if (val.length < 2) { toast(t('nameInvalid')); return; }
+            state.playerName = val;
+            saveState();
+            toMainMenu();
+        };
+
+        const setupScreenChange = (btnId, screenId, beforeFn) => {
+            $(btnId).onclick = () => {
+                if (beforeFn) beforeFn();
+                setScreen(screenId);
+            };
+        };
+
+        setupScreenChange('#badgesBtnWelcome', 'badgesScreen', renderBadges);
+        setupScreenChange('#badgesBtn', 'badgesScreen', renderBadges);
+        setupScreenChange('#storeBtn', 'storeScreen', () => { renderStore(); });
+        setupScreenChange('#encyclopediaBtn', 'encyclopediaScreen', renderEncyclopedia);
+
+        $('#backToMainBtn').onclick = toMainMenu;
+        $('#backFromStoreBtn').onclick = toMainMenu;
+        $('#backFromBadgesBtn').onclick = toMainMenu;
+        $('#backFromEncyclopediaBtn').onclick = toMainMenu;
+
+        $$('[data-diff]').forEach(btn => {
+            btn.onclick = () => startRound(btn.dataset.diff);
+        });
+
+        // Mode toggles
+        $$('[data-mode]').forEach(btn => {
+            btn.onclick = () => {
+                state.currentMode = btn.dataset.mode;
+                $$('[data-mode]').forEach(b => b.classList.remove('toggled'));
+                btn.classList.add('toggled');
+                applyTranslations();
+            };
+        });
+
+        $('#quitGameBtn').onclick = endRound;
+
+        $$('[data-item]').forEach(btn => {
+            btn.onclick = () => buy(btn.dataset.item);
+        });
+
+        $('#useEliminateBtn').onclick = useEliminate;
+        $('#useAutoBtn').onclick = useAuto;
+
+        $('#goHomeBtn').onclick = () => {
+            $('#gameOverOverlay').classList.remove('active');
+            toMainMenu();
+        };
+        $('#playAgainBtn').onclick = () => {
+            $('#gameOverOverlay').classList.remove('active');
+            if (state.currentCategory && state.currentDifficulty) {
+                startRound(state.currentDifficulty);
+            } else {
+                toMainMenu();
+            }
+        };
+
+        const langHandler = (e) => {
+            state.lang = e.target.value;
+            saveState();
+            rerenderAll();
+        };
+        $('#langSelectWelcome').onchange = langHandler;
+        $('#langSelectMain').onchange = langHandler;
+
+        setInterval(regenLivesTick, 2000); // Canları düzenli kontrol et
+    }
+
+    function toMainMenu() {
+        renderTopbar();
+        renderCategories();
+        setScreen('mainMenu');
+    }
+
+    function rerenderAll() {
+        applyTranslations();
+        renderTopbar();
+        renderCategories();
+    }
+
+    // ------------- Init (Oyun Başlangıcı) -------------
+    function init() {
+        applyTheme();
+        $('#langSelectWelcome').value = state.lang;
+        $('#langSelectMain').value = state.lang;
+
+        if (state.playerName) {
+            toMainMenu();
+        } else {
+            setScreen('welcomeScreen');
+        }
+
+        rerenderAll();
+        bindEvents();
+    }
+
+    init();
+    </script>
+</body>
+</html>
