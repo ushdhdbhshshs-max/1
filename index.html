@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Hayvan Tahmin Yarışması</title>
+  <style>
+    :root {
+      --bg1: #0f1226;
+      --bg2: #24103d;
+      --card: rgba(255,255,255,0.09);
+      --glass: rgba(255,255,255,0.12);
+      --text: #f7f7fb;
+      --muted: #cfd1e2;
+      --accent: #8a7dff;
+      --accent2: #00e3a2;
+      --danger: #ff5b6e;
+      --warning: #ffb020;
+      --ok: #27d07d;
+      --shadow: rgba(0,0,0,0.3);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      background-attachment: fixed;
+    }
+
+    #app { max-width: 560px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+
+    header {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(15,18,38,0.85), rgba(15,18,38,0.35));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand { font-weight: 800; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+    .brand .logo { font-size: 20px; }
+
+    .top-right { display: flex; align-items: center; gap: 8px; }
+    .lives { display: flex; align-items: center; gap: 8px; }
+    .life-info { font-size: 12px; color: var(--muted); }
+    #playerBadge { font-size: 12px; color: var(--muted); }
+
+    button {
+      appearance: none; border: none; outline: none; cursor: pointer;
+      background: var(--accent);
+      color: white; padding: 12px 14px; border-radius: 12px; font-weight: 700; letter-spacing: .2px;
+      box-shadow: 0 8px 24px rgba(138,125,255,0.25);
+      transition: transform .06s ease, filter .2s ease;
+    }
+    button:active { transform: translateY(1px) scale(0.99); }
+    button.secondary { background: var(--glass); color: var(--text); box-shadow: 0 4px 14px var(--shadow); }
+    button.ghost { background: transparent; color: var(--muted); box-shadow: none; padding: 8px 10px; }
+
+    #watchAdBtn { background: linear-gradient(90deg, var(--accent), #ff7dd7); padding: 10px 12px; border-radius: 10px; font-size: 12px; }
+
+    main { flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 16px; }
+
+    .card {
+      background: var(--card); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    h1, h2, h3 { margin: 0 0 8px 0; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 18px; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+    /* Start menu */
+    .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .menu-btn { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; padding: 14px; }
+
+    /* Category list */
+    .category-btn {
+      display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 8px; text-align: left;
+    }
+    .category-btn img { width: 72px; height: 72px; object-fit: cover; border-radius: 12px; }
+    .category-btn h3 { font-size: 16px; margin: 0; }
+    .category-btn .muted { font-size: 12px; color: var(--muted); }
+
+    .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .level-grid button { padding: 10px 8px; font-size: 12px; border-radius: 10px; }
+
+    #gameScreen .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    #progress { font-size: 13px; color: var(--muted); }
+    #gameContainer { display: grid; gap: 12px; }
+    #gameContainer .hero { text-align: center; }
+    .hero img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 12px; background: rgba(255,255,255,0.08); }
+
+    .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .option-btn { width: 100%; }
+
+    .image-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .image-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.06); }
+    .image-option img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
+
+    .letter-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .slot { width: 44px; height: 52px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px dashed rgba(255,255,255,0.18); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; }
+    .letters { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .letter { padding: 10px 0; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); font-weight: 800; }
+    .letter[disabled] { opacity: 0.35; filter: grayscale(0.6); }
+
+    .drag-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .dropzone { min-height: 100px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); display: grid; place-items: center; background: rgba(255,255,255,0.05); position: relative; padding: 8px; }
+    .dropzone.locked { border-style: solid; border-color: var(--ok); background: rgba(39,208,125,0.12); }
+    .dropzone .label { position: absolute; bottom: -8px; left: 10px; font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.35); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+
+    .drag-item { user-select: none; -webkit-user-drag: element; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 6px; display: flex; align-items: center; justify-content: center; }
+    .drag-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
+    .drag-item.selected { outline: 2px solid var(--accent2); box-shadow: 0 0 0 3px rgba(0,227,162,0.25) inset; }
+    .drag-item.placed { opacity: 0.45; filter: grayscale(0.6); pointer-events: none; }
+    .dropzone.highlight { border-color: var(--accent2); background: rgba(0,227,162,0.08); }
+
+    .controls { display: flex; gap: 8px; }
+
+    #gameOverScreen { text-align: center; }
+
+    #adOverlay { position: fixed; inset: 0; background: rgba(10,10,15,0.9); display: grid; place-items: center; z-index: 20; }
+    #adOverlay .ad-card { width: min(92vw, 420px); background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; text-align: center; }
+    .progress { width: 100%; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; border: 1px solid rgba(255,255,255,0.12); }
+    .progress > div { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #ff7dd7); transition: width 0.12s linear; }
+
+    #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 30; }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+    /* Achievements */
+    .achievements { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .badge { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px; text-align: center; }
+    .badge .icon { font-size: 36px; }
+    .badge.locked { filter: grayscale(1); opacity: 0.6; }
+
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th, .table td { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px; text-align: left; }
+
+    @media (min-width: 520px) {
+      .image-options { grid-template-columns: repeat(4, 1fr); }
+      .letters { grid-template-columns: repeat(8, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="brand">
+        <div class="logo">🧠</div>
+        <div>Hayvan Tahmin</div>
+      </div>
+      <div id="playerBadge" class="life-info"></div>
+      <div class="top-right">
+        <div class="lives">
+          <div id="heartContainer" aria-live="polite">❤️❤️❤️</div>
+          <span id="lifeInfo" class="life-info"></span>
+        </div>
+        <button id="watchAdBtn" title="1 Saat Sınırsız Can">Reklam İzle</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Start Menu -->
+      <section id="startScreen" class="grid">
+        <div class="card">
+          <h1>Hayvan Tahmin Yarışması</h1>
+          <div class="life-info">Tek başına ya da arkadaşınla oyna, puan topla, rozetleri aç!</div>
+        </div>
+        <div class="start-grid">
+          <button id="btnSingle" class="menu-btn">🎯 Tek Oyna</button>
+          <button id="btnBadges" class="menu-btn">🏅 Rozetlerim</button>
+          <button id="btnParent" class="menu-btn">🛡️ Ebeveyn Kontrolü</button>
+        </div>
+      </section>
+
+      <!-- Single Setup -->
+      <section id="singleSetupScreen" class="card" hidden>
+        <h2>Tek Oyuncu Ayarları</h2>
+        <div class="grid">
+          <label>İsminiz
+            <input id="singleName" type="text" placeholder="Adınız" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <label>Yaşınız
+            <input id="singleAge" type="number" min="3" max="18" placeholder="Yaş" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+          </label>
+          <div class="controls">
+            <button id="singleSetupNext">Devam</button>
+            <button class="ghost" id="backToStart1">Geri</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Select -->
+      <section id="categoryScreen" class="grid" hidden>
+        <div class="card">
+          <h2>Kategori Seç</h2>
+          <div class="life-info">Sol tarafta görsel, sağda başlık ile listelenir</div>
+        </div>
+        <div id="categoryList" class="grid"></div>
+        <div class="controls"><button id="backToStart3" class="ghost">Geri</button></div>
+      </section>
+
+      <!-- Level Select -->
+      <section id="levelScreen" class="grid" hidden>
+        <div class="card">
+          <h2 id="levelTitle">Seviye Seç</h2>
+          <div class="level-grid">
+            <button data-level="Seviye 1">Seviye 1</button>
+            <button data-level="Seviye 2">Seviye 2</button>
+            <button data-level="Seviye 3">Seviye 3</button>
+            <button data-level="Tümü">Tümü</button>
+          </div>
+          <div class="controls"><button id="backToCategories" class="ghost">Geri</button></div>
+        </div>
+      </section>
+
+      <!-- Game -->
+      <section id="gameScreen" hidden>
+        <div class="card">
+          <div class="topbar">
+            <div id="progress">Soru 1/10 • Oyun 1/4</div>
+            <div id="currentCatLvl" class="life-info"></div>
+          </div>
+          <div id="gameContainer"></div>
+          <div class="controls">
+            <button id="restartQuestionBtn" class="ghost">Soruyu Baştan</button>
+            <button id="quitToStartBtn" class="secondary">Menü</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Game Over (single) -->
+      <section id="gameOverScreen" class="card" hidden>
+        <h2>Canların bitti!</h2>
+        <p class="life-info">3 dakika sonra 1 can yenilenir. İstersen reklam izleyerek 1 saat sınırsız can kazan.</p>
+        <div class="controls">
+          <button id="newGameBtn">Yeni Oyuna Başla</button>
+          <button id="goMenuFromOver" class="ghost">Menü</button>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="resultsScreen" class="card" hidden>
+        <h2>Sonuçlar</h2>
+        <div id="resultsBody" class="life-info"></div>
+        <div class="controls">
+          <button id="resultsToMenu">Ana Menü</button>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section id="achievementsScreen" class="grid" hidden>
+        <div class="card">
+          <h2>Rozetlerim</h2>
+          <div>Toplam Puan: <b id="totalPointsLabel">0</b></div>
+        </div>
+        <div id="badgeList" class="achievements"></div>
+        <div class="controls"><button id="backFromBadges" class="ghost">Geri</button></div>
+      </section>
+
+      <!-- Parent Control -->
+      <section id="parentScreen" class="grid" hidden>
+        <div class="card" id="parentAuth"></div>
+        <div class="card" id="parentStats" hidden>
+          <h2>Ebeveyn Paneli</h2>
+          <div class="life-info">Kategori performansı</div>
+          <table class="table" id="statsTable"></table>
+          <div class="controls">
+            <button id="resetStatsBtn" class="secondary">İstatistikleri Sıfırla</button>
+            <button id="backFromParent" class="ghost">Geri</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="adOverlay" hidden>
+      <div class="ad-card">
+        <h2>Reklam izleniyor…</h2>
+        <p class="life-info">5 saniye sonra 1 saat sınırsız can!</p>
+        <div class="progress" aria-hidden="true"><div id="adBar"></div></div>
+        <p id="adCountdown" class="life-info" style="margin-top:8px;">5</p>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+  </div>
+
+  <script>
+    const MAX_LIVES = 3;
+    const LIFE_REGEN_MS = 3 * 60 * 1000; // 3 dakika
+    const AD_DURATION_MS = 5000; // sahte reklam 5 sn
+    const UNLIMITED_MS = 60 * 60 * 1000; // 1 saat
+    const POINTS_PER_CORRECT = 10;
+    const QUESTION_COUNTS = { 'Seviye 1': 10, 'Seviye 2': 15, 'Seviye 3': 20, 'Tümü': 30 };
+
+    const LS_KEYS = {
+      lives: 'animalquiz_lives',
+      regenAt: 'animalquiz_regenAt',
+      unlimitedUntil: 'animalquiz_unlimitedUntil',
+      totalPoints: 'animalquiz_totalPoints',
+      parentName: 'animalquiz_parentName',
+      parentPIN: 'animalquiz_parentPIN',
+      stats: 'animalquiz_stats'
+    };
+
+    const TURKISH_ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
+
+    function animalImageUrl(name) {
+      const q = encodeURIComponent(name + ',animal');
+      return `https://source.unsplash.com/512x512/?${q}`;
+    }
+    function categoryImageUrl(cat) {
+      const map = {
+        'Kuşlar': 'bird', 'Sürüngenler': 'reptile', 'Balıklar': 'fish', 'Eklem Bacaklılar': 'arthropod', 'Omurgasızlar': 'invertebrate', 'Dinozorlar': 'dinosaur', 'Memeliler': 'mammal'
+      };
+      const q = encodeURIComponent(map[cat] || 'animal');
+      return `https://source.unsplash.com/256x256/?${q}`;
+    }
+
+    const INFO_DB = {
+      'Aslan': 'Aslanlar günde 20 saate kadar dinlenebilir ve sürü halinde yaşarlar.',
+      'Fil': 'Fillere özgü uzun hortumları 40 binden fazla kas içerir.',
+      'Kaplan': 'Kaplanlar kedigillerin en güçlü yüzücülerindendir.',
+      'Panda': 'Pandalar günün büyük kısmını bambu yiyerek geçirir.',
+      'Kedi': 'Kediler karanlıkta insanlardan altı kat daha iyi görür.',
+      'Köpek': 'Köpekler kokuları bizden 10.000 kat güçlü algılar.',
+      'Kartal': 'Kartallar 3 km öteden avını görebilir.',
+      'Serçe': 'Serçeler şehir yaşamına en iyi uyum sağlayan kuşlardandır.',
+      'Tavuskuşu': 'Erkek tavuskuşunun gösterişli tüyleri dişileri etkilemek içindir.',
+      'Güvercin': 'Güvercinler çok iyi yön bulur ve yüzlerce km uzaktan yuvasını bulabilir.',
+      'Baykuş': 'Baykuşlar başlarını 270 dereceye kadar çevirebilir.',
+      'Tukan': 'Tukanların gagası hafif ama çok hacimlidir.',
+      'Yılan': 'Yılanlar alt çenelerini ayırarak büyük avları yutabilir.',
+      'Timsah': 'Timsahların ısırma gücü hayvanlar alemindeki en yükseklerdendir.',
+      'Kertenkele': 'Bazı kertenkele türleri kuyruklarını koparıp kaçabilir.',
+      'Kaplumbağa': 'Deniz kaplumbağaları binlerce km yol alabilir.',
+      'Köpekbalığı': 'Köpekbalıkları milyonlarca yıldır çok az değişmiştir.',
+      'Sardalya': 'Sürüler halinde yüzer, avcılara karşı korunurlar.',
+      'Mercan Balığı': 'Mercan resiflerinin renkli sakinleridir.',
+      'Balon Balığı': 'Tehlikede şişerek kendini büyütür.',
+      'Örümcek': 'Örümcek ağları çelikten daha sağlam olabilir.',
+      'Yengeç': 'Yengeçler yan yan yürümeleriyle bilinir.',
+      'Kelebek': 'Kelebekler ayaklarıyla tat alırlar.',
+      'Arı': 'Arılar dans ederek haberleşir.',
+      'Karınca': 'Karıncalar kendi ağırlıklarının kat kat fazlasını taşıyabilir.',
+      'Ahtapot': 'Ahtapotların üç kalbi vardır ve çok zekidirler.',
+      'Denizanası': 'Bazı denizanaları neredeyse ölümsüzdür.',
+      'Salyangoz': 'Salyangozlar hem karada hem suda yaşar.',
+      'Solucan': 'Toprağı havalandırarak doğaya fayda sağlar.',
+      'T-Rex': 'T-Rex güçlü çenesiyle ünlüdür.',
+      'Sauropod': 'Sauropodlar dev boyunlarıyla bilinir.',
+      'Triceratops': 'Üç boynuzu ve iri bir baş kalkanı vardır.',
+      'Velociraptor': 'Küçük ama hızlı ve çevik bir avcıydı.'
+    };
+
+    const CATEGORIES = {
+      'Kuşlar': [
+        { name: 'Kartal' }, { name: 'Serçe' }, { name: 'Tavuskuşu' }, { name: 'Güvercin' }, { name: 'Baykuş' }, { name: 'Tukan' }
+      ],
+      'Sürüngenler': [
+        { name: 'Yılan' }, { name: 'Timsah' }, { name: 'Kertenkele' }, { name: 'Kaplumbağa' }
+      ],
+      'Balıklar': [
+        { name: 'Köpekbalığı' }, { name: 'Sardalya' }, { name: 'Mercan Balığı' }, { name: 'Balon Balığı' }
+      ],
+      'Eklem Bacaklılar': [
+        { name: 'Örümcek' }, { name: 'Yengeç' }, { name: 'Kelebek' }, { name: 'Arı' }, { name: 'Karınca' }
+      ],
+      'Omurgasızlar': [
+        { name: 'Ahtapot' }, { name: 'Denizanası' }, { name: 'Salyangoz' }, { name: 'Solucan' }
+      ],
+      'Dinozorlar': [
+        { name: 'T-Rex' }, { name: 'Sauropod' }, { name: 'Triceratops' }, { name: 'Velociraptor' }
+      ],
+      'Memeliler': [
+        { name: 'Aslan' }, { name: 'Fil' }, { name: 'Kaplan' }, { name: 'Panda' }, { name: 'Kedi' }, { name: 'Köpek' }
+      ]
+    };
+
+    const levels = ['Seviye 1', 'Seviye 2', 'Seviye 3', 'Tümü'];
+
+    const el = (sel) => document.querySelector(sel);
+
+    // Screens
+    const startScreen = el('#startScreen');
+    const singleSetupScreen = el('#singleSetupScreen');
+    const categoryScreen = el('#categoryScreen');
+    const levelScreen = el('#levelScreen');
+    const gameScreen = el('#gameScreen');
+    const overScreen = el('#gameOverScreen');
+    const achievementsScreen = el('#achievementsScreen');
+    const parentScreen = el('#parentScreen');
+    const resultsScreen = el('#resultsScreen');
+
+    // UI elements
+    const categoriesEl = el('#categoryList');
+    const heartContainer = el('#heartContainer');
+    const lifeInfo = el('#lifeInfo');
+    const playerBadge = el('#playerBadge');
+    const gameContainer = el('#gameContainer');
+    const progressEl = el('#progress');
+    const currentCatLvl = el('#currentCatLvl');
+    const adOverlay = el('#adOverlay');
+    const adBar = el('#adBar');
+    const adCountdown = el('#adCountdown');
+    const toastEl = el('#toast');
+
+    // Achievements
+    const badgeList = el('#badgeList');
+    const totalPointsLabel = el('#totalPointsLabel');
+
+    // Parent
+    const parentAuth = el('#parentAuth');
+    const parentStatsCard = el('#parentStats');
+    const statsTable = el('#statsTable');
+
+    let state = {
+      mode: null, // 'single' | 'multi'
+      single: { name: '', age: '' },
+      multi: { players: ['', ''], points: [0,0], currentIdx: 0 },
+      lives: MAX_LIVES,
+      regenAt: null,
+      unlimitedUntil: 0,
+      categoryKey: null,
+      levelKey: null,
+      step: 0,          // subgame idx (0..3)
+      questionIndex: 0, // current question
+      questionsTotal: 0,
+      questionTargets: [], // array of animal objects
+      round: null,
+      points: 0 // single session points
+    };
+
+    function init() {
+      bindStartMenu();
+      bindCommonButtons();
+      loadLifeState();
+      updateLivesUI();
+      lifeTicker();
+      renderBadges();
+      if (!location.hash) navigate('start'); else route();
+    }
+
+    function bindStartMenu() {
+      el('#btnSingle').addEventListener('click', () => { navigate('singleSetup'); });
+      // el('#btnMulti') kaldırıldı
+      el('#btnBadges').addEventListener('click', () => { navigate('badges'); });
+      el('#btnParent').addEventListener('click', () => { navigate('parent'); });
+
+      el('#backToStart1').addEventListener('click', () => navigate('start'));
+      // backToStart2 kaldırıldı
+      el('#backToStart3').addEventListener('click', () => navigate('start'));
+      el('#backToCategories').addEventListener('click', () => navigate('categories'));
+
+      el('#singleSetupNext').addEventListener('click', () => {
+        const name = (el('#singleName').value || '').trim();
+        const age = (el('#singleAge').value || '').trim();
+        if (!name) { showToast('İsim gerekli'); return; }
+        state.mode = 'single';
+        state.single.name = name; state.single.age = age;
+        updatePlayerBadge();
+        navigate('categories');
+      });
+
+      el('#multiSetupNext').addEventListener('click', () => {
+        const p1 = (el('#p1Name').value || '').trim();
+        const p2 = (el('#p2Name').value || '').trim();
+        if (!p1 || !p2) { showToast('İki isim de gerekli'); return; }
+        state.mode = 'multi';
+        state.multi.players = [p1, p2];
+        state.multi.points = [0,0];
+        state.multi.currentIdx = 0;
+        updatePlayerBadge();
+        showCategories();
+      });
+
+      el('#resultsToMenu').addEventListener('click', () => navigate('start'));
+      el('#backFromBadges').addEventListener('click', () => navigate('start'));
+      el('#backFromParent').addEventListener('click', () => navigate('start'));
+    }
+
+    function updatePlayerBadge() {
+      playerBadge.textContent = state.single.name ? `Oyuncu: ${state.single.name}${state.single.age ? `, ${state.single.age} yaş` : ''}` : '';
+    }
+
+    function bindCommonButtons() {
+      el('#watchAdBtn').addEventListener('click', onWatchAd);
+      el('#restartQuestionBtn').addEventListener('click', () => {
+        restartQuestion();
+        showToast('Soru başa alındı');
+      });
+      el('#quitToStartBtn').addEventListener('click', () => navigate('start'));
+      el('#newGameBtn').addEventListener('click', () => {
+        state.lives = MAX_LIVES; state.regenAt = null; saveLifeState(); updateLivesUI(); showStart();
+      });
+      el('#goMenuFromOver').addEventListener('click', showStart);
+
+      // Level buttons
+      levelScreen.querySelectorAll('button[data-level]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          startSession(state.categoryKey, btn.dataset.level);
+        });
+      });
+    }
+
+    function hideAll() {
+      [startScreen, singleSetupScreen, categoryScreen, levelScreen, gameScreen, overScreen, achievementsScreen, parentScreen, resultsScreen].forEach(s => s.hidden = true);
+    }
+
+    function navigate(page) {
+      history.pushState({ page }, '', `#${page}`);
+      route();
+    }
+
+    window.addEventListener('popstate', route);
+    window.addEventListener('hashchange', route);
+
+    function route() {
+      const page = (location.hash || '#start').replace('#','');
+      if (page === 'start') { showStart(); }
+      else if (page === 'singleSetup') { showSingleSetup(); }
+      else if (page === 'categories') { showCategories(); }
+      else if (page === 'levels') { if (!state.categoryKey) { navigate('categories'); } else { showLevels(state.categoryKey); } }
+      else if (page === 'game') { showGame(); }
+      else if (page === 'badges') { showBadges(); }
+      else if (page === 'parent') { showParent(); }
+      else if (page === 'results') { resultsScreen.hidden = false; }
+      else { showStart(); }
+    }
+
+    function showStart() {
+      hideAll();
+      state.mode = 'single';
+      updatePlayerBadge();
+      startScreen.hidden = false;
+    }
+    function showSingleSetup() { hideAll(); singleSetupScreen.hidden = false; }
+
+    function renderCategoryList() {
+      categoriesEl.innerHTML = '';
+      Object.entries(CATEGORIES).forEach(([catName, animals]) => {
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.innerHTML = `
+          <img src="${categoryImageUrl(catName)}" alt="${catName}">
+          <div>
+            <h3>${catName}</h3>
+            <div class="muted">${animals.length} hayvan</div>
+          </div>`;
+        btn.addEventListener('click', () => { state.categoryKey = catName; navigate('levels'); });
+        categoriesEl.appendChild(btn);
+      });
+    }
+
+    function showCategories() { hideAll(); renderCategoryList(); categoryScreen.hidden = false; }
+    function showLevels(catName) {
+      hideAll();
+      el('#levelTitle').textContent = `${catName} • Seviye Seç`;
+      levelScreen.hidden = false;
+    }
+
+    function showGame() { hideAll(); gameScreen.hidden = false; }
+    function showOver() { hideAll(); overScreen.hidden = false; }
+
+    function showBadges() { hideAll(); renderBadges(); achievementsScreen.hidden = false; }
+
+    function showParent() {
+      hideAll();
+      renderParentAuth();
+      parentScreen.hidden = false;
+      // ebeveyn, ayrı sayfa hissi için hash ile yönlendirilir
+    }
+
+    function renderBadges() {
+      const total = getTotalPoints();
+      totalPointsLabel.textContent = String(total);
+      const badges = [
+        { name: 'Bronz Pati', need: 100, icon: '🥉' },
+        { name: 'Gümüş Pençe', need: 300, icon: '🥈' },
+        { name: 'Altın Yele', need: 600, icon: '🥇' },
+        { name: 'Efsane Avcı', need: 1000, icon: '🏆' }
+      ];
+      badgeList.innerHTML = '';
+      badges.forEach(b => {
+        const d = document.createElement('div'); d.className = 'badge' + (total >= b.need ? '' : ' locked');
+        d.innerHTML = `<div class="icon">${b.icon}</div><div>${b.name}</div><div class="life-info">${b.need} puan</div>`;
+        badgeList.appendChild(d);
+      });
+    }
+
+    function renderParentAuth() {
+      const name = localStorage.getItem(LS_KEYS.parentName) || '';
+      const pin = localStorage.getItem(LS_KEYS.parentPIN) || '';
+      parentStatsCard.hidden = true;
+      if (!pin) {
+        parentAuth.innerHTML = `
+          <h2>Ebeveyn Kurulumu</h2>
+          <div class="grid">
+            <label>Adınız
+              <input id="parentNameInput" type="text" placeholder="Ebeveyn adı" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <label>PIN belirle (4 hane)
+              <input id="parentPinInput" type="password" maxlength="4" placeholder="1234" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <div class="controls">
+              <button id="saveParentSetup">Kaydet</button>
+              <button id="backFromParent" class="ghost">Geri</button>
+            </div>
+          </div>`;
+        el('#saveParentSetup').addEventListener('click', () => {
+          const n = (el('#parentNameInput').value || '').trim();
+          const p = (el('#parentPinInput').value || '').trim();
+          if (!n || p.length !== 4) { showToast('İsim ve 4 haneli PIN gerekli'); return; }
+          localStorage.setItem(LS_KEYS.parentName, n);
+          localStorage.setItem(LS_KEYS.parentPIN, p);
+          showToast('Kaydedildi');
+          renderParentAuth();
+        });
+      } else {
+        parentAuth.innerHTML = `
+          <h2>Ebeveyn Girişi</h2>
+          <div class="grid">
+            <label>PIN
+              <input id="parentPinLogin" type="password" maxlength="4" placeholder="PIN" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text);" />
+            </label>
+            <div class="controls">
+              <button id="enterParent">Giriş</button>
+              <button id="backFromParent" class="ghost">Geri</button>
+            </div>
+          </div>`;
+        el('#enterParent').addEventListener('click', () => {
+          const p = (el('#parentPinLogin').value || '').trim();
+          if (p === localStorage.getItem(LS_KEYS.parentPIN)) {
+            renderStatsTable();
+            parentStatsCard.hidden = false;
+          } else {
+            showToast('PIN hatalı');
+          }
+        });
+      }
+      el('#backFromParent').addEventListener('click', showStart);
+      el('#resetStatsBtn')?.addEventListener('click', () => { localStorage.removeItem(LS_KEYS.stats); renderStatsTable(); showToast('Sıfırlandı'); });
+    }
+
+    function getStats() {
+      try { return JSON.parse(localStorage.getItem(LS_KEYS.stats) || '{}'); } catch { return {}; }
+    }
+    function saveStats(stats) { localStorage.setItem(LS_KEYS.stats, JSON.stringify(stats)); }
+
+    function renderStatsTable() {
+      const stats = getStats();
+      const rows = [['Kategori', 'Doğru', 'Yanlış']];
+      Object.keys(CATEGORIES).forEach(cat => {
+        const s = stats[cat] || { correct: 0, wrong: 0 };
+        rows.push([cat, String(s.correct||0), String(s.wrong||0)]);
+      });
+      statsTable.innerHTML = rows.map((r,i) => `<tr>${r.map((c,ci) => `<${i===0?'th':'td'}>${c}</${i===0?'th':'td'}>`).join('')}</tr>`).join('');
+    }
+
+    function subsetByLevel(animals, levelName) {
+      if (levelName === 'Tümü') return animals.slice();
+      const size = Math.ceil(animals.length / 3);
+      const idx = levels.indexOf(levelName);
+      const start = Math.max(0, Math.min(2, idx)) * size; // 0, size, 2*size
+      return animals.slice(start, start + size);
+    }
+
+    function startSession(categoryKey, levelKey) {
+      state.categoryKey = categoryKey;
+      state.levelKey = levelKey;
+      state.step = 0;
+      state.questionIndex = 0;
+      state.questionsTotal = QUESTION_COUNTS[levelKey] || 10;
+      state.points = 0;
+      if (state.mode === 'multi') { state.multi.points = [0,0]; state.multi.currentIdx = 0; }
+
+      const pool = subsetByLevel(CATEGORIES[categoryKey], levelKey);
+      // build targets with replacement if needed
+      state.questionTargets = [];
+      for (let i = 0; i < state.questionsTotal; i++) {
+        const t = pool[Math.floor(Math.random() * pool.length)];
+        state.questionTargets.push(t);
+      }
+
+      currentCatLvl.textContent = `${categoryKey} • ${levelKey}`;
+      navigate('game');
+      startQuestion();
+    }
+
+    function startQuestion() {
+      state.step = 0;
+      updateProgress();
+      const target = state.questionTargets[state.questionIndex];
+      state.round = makeRoundForTarget(target);
+      renderCurrentStep();
+    }
+
+    function restartQuestion() { startQuestion(); }
+
+    function makeRoundForTarget(target) {
+      const pool = subsetByLevel(CATEGORIES[state.categoryKey], state.levelKey);
+      const decoys = (excludeName, count) => {
+        const others = pool.filter(a => a.name !== excludeName);
+        let res = randomSample(others, Math.min(count, others.length));
+        // fill from global if not enough
+        if (res.length < count) {
+          const allOthers = allAnimals().filter(a => a.name !== excludeName);
+          const need = count - res.length;
+          res = res.concat(randomSample(allOthers, need));
+        }
+        return res;
+      };
+
+      const g1Choices = shuffle([target, ...decoys(target.name, 3)]);
+      const g2Choices = shuffle([target, ...decoys(target.name, 3)]);
+      const g3Letters = normalizeForLetters(target.name);
+      const g4Choices = shuffle([target, ...decoys(target.name, 3)]); // 4 adet sürükle-bırak
+      return { target, g1Choices, g2Choices, g3Letters, g4Choices };
+    }
+
+    function allAnimals() {
+      return Object.values(CATEGORIES).flat();
+    }
+
+    function updateProgress() {
+      const q = state.questionIndex + 1;
+      const t = state.questionsTotal;
+      const s = state.step + 1;
+      progressEl.textContent = `Soru ${q}/${t} • Oyun ${s}/4`;
+      updatePlayerBadge();
+    }
+
+    function renderCurrentStep() {
+      gameContainer.innerHTML = '';
+      const step = state.step;
+      if (step === 0) renderGame1();
+      else if (step === 1) renderGame2();
+      else if (step === 2) renderGame3();
+      else if (step === 3) renderGame4();
+    }
+
+    function awardPoints() {
+      if (state.mode === 'single') {
+        state.points += POINTS_PER_CORRECT;
+        addTotalPoints(POINTS_PER_CORRECT);
+      } else if (state.mode === 'multi') {
+        const i = state.multi.currentIdx;
+        state.multi.points[i] += POINTS_PER_CORRECT;
+        addTotalPoints(POINTS_PER_CORRECT);
+      }
+      renderBadges();
+    }
+
+    function markStats(correct) {
+      if (!state.categoryKey) return;
+      const stats = getStats();
+      stats[state.categoryKey] = stats[state.categoryKey] || { correct: 0, wrong: 0 };
+      if (correct) stats[state.categoryKey].correct += 1; else stats[state.categoryKey].wrong += 1;
+      saveStats(stats);
+    }
+
+    function nextStepOrInfo() {
+      state.step += 1;
+      if (state.step >= 4) {
+        showInfoCardThenNext();
+      } else {
+        updateProgress();
+        renderCurrentStep();
+      }
+    }
+
+    function handleWrong() {
+      markStats(false);
+      if (isUnlimited()) {
+        showToast('Yanlış! Soru başa alındı');
+        startQuestion();
+        return;
+      }
+      state.lives -= 1;
+      if (state.lives < 0) state.lives = 0;
+      if (state.lives < MAX_LIVES && state.regenAt == null) state.regenAt = Date.now() + LIFE_REGEN_MS;
+      saveLifeState();
+      updateLivesUI();
+      if (state.lives <= 0) {
+        navigate('results');
+      } else {
+        showToast('Yanlış! -1 can');
+        startQuestion();
+      }
+    }
+
+    function correctAndAdvance() {
+      awardPoints();
+      markStats(true);
+      showToast('Doğru! +' + POINTS_PER_CORRECT);
+      nextStepOrInfo();
+    }
+
+    function showInfoCardThenNext() {
+      const { target } = state.round;
+      const info = INFO_DB[target.name] || `${target.name} hakkında daha sonra bilgi eklenecek.`;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="hero"><img src="${animalImageUrl(target.name)}" alt="${target.name}"></div>
+        <h2>${target.name}</h2>
+        <p class="life-info">${info}</p>
+        <div class="controls"><button id="nextQuestionBtn">Devam</button></div>
+      `;
+      gameContainer.innerHTML = '';
+      gameContainer.appendChild(card);
+      el('#nextQuestionBtn').addEventListener('click', () => {
+        state.questionIndex += 1;
+        if (state.questionIndex >= state.questionsTotal) {
+          endSession();
+        } else {
+          // switch player in multi
+          if (state.mode === 'multi') {
+            state.multi.currentIdx = (state.multi.currentIdx + 1) % 2;
+            updatePlayerBadge();
+          }
+          startQuestion();
+        }
+      });
+      updateProgress();
+    }
+
+    function endSession() {
+      hideAll();
+      const body = el('#resultsBody');
+      body.innerHTML = `
+        <div>Oyuncu: <b>${state.single.name || 'Tek Oyuncu'}</b></div>
+        <div>Kategori: <b>${state.categoryKey}</b> • Seviye: <b>${state.levelKey}</b></div>
+        <div>Toplam Puan: <b>${state.points}</b></div>
+      `;
+      resultsScreen.hidden = false;
+      navigate('results');
+    }
+
+    // Game 1: Resim -> 4 isim
+    function renderGame1() {
+      const { target, g1Choices } = state.round;
+      const hero = document.createElement('div'); hero.className = 'hero'; hero.innerHTML = `<img src="${animalImageUrl(target.name)}" alt="${target.name}">`;
+      const ask = document.createElement('h2'); ask.textContent = 'Bu hangi hayvan?';
+      const opts = document.createElement('div'); opts.className = 'options';
+      g1Choices.forEach(c => {
+        const b = document.createElement('button'); b.className = 'option-btn'; b.textContent = c.name;
+        b.addEventListener('click', () => {
+          if (c.name === target.name) correctAndAdvance(); else handleWrong();
+        });
+        opts.appendChild(b);
+      });
+      gameContainer.appendChild(hero); gameContainer.appendChild(ask); gameContainer.appendChild(opts);
+    }
+
+    // Game 2: İsim -> 4 resim
+    function renderGame2() {
+      const { target, g2Choices } = state.round;
+      const ask = document.createElement('h2'); ask.textContent = `${target.name} hangisi?`;
+      const grid = document.createElement('div'); grid.className = 'image-options';
+      g2Choices.forEach(c => {
+        const wrap = document.createElement('button'); wrap.className = 'image-option';
+        wrap.innerHTML = `<img alt="${c.name}" src="${animalImageUrl(c.name)}"><div class="life-info">${c.name}</div>`;
+        wrap.addEventListener('click', () => { if (c.name === target.name) correctAndAdvance(); else handleWrong(); });
+        grid.appendChild(wrap);
+      });
+      gameContainer.appendChild(ask); gameContainer.appendChild(grid);
+    }
+
+    // Game 3: Resim -> Harflerle yaz
+    function renderGame3() {
+      const { target, g3Letters } = state.round;
+      const hero = document.createElement('div'); hero.className = 'hero'; hero.innerHTML = `<img src="${animalImageUrl(target.name)}" alt="${target.name}">`;
+      const ask = document.createElement('h2'); ask.textContent = 'Hayvanın adını yaz';
+
+      const clean = g3Letters;
+      const slotsRow = document.createElement('div'); slotsRow.className = 'letter-row';
+      const slots = [];
+      for (let i = 0; i < clean.length; i++) {
+        const s = document.createElement('div'); s.className = 'slot'; s.textContent = '';
+        s.dataset.idx = String(i);
+        s.addEventListener('click', () => {
+          for (let j = selections.length - 1; j >= 0; j--) {
+            if (selections[j].slotIdx === i) {
+              const tile = selections[j].tile; tile.disabled = false; selections.splice(j, 1); s.textContent = ''; break;
+            }
+          }
+        });
+        slots.push(s); slotsRow.appendChild(s);
+      }
+
+      const letterArea = document.createElement('div'); letterArea.className = 'letters';
+      const pool = generateLetterPool(clean, 14);
+      const selections = [];
+
+      pool.forEach((ch, idx) => {
+        const btn = document.createElement('button'); btn.className = 'letter'; btn.textContent = ch; btn.dataset.idx = String(idx);
+        btn.addEventListener('click', () => {
+          const next = slots.find(s => !s.textContent); if (!next) return;
+          next.textContent = ch; selections.push({ slotIdx: Number(next.dataset.idx), char: ch, tile: btn }); btn.disabled = true;
+          if (slots.every(s => s.textContent)) {
+            const attempt = slots.map(s => s.textContent).join('');
+            if (attempt === clean) { correctAndAdvance(); } else { handleWrong(); }
+          }
+        });
+        letterArea.appendChild(btn);
+      });
+
+      const tools = document.createElement('div'); tools.className = 'letter-row';
+      const backBtn = document.createElement('button'); backBtn.className = 'secondary'; backBtn.textContent = 'Sil';
+      backBtn.addEventListener('click', () => {
+        for (let i = selections.length - 1; i >= 0; i--) {
+          const { slotIdx, tile } = selections.pop(); tile.disabled = false; slots[slotIdx].textContent = ''; break;
+        }
+      });
+      const clearBtn = document.createElement('button'); clearBtn.className = 'ghost'; clearBtn.textContent = 'Temizle';
+      clearBtn.addEventListener('click', () => { while (selections.length) { const { slotIdx, tile } = selections.pop(); tile.disabled = false; slots[slotIdx].textContent = ''; } });
+      tools.appendChild(backBtn); tools.appendChild(clearBtn);
+
+      gameContainer.appendChild(hero); gameContainer.appendChild(ask); gameContainer.appendChild(slotsRow); gameContainer.appendChild(letterArea); gameContainer.appendChild(tools);
+    }
+
+    // Game 4: 4 sürükle-bırak
+    function renderGame4() {
+      const picks = state.round.g4Choices; // 4 adet
+      const ask = document.createElement('h2'); ask.textContent = 'Resimleri doğru kutulara sürükle (veya dokun-seç → kutuya dokun)';
+
+      const zones = document.createElement('div'); zones.className = 'drag-grid';
+      const items = document.createElement('div'); items.className = 'drag-grid';
+
+      const assigned = new Map();
+      const itemsByName = new Map();
+      let selectedName = null;
+
+      function place(name, dz) {
+        if (!name || dz.classList.contains('locked')) return;
+        if (name === dz.dataset.name) {
+          dz.classList.add('locked'); dz.textContent = ''; dz.innerHTML = `<div class="label">${dz.dataset.name}</div>`;
+          const indz = document.createElement('div'); const im = document.createElement('img'); im.src = animalImageUrl(name); im.alt = name; im.style.width = '100%'; im.style.height = '100px'; im.style.objectFit = 'cover'; indz.appendChild(im); dz.appendChild(indz);
+          assigned.set(dz.dataset.name, name);
+          const itemEl = itemsByName.get(name); if (itemEl) { itemEl.classList.remove('selected'); itemEl.classList.add('placed'); itemEl.draggable = false; }
+          selectedName = null;
+          if (assigned.size === picks.length) { correctAndAdvance(); }
+        } else {
+          handleWrong();
+        }
+      }
+
+      picks.forEach(p => {
+        const dz = document.createElement('div'); dz.className = 'dropzone'; dz.dataset.name = p.name;
+        dz.innerHTML = `<div class="label">${p.name}</div>`;
+        dz.addEventListener('dragover', (e) => e.preventDefault());
+        dz.addEventListener('dragenter', (e) => { e.preventDefault(); dz.classList.add('highlight'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('highlight'));
+        dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('highlight'); const droppedName = e.dataTransfer.getData('text/plain'); if (!droppedName) return; place(droppedName, dz); });
+        dz.addEventListener('click', () => { if (!selectedName) { showToast('Önce bir resim seç'); return; } place(selectedName, dz); });
+        zones.appendChild(dz);
+      });
+
+      shuffle(picks.slice()).forEach(p => {
+        const it = document.createElement('div'); it.className = 'drag-item'; it.draggable = true; it.dataset.name = p.name;
+        it.innerHTML = `<img alt="${p.name}" src="${animalImageUrl(p.name)}">`;
+        itemsByName.set(p.name, it);
+        it.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', p.name); });
+        it.addEventListener('click', () => {
+          if (it.classList.contains('placed')) return;
+          if (selectedName === p.name) { it.classList.remove('selected'); selectedName = null; }
+          else { itemsByName.forEach(el => el.classList.remove('selected')); it.classList.add('selected'); selectedName = p.name; }
+        });
+        items.appendChild(it);
+      });
+
+      gameContainer.appendChild(ask); gameContainer.appendChild(zones); gameContainer.appendChild(items);
+    }
+
+    // Lives / Ads
+    function hasLives() { return state.lives > 0 || isUnlimited(); }
+    function isUnlimited() { return Date.now() < state.unlimitedUntil; }
+
+    function loadLifeState() {
+      const lives = parseInt(localStorage.getItem(LS_KEYS.lives) || `${MAX_LIVES}`);
+      let regenAt = localStorage.getItem(LS_KEYS.regenAt); regenAt = regenAt ? parseInt(regenAt) : null;
+      let unlimitedUntil = parseInt(localStorage.getItem(LS_KEYS.unlimitedUntil) || '0');
+
+      state.lives = isNaN(lives) ? MAX_LIVES : lives;
+      state.regenAt = regenAt;
+      state.unlimitedUntil = isNaN(unlimitedUntil) ? 0 : unlimitedUntil;
+
+      if (!isUnlimited() && state.lives < MAX_LIVES) {
+        if (state.regenAt == null) state.regenAt = Date.now() + LIFE_REGEN_MS;
+        const now = Date.now();
+        while (state.regenAt && now >= state.regenAt && state.lives < MAX_LIVES) { state.lives += 1; state.regenAt += LIFE_REGEN_MS; }
+        if (state.lives >= MAX_LIVES) state.regenAt = null;
+      }
+      saveLifeState();
+    }
+
+    function saveLifeState() {
+      localStorage.setItem(LS_KEYS.lives, String(state.lives));
+      if (state.regenAt == null) localStorage.removeItem(LS_KEYS.regenAt); else localStorage.setItem(LS_KEYS.regenAt, String(state.regenAt));
+      localStorage.setItem(LS_KEYS.unlimitedUntil, String(state.unlimitedUntil || 0));
+    }
+
+    function updateLivesUI() {
+      const hearts = isUnlimited() ? '♾️' : '❤️'.repeat(state.lives) + '🖤'.repeat(MAX_LIVES - state.lives);
+      heartContainer.textContent = hearts;
+      if (isUnlimited()) {
+        const left = state.unlimitedUntil - Date.now(); lifeInfo.textContent = `Sınırsız: ${fmtMS(left)}`;
+      } else if (state.lives >= MAX_LIVES) { lifeInfo.textContent = 'Tam can'; }
+      else if (state.regenAt) { const left = state.regenAt - Date.now(); lifeInfo.textContent = `+1 can: ${fmtMS(left)}`; }
+      else { lifeInfo.textContent = ''; }
+    }
+
+    function onWatchAd() {
+      // tek oyuncu modunda reklam izlenebilir
+      adOverlay.hidden = false; adBar.style.width = '0%';
+      let left = AD_DURATION_MS; adCountdown.textContent = String(Math.ceil(left / 1000));
+      const started = Date.now();
+      const t = setInterval(() => {
+        left = Math.max(0, AD_DURATION_MS - (Date.now() - started));
+        const p = 100 - Math.floor((left / AD_DURATION_MS) * 100);
+        adBar.style.width = p + '%';
+        adCountdown.textContent = String(Math.ceil(left / 1000));
+        if (left <= 0) {
+          clearInterval(t); adOverlay.hidden = true; state.unlimitedUntil = Date.now() + UNLIMITED_MS; saveLifeState(); updateLivesUI(); showToast('1 saat sınırsız can!');
+        }
+      }, 120);
+    }
+
+    function fmtMS(ms) { const s = Math.max(0, Math.ceil(ms / 1000)); const m = Math.floor(s / 60); const r = s % 60; return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`; }
+
+    function lifeTicker() {
+      setInterval(() => {
+        if (isUnlimited()) { if (Date.now() >= state.unlimitedUntil) { state.unlimitedUntil = 0; saveLifeState(); } }
+        else { if (state.lives < MAX_LIVES && state.regenAt && Date.now() >= state.regenAt) { state.lives += 1; if (state.lives < MAX_LIVES) state.regenAt = Date.now() + LIFE_REGEN_MS; else state.regenAt = null; saveLifeState(); } }
+        updateLivesUI();
+      }, 1000);
+    }
+
+    // Helpers
+    function showToast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 1400); }
+    function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function randomSample(arr, n) { const a = arr.slice(); const out = []; while (a.length && out.length < n) { const idx = Math.floor(Math.random() * a.length); out.push(a.splice(idx, 1)[0]); } return out; }
+    function normalizeForLetters(name) { const up = name.toLocaleUpperCase('tr-TR'); return up.replace(/[^A-ZÇĞİÖŞÜ]/g, ''); }
+    function generateLetterPool(clean, size) { const letters = clean.split(''); const pool = letters.slice(); while (pool.length < size) { const ch = TURKISH_ALPHABET[Math.floor(Math.random() * TURKISH_ALPHABET.length)]; pool.push(ch); } return shuffle(pool).slice(0, size); }
+
+    function getTotalPoints() { return parseInt(localStorage.getItem(LS_KEYS.totalPoints) || '0'); }
+    function addTotalPoints(x) { const cur = getTotalPoints(); localStorage.setItem(LS_KEYS.totalPoints, String(cur + x)); totalPointsLabel.textContent = String(cur + x); }
+
+    init();
+  </script>
+</body>
+</html>
